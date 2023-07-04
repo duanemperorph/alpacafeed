@@ -40,6 +40,12 @@ struct FeedView: View {
 
 struct FeedView_Previews: PreviewProvider {
     static var previews: some View {
-        FeedView(feedItems: exampleFeedItems)
+        ZStack {
+            FeedView(feedItems: exampleFeedItems)
+            VStack {
+                TopBarMinimized()
+                Spacer()
+            }
+        }
     }
 }

@@ -32,13 +32,14 @@ struct ModeSelectorButton: View {
             Text("Your Text")
                 .frame(maxWidth: .infinity)
             Image(systemName: "chevron.right").font(.system(size: 14)).fontWeight(.bold)
-        }.padding(.horizontal, 15)
+        }
+        .frame(maxWidth: .infinity, minHeight: 30, maxHeight: 30)
+        .padding(.horizontal, 15)
         .foregroundColor(.white)
         .font(.system(size: 16)).fontWeight(.semibold)
-        .frame(width: 200, height: 28)
-        .background(Color.white.opacity(0.1)).cornerRadius(14)
+        .background(Color.white.opacity(0.1)).cornerRadius(15)
         .overlay( /// apply a rounded border
-            RoundedRectangle(cornerRadius: 14)
+            RoundedRectangle(cornerRadius: 15)
                 .stroke(Color.white.opacity(0.5), lineWidth: 1)
         )
     }
@@ -53,7 +54,20 @@ struct ButtonSubBarView: View {
                 Image(systemName: "chevron.left")
             }
             Spacer()
+            Button(action: {
+                // Action for gear button
+            }) {
+                Image(systemName: "chevron.right")
+            }
+            Spacer()
             ModeSelectorButton()
+                .frame(width: 150)
+            Spacer()
+            Button(action: {
+                // Add your button action here
+            }) {
+                Image(systemName: "arrow.clockwise")
+            }
             Spacer()
             Button(action: {
                 // Action for plus button

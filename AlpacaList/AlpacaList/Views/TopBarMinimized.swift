@@ -7,6 +7,32 @@
 
 import SwiftUI
 
+struct ImageTextFieldPairViewMinimized: View {
+    var imageName: String
+    @Binding var text: String
+    
+    var body: some View {
+        HStack(spacing: 10) {
+            Image(systemName: imageName)
+                .font(.system(size: 20))
+                .frame(width: 20, height: 20)
+            Text(text)
+                .font(.system(size: 18))
+                .padding(.horizontal, 4)
+                .frame(maxWidth: .infinity, alignment: .center)
+            Spacer().frame(width: 20)
+        }
+        .foregroundColor(.white.opacity(0.75))
+        .padding(.horizontal, 10)
+        .frame(maxWidth: .infinity, minHeight: 40)
+//        .background(Color.black.opacity(0.1).cornerRadius(10))
+        .overlay( /// apply a rounded border
+            RoundedRectangle(cornerRadius: 10)
+                .stroke(Color.white.opacity(0.75), lineWidth: 0.75)
+        )
+    }
+}
+
 struct TopBarMinimized: View {
     @Environment(\.colorScheme) var envColorScheme
     
@@ -19,13 +45,13 @@ struct TopBarMinimized: View {
     
     var body: some View {
         HStack {
-            Text(communityName)
+            ImageTextFieldPairViewMinimized(imageName: "chevron.down.circle", text: $communityName)
         }
         .font(.system(size: 18))
         .frame(maxWidth: .infinity, maxHeight: 20)
-        .padding(.horizontal, 8)
+        .padding(10)
         .padding(.vertical)
-        .background(.thinMaterial)
+        .background(.regularMaterial)
         .environment(\.colorScheme, backgroundColorScheme)
     }
 }
