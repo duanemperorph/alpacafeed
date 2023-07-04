@@ -36,7 +36,7 @@ struct FeedItemView: View {
         }
         .padding(20)
         .frame(maxWidth: .infinity)
-        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 8))
+        .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 8))
     }
 }
 
