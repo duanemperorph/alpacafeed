@@ -10,6 +10,11 @@ import SwiftUI
 struct FeedView: View {
     @State var feedItems: [FeedItem] = []
     
+    var drag: some Gesture {
+        DragGesture(coordinateSpace: .local)
+            .onChanged { value in print("start dragging", value)}
+    }
+    
     var body: some View {
         ZStack {
             LinearGradient(
@@ -28,6 +33,7 @@ struct FeedView: View {
             }
             .scrollContentBackground(.hidden)
             .listStyle(PlainListStyle())
+            .gesture(drag)
         }
     }
 }
