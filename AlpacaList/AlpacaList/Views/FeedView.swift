@@ -9,10 +9,22 @@ import SwiftUI
 
 struct FeedView: View {
     @State var feedItems: [FeedItem] = []
+    @State var isTopBarOpen = false
     
-    var drag: some Gesture {
-        DragGesture(coordinateSpace: .local)
-            .onChanged { value in print("start dragging", value)}
+    var listDrag: some Gesture {
+        DragGesture(coordinateSpace: .local).onChanged { _ in
+            withAnimation(.easeInOut(duration: 0.5)) {
+                isTopBarOpen = false
+            }
+        }
+    }
+    
+    var topBarTap: some Gesture {
+        TapGesture().onEnded { _ in
+            withAnimation(.easeInOut(duration: 0.5)) {
+                isTopBarOpen = true
+            }
+        }
     }
     
     var body: some View {
@@ -33,19 +45,25 @@ struct FeedView: View {
             }
             .scrollContentBackground(.hidden)
             .listStyle(PlainListStyle())
-            .gesture(drag)
+            .gesture(listDrag)
+            .safeAreaInset(edge: .top) {
+                let topBar = VStack() {
+                    if (isTopBarOpen) {
+                        TopBarExpanded()
+                    }
+                    else {
+                        TopBarMinimized()
+                            .gesture(topBarTap)
+                    }
+                }
+                topBar.transition(.scale)
+            }
         }
     }
 }
 
 struct FeedView_Previews: PreviewProvider {
     static var previews: some View {
-        ZStack {
-            FeedView(feedItems: exampleFeedItems)
-            VStack {
-                TopBarMinimized()
-                Spacer()
-            }
-        }
+        FeedView(feedItems: exampleFeedItems)
     }
 }

@@ -81,7 +81,7 @@ struct ButtonSubBarView: View {
     }
 }
 
-struct TopBarViewExpanded: View {
+struct TopBarExpanded: View {
     @Environment(\.colorScheme) var envColorScheme
     
     @State var communityName = "lemmyworld@lemmy.world"
@@ -104,7 +104,7 @@ struct TopBarViewExpanded: View {
         }
         .padding(.horizontal, 8)
         .padding(.vertical)
-        .background(.thinMaterial)
+        .background(.regularMaterial)
         .environment(\.colorScheme, backgroundColorScheme)
     }
 }
@@ -118,7 +118,7 @@ struct TopBarViewExpanded_Previews: PreviewProvider {
                 endPoint: .bottomTrailing
             )
             .edgesIgnoringSafeArea(.all)
-            TopBarViewExpanded()
+            TopBarExpanded()
         }
     }
 }

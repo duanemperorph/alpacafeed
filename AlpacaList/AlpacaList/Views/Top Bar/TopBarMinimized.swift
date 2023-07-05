@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ImageTextFieldPairViewMinimized: View {
+struct TopBarButtonMinimized: View {
     var imageName: String
     @Binding var text: String
     
@@ -25,7 +25,6 @@ struct ImageTextFieldPairViewMinimized: View {
         .foregroundColor(.white.opacity(0.75))
         .padding(.horizontal, 10)
         .frame(maxWidth: .infinity, minHeight: 40)
-//        .background(Color.black.opacity(0.1).cornerRadius(10))
         .overlay( /// apply a rounded border
             RoundedRectangle(cornerRadius: 10)
                 .stroke(Color.white.opacity(0.75), lineWidth: 0.75)
@@ -45,7 +44,7 @@ struct TopBarMinimized: View {
     
     var body: some View {
         HStack {
-            ImageTextFieldPairViewMinimized(imageName: "chevron.down.circle", text: $communityName)
+            TopBarButtonMinimized(imageName: "chevron.down.circle", text: $communityName)
         }
         .font(.system(size: 18))
         .frame(maxWidth: .infinity, maxHeight: 20)
