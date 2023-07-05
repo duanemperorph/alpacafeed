@@ -82,15 +82,8 @@ struct ButtonSubBarView: View {
 }
 
 struct TopBarExpanded: View {
-    @Environment(\.colorScheme) var envColorScheme
-    
-    @State var communityName = "lemmyworld@lemmy.world"
-    @State var userName = "cat@kbin.social"
-    
-
-    var backgroundColorScheme: ColorScheme {
-        return envColorScheme == .dark ? ColorScheme.light : ColorScheme.dark
-    }
+    @Binding var communityName: String
+    @Binding var userName: String
     
     var body: some View {
         VStack {
@@ -104,8 +97,6 @@ struct TopBarExpanded: View {
         }
         .padding(.horizontal, 8)
         .padding(.vertical)
-        .background(.regularMaterial)
-        .environment(\.colorScheme, backgroundColorScheme)
     }
 }
 
@@ -118,7 +109,11 @@ struct TopBarViewExpanded_Previews: PreviewProvider {
                 endPoint: .bottomTrailing
             )
             .edgesIgnoringSafeArea(.all)
-            TopBarExpanded()
+            TopBarExpanded(
+                communityName: .constant("lemmyworld@lemmy.world"),
+                userName: .constant("dog@kbin.social")
+            
+            )
         }
     }
 }

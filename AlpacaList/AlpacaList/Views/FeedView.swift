@@ -19,14 +19,6 @@ struct FeedView: View {
         }
     }
     
-    var topBarTap: some Gesture {
-        TapGesture().onEnded { _ in
-            withAnimation(.easeInOut(duration: 0.5)) {
-                isTopBarOpen = true
-            }
-        }
-    }
-    
     var body: some View {
         ZStack {
             LinearGradient(
@@ -47,16 +39,7 @@ struct FeedView: View {
             .listStyle(PlainListStyle())
             .gesture(listDrag)
             .safeAreaInset(edge: .top) {
-                let topBar = VStack() {
-                    if (isTopBarOpen) {
-                        TopBarExpanded()
-                    }
-                    else {
-                        TopBarMinimized()
-                            .gesture(topBarTap)
-                    }
-                }
-                topBar.transition(.scale)
+                TopBarContainer()
             }
         }
     }

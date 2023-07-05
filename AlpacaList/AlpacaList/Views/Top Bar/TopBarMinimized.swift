@@ -33,14 +33,7 @@ struct TopBarButtonMinimized: View {
 }
 
 struct TopBarMinimized: View {
-    @Environment(\.colorScheme) var envColorScheme
-    
-    @State var communityName = "lemmyworld@lemmy.world"
-    
-
-    var backgroundColorScheme: ColorScheme {
-        return envColorScheme == .dark ? ColorScheme.light : ColorScheme.dark
-    }
+    @Binding var communityName: String
     
     var body: some View {
         HStack {
@@ -50,12 +43,12 @@ struct TopBarMinimized: View {
         .frame(maxWidth: .infinity, maxHeight: 20)
         .padding(10)
         .padding(.vertical)
-        .background(.regularMaterial)
-        .environment(\.colorScheme, backgroundColorScheme)
     }
 }
 
 struct TopBarMinimized_Previews: PreviewProvider {
+    @State static var communityName = "lemmyworld@lemmy.world"
+    
     static var previews: some View {
         ZStack {
             LinearGradient(
@@ -64,7 +57,7 @@ struct TopBarMinimized_Previews: PreviewProvider {
                 endPoint: .bottomTrailing
             )
             .edgesIgnoringSafeArea(.all)
-            TopBarMinimized()
+            TopBarMinimized(communityName: $communityName)
         }
     }
 }
