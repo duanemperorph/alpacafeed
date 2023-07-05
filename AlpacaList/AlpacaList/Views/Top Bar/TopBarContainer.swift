@@ -10,7 +10,8 @@ import SwiftUI
 struct TopBarContainer: View {
     @Environment(\.colorScheme) var envColorScheme
     
-    @State var isTopBarOpen = false
+    @Binding var isOpen: Bool
+    
     @State var communityName = "lemmyworld@lemmy.world"
     @State var userName = "imacat@kbin.social"
     
@@ -20,15 +21,15 @@ struct TopBarContainer: View {
     
     var topBarTap: some Gesture {
         TapGesture().onEnded { _ in
-            withAnimation(.easeInOut(duration: 0.5)) {
-                isTopBarOpen = true
+            withAnimation(.easeInOut(duration: 0.3)) {
+                isOpen = true
             }
         }
     }
     
     var body: some View {
         VStack {
-            if (isTopBarOpen) {
+            if (isOpen) {
                 TopBarExpanded(
                     communityName: $communityName,
                     userName: $userName
@@ -47,6 +48,8 @@ struct TopBarContainer: View {
 }
 
 struct TopBarContainer_Previews: PreviewProvider {
+    @State static var isOpen = false
+    
     static var previews: some View {
         ZStack {
             LinearGradient(
@@ -55,7 +58,7 @@ struct TopBarContainer_Previews: PreviewProvider {
                 endPoint: .bottomTrailing
             )
             .edgesIgnoringSafeArea(.all)
-            TopBarContainer()
+            TopBarContainer(isOpen: $isOpen)
         }
     }
 }

@@ -12,9 +12,11 @@ struct FeedView: View {
     @State var isTopBarOpen = false
     
     var listDrag: some Gesture {
-        DragGesture(coordinateSpace: .local).onChanged { _ in
-            withAnimation(.easeInOut(duration: 0.5)) {
-                isTopBarOpen = false
+        DragGesture(coordinateSpace: .local).onChanged { data in
+            if (isTopBarOpen && data.translation.height < 0) {
+                withAnimation(.easeInOut(duration: 0.3)) {
+                    isTopBarOpen = false
+                }
             }
         }
     }
@@ -39,7 +41,7 @@ struct FeedView: View {
             .listStyle(PlainListStyle())
             .gesture(listDrag)
             .safeAreaInset(edge: .top) {
-                TopBarContainer()
+                TopBarContainer(isOpen: $isTopBarOpen)
             }
         }
     }
