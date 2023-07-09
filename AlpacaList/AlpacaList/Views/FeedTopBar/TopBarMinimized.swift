@@ -9,7 +9,7 @@ import SwiftUI
 
 struct TopBarButtonMinimized: View {
     var imageName: String
-    @Binding var text: String
+    var text: String
     
     var body: some View {
         HStack(spacing: 10) {
@@ -33,11 +33,12 @@ struct TopBarButtonMinimized: View {
 }
 
 struct TopBarMinimized: View {
-    @Binding var communityName: String
+    var communityName: String
+    var icon: String
     
     var body: some View {
         HStack {
-            TopBarButtonMinimized(imageName: "chevron.down.circle", text: $communityName)
+            TopBarButtonMinimized(imageName: icon, text: communityName)
         }
         .font(.system(size: 18))
         .frame(maxWidth: .infinity, maxHeight: 20)
@@ -47,8 +48,6 @@ struct TopBarMinimized: View {
 }
 
 struct TopBarMinimized_Previews: PreviewProvider {
-    @State static var communityName = "lemmyworld@lemmy.world"
-    
     static var previews: some View {
         ZStack {
             LinearGradient(
@@ -58,7 +57,7 @@ struct TopBarMinimized_Previews: PreviewProvider {
             )
             .edgesIgnoringSafeArea(.all)
             VStack {
-                TopBarMinimized(communityName: $communityName)
+                TopBarMinimized(communityName: "lemmyworld@lemmy.world", icon: "globe")
             }
             .background(.regularMaterial)
             .environment(\.colorScheme, .dark)

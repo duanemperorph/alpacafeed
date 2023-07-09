@@ -36,9 +36,7 @@ struct TopBarContainer: View {
                 )
             }
             else {
-                TopBarMinimized(
-                    communityName: $communityName
-                )
+                TopBarMinimized(communityName: "lemmyworld@lemmy.world", icon: "globe")
                 .gesture(topBarTap)
             }
         }
