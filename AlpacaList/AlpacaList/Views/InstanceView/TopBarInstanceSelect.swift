@@ -7,40 +7,102 @@
 
 import SwiftUI
 
-struct SettingsListViewItem: View {
-    var body: some View {
-        VStack {
-            VStack {
-                
-            }
-            .frame(maxWidth: .infinity, minHeight: 50)
-            .background(.thinMaterial).cornerRadius(25)
-            .environment(\.colorScheme, .dark)
-            .font(.system(size: 18))
-            .fontWeight(.bold)
-        }.padding(10)
-    }
-}
+let fakeCommunities = [
+    "m/CatConspiracy",
+    "m/PotatoFashion",
+    "m/CheeseArt",
+    "m/UnicornLoversAnonymous",
+    "m/InvisiblePetschallenges",
+    "m/TinfoilCraftshats",
+    "m/SockDrawerMysteriesof",
+    "m/BananaGangdiscussions",
+    "m/UnderwaterBasketWeavin",
+    "m/AvocadoJuggling"
+]
 
-struct SettingsToggleItem: View {
-    var text: String
-    @State var toggle = false
+struct SettingsSectionView<ContentView: View>: View {
+    @ViewBuilder var content: ContentView
+    var title: String?
+    
+    init(title: String? = nil, @ViewBuilder content: () -> ContentView) {
+        self.title = title
+        self.content = content()
+    }
+    
+    //constructor with just the content
+    init(@ViewBuilder content: () -> ContentView) {
+        self.content = content()
+    }
     
     var body: some View {
         VStack {
-            HStack {
-                Toggle(text, isOn: $toggle)
-                    .padding(.leading, 25)
-                    .padding(.trailing, 25)
-                    .tint(Color(red: 0.75, green: 0.25, blue: 0.75))
+            VStack {
+                if let title = title {
+                    Text(title.uppercased())
+                        .font(.custom("AvenirNext-Bold", size: 16))
+                        .foregroundColor(Color(red: 0.65, green: 0.65, blue: 0.65))
+                        .padding(.top, 2)
+                    Divider()
+                }
+                content
             }
-            .frame(maxWidth: .infinity, minHeight: 50)
-            .background(.thinMaterial).cornerRadius(25)
-            .environment(\.colorScheme, .dark)
-            .font(.system(size: 18))
-            .fontWeight(.bold)
+            .padding(.horizontal, 20)
+            .padding(.vertical, 10)
         }
-        .padding(10)
+        .frame(maxWidth: .infinity, minHeight: 50)
+        .background(.regularMaterial).cornerRadius(25)
+        .environment(\.colorScheme, .dark)
+        .font(.system(size: 18))
+        .fontWeight(.bold)
+        .padding(.horizontal)
+        .shadow(color: Color.black.opacity(0.5), radius: 5, x: 5, y: 5)
+    }
+}
+
+struct InstanceSettingsItem: View {
+    @State var favorited = false
+    @State var subscribed = false
+    
+    var body: some View {
+        SettingsSectionView(title: "Instance Settings") {
+            VStack {
+                Toggle("Favorite", isOn: $favorited)
+                    .tint(Color(red: 0.75, green: 0.25, blue: 0.75))
+                    .foregroundColor(Color(red: 0.75, green: 0.75, blue: 0.75))
+                Toggle("Subscribe", isOn: $subscribed)
+                    .tint(Color(red: 0.75, green: 0.25, blue: 0.75))
+                    .foregroundColor(Color(red: 0.75, green: 0.75, blue: 0.75))
+            }
+        }
+    }
+}
+
+struct FavoritesSettingsItem: View {
+    var title: String
+    
+    var body: some View {
+        SettingsSectionView(title: title) {
+            VStack {
+                //For each community
+                ForEach(fakeCommunities, id: \.self) { community in
+                    HStack {
+                        // bookmark image
+                        Image(systemName: "bookmark")
+                            .foregroundColor(Color(red: 0.75, green: 0.75, blue: 0.75))
+                            .font(.system(size: 16))
+                        Spacer().frame(width: 20)
+                        Text(community)
+                            .foregroundColor(.white)
+                            .font(.system(size: 18))
+                        Spacer()
+                    }.padding(5)
+                    
+                    if community != fakeCommunities.last {
+                        Divider()
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -95,22 +157,21 @@ struct TopBarInstanceSelect_Previews: PreviewProvider {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .background(.ultraThinMaterial)
                 .environment(\.colorScheme, .dark)
-            VStack {
-                VStack {
-                    TopBarInstanceSelect(
-                        imageName: "chevron.down.circle",
-                        text: .constant("theranch@alapcas.world"))
+            ScrollView {
+                VStack(alignment: .center, spacing: 25) {
+                    InstanceSettingsItem()
+                    FavoritesSettingsItem(title: "Favorites")
+                    FavoritesSettingsItem(title: "Subscriptions")
                 }
-                .background(.thickMaterial)
-                .environment(\.colorScheme, .dark)
-                Spacer().frame(height: 10)
-                SettingsToggleItem(text: "Favorite")
-                Spacer().frame(height: 0)
-                SettingsToggleItem(text: "Subscribe")
-                Spacer().frame(height: 0)
-                SettingsListViewItem()
-                Spacer()
             }
+        }.safeAreaInset(edge: .top) {
+            VStack {
+                TopBarInstanceSelect(
+                    imageName: "chevron.down.circle",
+                    text: .constant("theranch@alapcas.world"))
+            }
+            .background(.thickMaterial)
+            .environment(\.colorScheme, .dark)
         }
     }
 }
