@@ -57,7 +57,11 @@ struct TopBarMinimized_Previews: PreviewProvider {
                 endPoint: .bottomTrailing
             )
             .edgesIgnoringSafeArea(.all)
-            TopBarMinimized(communityName: $communityName)
+            VStack {
+                TopBarMinimized(communityName: $communityName)
+            }
+            .background(.regularMaterial)
+            .environment(\.colorScheme, .dark)
         }
     }
 }

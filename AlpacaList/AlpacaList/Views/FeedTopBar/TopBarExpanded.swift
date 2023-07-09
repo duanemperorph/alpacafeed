@@ -109,11 +109,15 @@ struct TopBarViewExpanded_Previews: PreviewProvider {
                 endPoint: .bottomTrailing
             )
             .edgesIgnoringSafeArea(.all)
-            TopBarExpanded(
-                communityName: .constant("lemmyworld@lemmy.world"),
-                userName: .constant("dog@kbin.social")
-            
-            )
+            VStack {
+                TopBarExpanded(
+                    communityName: .constant("lemmyworld@lemmy.world"),
+                    userName: .constant("dog@kbin.social")
+                )
+                
+            }
+            .background(.regularMaterial)
+            .environment(\.colorScheme, .dark)
         }
     }
 }
