@@ -45,7 +45,7 @@ struct UserSettings: View {
     
     var body: some View {
         SettingsList {
-            SettingsSection(title: "Change User") {
+            SettingsSection(title: "Active User") {
                 ForEach(fakeUsers, id: \.self) { user in
                     SettingsRadioItem(
                         username: user,
@@ -88,6 +88,6 @@ struct UserSettings_Previews: PreviewProvider {
                 .background(.ultraThickMaterial)
                 .environment(\.colorScheme, .dark)
             }
-        }
+        }.tint(Color(red: 0.75, green: 0.25, blue: 0.75))
     }
 }

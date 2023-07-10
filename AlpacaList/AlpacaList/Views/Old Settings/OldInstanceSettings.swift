@@ -67,7 +67,7 @@ struct FavoritesSettingsSection: View {
     }
 }
 
-struct InstanceSettings: View {
+struct OldInstanceSettings: View {
     var body: some View {
         ZStack {
             VStack{}
@@ -91,7 +91,7 @@ struct InstanceSettings: View {
     }
 }
 
-struct InstanceSettings_Previews: PreviewProvider {
+struct OldInstanceSettings_Previews: PreviewProvider {
     static var previews: some View {
         ZStack {
             LinearGradient(
@@ -100,7 +100,7 @@ struct InstanceSettings_Previews: PreviewProvider {
                 endPoint: .bottomTrailing
             )
             .edgesIgnoringSafeArea(.all)
-            InstanceSettings()
+            OldInstanceSettings()
         }
     }
 }

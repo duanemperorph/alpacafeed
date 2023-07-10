@@ -47,7 +47,6 @@ struct SettingsButton<ContentView: View>: View {
             .foregroundColor(isTouching ? .primary.opacity(0.5) : .primary)
             .gesture(touchGesture)
             .simultaneousGesture(tapGesture)
-            
     }
 }
 
@@ -59,7 +58,7 @@ struct SettingsRadioItemCheckMark: View {
         // return a gray cicrle sybmol if not checked
         if isChecked {
             Image(systemName: "checkmark.circle.fill")
-                .foregroundColor(.purple)
+                .foregroundColor(.accentColor)
                 .fontWeight(.bold)
         } else {
             Image(systemName: "circle")
@@ -90,6 +89,15 @@ struct SettingsRadioItem: View {
             }
             .padding(5)
         }
+    }
+}
+
+struct SettingsToggleItem: View {
+    var title: String
+    var isChecked: Bool
+    
+    var body: some View {
+        return VStack{}
     }
 }
 
