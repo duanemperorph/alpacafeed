@@ -24,14 +24,51 @@ struct UserSettingsItemCheckMark: View {
         if isChecked {
             Image(systemName: "checkmark.circle.fill")
                 .foregroundColor(.purple)
+                .fontWeight(.bold)
         } else {
             Image(systemName: "circle")
-                .foregroundColor(Color(red: 0.75, green: 0.75, blue: 0.75))
+                .foregroundColor(Color.primary.opacity(0.35))
+                .fontWeight(.light)
         }
     }
 }
 
-struct UserSettingsNewUserButton: View {
+struct UserSettingsItem: View {
+    var username: String
+    var isChecked: Bool
+    
+    var body: some View {
+        Button(action: {}) {
+            HStack {
+                // bookmark image
+                UserSettingsItemCheckMark(isChecked: isChecked)
+                    .font(.system(size: 20))
+                    .frame(width: 20)
+                Spacer().frame(width: 20)
+                Text(username)
+                    .font(.system(size: 18))
+                    .lineLimit(1)
+                    .fontWeight(.medium)
+                    .foregroundColor(.primary)
+                Spacer()
+            }
+            .padding(5)
+        }
+    }
+}
+
+struct UserSettingsAddUserButton: View {
+    // add a tap gesture that handles the start / end events
+    var gesture: some Gesture {
+        return DragGesture(minimumDistance: 0)
+            .onChanged { _ in
+                print("started")
+            }
+            .onEnded { _ in
+                print("ended")
+            }
+    }
+    
     var body: some View {
         HStack {
             // bookmark image
@@ -41,109 +78,61 @@ struct UserSettingsNewUserButton: View {
                 .frame(width: 20)
             Spacer().frame(width: 20)
             Text("Add New User")
-                .foregroundColor(.white)
                 .font(.system(size: 18))
+                .fontWeight(.medium)
                 .lineLimit(1)
             Spacer()
-        }.padding(5)
-    }
-
-}
-
-struct UserSettingsItem: View {
-    var username: String
-    var isChecked: Bool
-
-    var body: some View {
-        HStack {
-            // bookmark image
-            UserSettingsItemCheckMark(isChecked: isChecked)
-                .font(.system(size: 20))
-                .fontWeight(.bold)
-                .frame(width: 20)
-            Spacer().frame(width: 20)
-            Text(username)
-                .foregroundColor(.white)
-                .font(.system(size: 18))
-                .lineLimit(1)
-            Spacer()
-        }.padding(5)
+        }
+        .padding(5)
+        .gesture(gesture)
     }
 }
 
-struct UserSettingsSection: View {
-    @State var selectedUser: String?
-    
-    var allUsersOptions: [String] {
-        return fakeUsers + ["Anonymous User"]
-    }
+struct SettingsHeader: View {
+    var title: String
     
     var body: some View {
-        SettingsSectionView(title: "SELECT USER") {
-            VStack {
-                //For each community
-                ForEach(allUsersOptions, id: \.self) { user in
-                    UserSettingsItem(username: user, isChecked: user == selectedUser)
-                    .onTapGesture {
-                        selectedUser = user
-                    }
-                
-                    Divider()
-                }
-                UserSettingsNewUserButton()
-            }
-        }
+        Text(title)
+            .font(.system(size: 16))
+            .fontWeight(.semibold)
+            .fontDesign(.monospaced)
+            .foregroundColor(Color.primary.opacity(0.5))
     }
-}
-
-struct UserSettingsLogoutButton: View {
-    var body: some View {
-        HStack {
-            // bookmark image
-            Image(systemName: "arrowshape.turn.up.backward")
-                .font(.system(size: 20))
-                .frame(width: 20)
-            Spacer().frame(width: 20)
-            Text("LOGOUT")
-                .font(.system(size: 18))
-                .lineLimit(1)
-                .frame(maxWidth: .infinity, minHeight: 1)
-            Spacer().frame(width: 20)
-        }
-        .foregroundColor(.red)
-        .fontWeight(.bold)
-    }
-}
-
-struct UserSettingsLogoutSection: View {
-    var body: some View {
-        SettingsSectionView {
-            UserSettingsLogoutButton()
-        }
-    }
-
 }
 
 struct UserSettings: View {
+    @State var selectedUser: String?
+    
     var body: some View {
-        ZStack {
-            VStack{}
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .background(.ultraThinMaterial)
-                .environment(\.colorScheme, .dark)
-            ScrollView {
-                VStack(alignment: .center, spacing: 25) {
-                    UserSettingsSection()
-                    UserSettingsLogoutSection()
+        List {
+            Section(header: SettingsHeader(title: "Change User")) {
+                ForEach(fakeUsers, id: \.self) { user in
+                    UserSettingsItem(username: user,
+                                     isChecked: user == selectedUser)
+                    .gesture(TapGesture()
+                                .onEnded { _ in
+                                    selectedUser = user
+                                })
                 }
+                UserSettingsItem(username: "Anonymous User", isChecked: selectedUser == nil)
+                    .gesture(TapGesture()
+                        .onEnded { _ in
+                            selectedUser = nil
+                        })
+                UserSettingsAddUserButton()
+                    .simultaneousGesture(TapGesture()
+                        .onEnded { _ in
+                            print("new")
+                        })
             }
-        }.safeAreaInset(edge: .top) {
-            VStack {
-                TopBarMinimized(communityName: "imacat@alpaca.world", icon: "gear")
-            }
-            .background(.thickMaterial)
-            .environment(\.colorScheme, .dark)
+            .listRowBackground(
+                Color.clear.background(.thinMaterial)
+            )
+            .listRowInsets(EdgeInsets(top: 5, leading: 10, bottom: 5, trailing: 10))
         }
+        .scrollContentBackground(.hidden)
+        .listStyle(InsetGroupedListStyle())
+        .background(.ultraThinMaterial)
     }
 }
 
@@ -157,6 +146,15 @@ struct UserSettings_Previews: PreviewProvider {
             )
             .edgesIgnoringSafeArea(.all)
             UserSettings()
+                .frame(width: .infinity, height: .infinity)
+            .safeAreaInset(edge: .top) {
+                VStack {
+                    TopBarMinimized(communityName: "imacat@alpaca.world", icon: "gear")
+                    
+                }
+                .background(.ultraThickMaterial)
+                .environment(\.colorScheme, .dark)
+            }
         }
     }
 }
