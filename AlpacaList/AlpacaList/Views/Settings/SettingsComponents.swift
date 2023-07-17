@@ -7,6 +7,16 @@
 
 import SwiftUI
 
+extension View {
+    func settingsItemFont() -> some View {
+        return self
+            .font(.system(size: 18))
+            .lineLimit(1)
+            .fontWeight(.medium)
+            .fontDesign(.monospaced)
+    }
+}
+
 struct SettingsHeader: View {
     var title: String
     
@@ -45,8 +55,8 @@ struct SettingsButton<ContentView: View>: View {
     var body: some View {
         contents
             .foregroundColor(isTouching ? .primary.opacity(0.5) : .primary)
-            .gesture(touchGesture)
             .simultaneousGesture(tapGesture)
+//            .simultaneousGesture(touchGesture)
     }
 }
 
@@ -69,7 +79,7 @@ struct SettingsRadioItemCheckMark: View {
 }
 
 struct SettingsRadioItem: View {
-    var username: String
+    var title: String
     var isChecked: Bool
     var action: () -> Void
     
@@ -81,10 +91,8 @@ struct SettingsRadioItem: View {
                     .font(.system(size: 20))
                     .frame(width: 20)
                 Spacer().frame(width: 20)
-                Text(username)
-                    .font(.system(size: 18))
-                    .lineLimit(1)
-                    .fontWeight(.medium)
+                Text(title)
+                    .settingsItemFont()
                 Spacer()
             }
             .padding(5)
@@ -94,10 +102,19 @@ struct SettingsRadioItem: View {
 
 struct SettingsToggleItem: View {
     var title: String
-    var isChecked: Bool
+    @Binding var isChecked: Bool
     
     var body: some View {
-        return VStack{}
+        return VStack{
+            HStack {
+                Toggle(title, isOn: $isChecked)
+                    .toggleStyle(SwitchToggleStyle(tint: .accentColor))
+                    .settingsItemFont()
+                
+            }
+            .padding(5)
+        
+        }
     }
 }
 

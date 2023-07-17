@@ -30,9 +30,7 @@ struct UserSettingsAddUserButton: View {
                     .frame(width: 20)
                 Spacer().frame(width: 20)
                 Text("Add New User")
-                    .font(.system(size: 18))
-                    .fontWeight(.medium)
-                    .lineLimit(1)
+                    .settingsItemFont()
                 Spacer()
             }
             .padding(5)
@@ -48,7 +46,7 @@ struct UserSettings: View {
             SettingsSection(title: "Active User") {
                 ForEach(fakeUsers, id: \.self) { user in
                     SettingsRadioItem(
-                        username: user,
+                        title: user,
                         isChecked: user == selectedUser,
                         action: {
                             selectedUser = user
@@ -56,7 +54,7 @@ struct UserSettings: View {
                     )
                 }
                 SettingsRadioItem(
-                    username: "Anonymous User",
+                    title: "Anonymous User",
                     isChecked: selectedUser == nil,
                     action: {
                         selectedUser = nil
