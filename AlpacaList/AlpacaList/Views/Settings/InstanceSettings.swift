@@ -7,6 +7,19 @@
 
 import SwiftUI
 
+let fakeCommunities = [
+    "m/CatConspiracy",
+    "m/PotatoFashion",
+    "m/CheeseArt",
+    "m/UnicornLoversAnonymous",
+    "m/InvisiblePetschallenges",
+    "m/TinfoilCraftshats",
+    "m/SockDrawerMysteriesof",
+    "m/BananaGangdiscussions",
+    "m/UnderwaterBasketWeavin",
+    "m/AvocadoJuggling"
+]
+
 struct InstanceSettingsBookmarkItem: View {
     var title: String
     

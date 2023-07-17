@@ -15,8 +15,6 @@ let fakeUsers = [
     "serendipity@eternalhorizon.co"
 ]
 
-
-
 struct UserSettingsAddUserButton: View {
     var action: () -> Void
     
