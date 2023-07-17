@@ -29,34 +29,21 @@ struct SettingsHeader: View {
     }
 }
 
+struct SettingsButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label.foregroundColor(configuration.isPressed ? .primary.opacity(0.5) : .primary)
+    }
+}
+
 struct SettingsButton<ContentView: View>: View {
     var action: () -> Void
     @ViewBuilder var contents: ContentView
     
-    @State var isTouching = false
-    
-    var touchGesture: some Gesture {
-        DragGesture(minimumDistance: 0)
-            .onChanged({_ in
-                isTouching = true
-            })
-            .onEnded({_ in
-                isTouching = false
-            })
-    }
-    
-    var tapGesture: some Gesture {
-        TapGesture()
-            .onEnded({_ in
-                action()
-            })
-    }
-    
     var body: some View {
-        contents
-            .foregroundColor(isTouching ? .primary.opacity(0.5) : .primary)
-            .simultaneousGesture(tapGesture)
-//            .simultaneousGesture(touchGesture)
+        Button(action: action) {
+            contents
+        }
+        .buttonStyle(SettingsButtonStyle())
     }
 }
 
