@@ -33,8 +33,10 @@ struct FeedItemView: View {
             Text(feedItem.username)
                 .frame(maxWidth: .infinity,
                         alignment: .leading)
+            
+            FeedItemButtons()
         }
-        .padding(20)
+        .padding(15)
         .frame(maxWidth: .infinity)
         .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 8))
     }

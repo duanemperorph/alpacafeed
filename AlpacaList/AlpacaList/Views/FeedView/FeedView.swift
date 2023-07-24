@@ -23,22 +23,18 @@ struct FeedView: View {
     
     var body: some View {
         ZStack {
-            LinearGradient(
-                gradient: Gradient(colors: [.blue, .purple]),
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
-            .edgesIgnoringSafeArea(.all)
+            FeedViewBackground()
             
-            List {
-                ForEach(feedItems) { item in
-                    FeedItemView(feedItem: item)
-                        .listRowBackground(Color.clear)
-                        .listRowInsets(EdgeInsets(top: 5, leading: 10, bottom: 5, trailing: 10))
-                }
+            ScrollView {
+                VStack {
+                    ForEach(feedItems) { item in
+                        FeedItemView(feedItem: item)
+                            .listRowBackground(Color.clear)
+                            .listRowInsets(EdgeInsets(top: 5, leading: 10, bottom: 5, trailing: 10))
+                    }
+                }.padding(10)
             }
             .scrollContentBackground(.hidden)
-            .listStyle(PlainListStyle())
             .gesture(listDrag)
             .safeAreaInset(edge: .top) {
                 TopBarContainer(isOpen: $isTopBarOpen)

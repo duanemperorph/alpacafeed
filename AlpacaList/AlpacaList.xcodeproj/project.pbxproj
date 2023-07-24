@@ -11,6 +11,8 @@
 		370A25B62A54FA400076D378 /* TopBarContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 370A25B52A54FA400076D378 /* TopBarContainer.swift */; };
 		372A0DEE2A64B40C002F851F /* InstanceSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 372A0DED2A64B40C002F851F /* InstanceSettings.swift */; };
 		37346BD32A520AB800CB346A /* TopBarExpanded.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37346BD22A520AB800CB346A /* TopBarExpanded.swift */; };
+		37350F1F2A6DF2DC00DD239B /* FeedItemButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37350F1E2A6DF2DC00DD239B /* FeedItemButtons.swift */; };
+		37350F212A6DF4E000DD239B /* FeedViewBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37350F202A6DF4E000DD239B /* FeedViewBackground.swift */; };
 		37CF46AB2A50FAF700952075 /* AlpacaListApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37CF46AA2A50FAF700952075 /* AlpacaListApp.swift */; };
 		37CF46AD2A50FAF700952075 /* FeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37CF46AC2A50FAF700952075 /* FeedView.swift */; };
 		37CF46AF2A50FAF800952075 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 37CF46AE2A50FAF800952075 /* Assets.xcassets */; };
@@ -46,6 +48,8 @@
 		370A25B52A54FA400076D378 /* TopBarContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopBarContainer.swift; sourceTree = "<group>"; };
 		372A0DED2A64B40C002F851F /* InstanceSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstanceSettings.swift; sourceTree = "<group>"; };
 		37346BD22A520AB800CB346A /* TopBarExpanded.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopBarExpanded.swift; sourceTree = "<group>"; };
+		37350F1E2A6DF2DC00DD239B /* FeedItemButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemButtons.swift; sourceTree = "<group>"; };
+		37350F202A6DF4E000DD239B /* FeedViewBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewBackground.swift; sourceTree = "<group>"; };
 		37CF46A72A50FAF700952075 /* AlpacaList.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AlpacaList.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		37CF46AA2A50FAF700952075 /* AlpacaListApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlpacaListApp.swift; sourceTree = "<group>"; };
 		37CF46AC2A50FAF700952075 /* FeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedView.swift; sourceTree = "<group>"; };
@@ -92,6 +96,8 @@
 			children = (
 				37CF46AC2A50FAF700952075 /* FeedView.swift */,
 				37F6894F2A510D82004E27DF /* FeedItemView.swift */,
+				37350F1E2A6DF2DC00DD239B /* FeedItemButtons.swift */,
+				37350F202A6DF4E000DD239B /* FeedViewBackground.swift */,
 			);
 			path = FeedView;
 			sourceTree = "<group>";
@@ -325,7 +331,9 @@
 				370A25B62A54FA400076D378 /* TopBarContainer.swift in Sources */,
 				37CF46AD2A50FAF700952075 /* FeedView.swift in Sources */,
 				37CF46AB2A50FAF700952075 /* AlpacaListApp.swift in Sources */,
+				37350F1F2A6DF2DC00DD239B /* FeedItemButtons.swift in Sources */,
 				37CF46D82A50FC8A00952075 /* FeedItem.swift in Sources */,
+				37350F212A6DF4E000DD239B /* FeedViewBackground.swift in Sources */,
 				370A25AF2A54B9F70076D378 /* TopBarMinimized.swift in Sources */,
 				372A0DEE2A64B40C002F851F /* InstanceSettings.swift in Sources */,
 				37F689502A510D82004E27DF /* FeedItemView.swift in Sources */,
