@@ -42,12 +42,10 @@ struct PostItemExpandCommentsButton: View {
         Button {
             isActive.toggle()
         } label: {
-            VStack {
-                Image(systemName: isActive ? "chevron.up" : "chevron.down")
-                    .fontWeight(.semibold)
-            }
-            .frame(maxWidth: .infinity)
-            .postItemButtonStyle(isActive: isActive)
+            Image(systemName: isActive ? "chevron.up" : "chevron.down")
+                .fontWeight(.semibold)
+                .frame(maxWidth: .infinity)
+                .postItemButtonStyle(isActive: isActive)
         }
     }
 }
@@ -69,7 +67,7 @@ struct PostItemButtonWithCount<Content: View>: View {
                 Text(String(count))
             }
             .postItemButtonStyle(isActive: isActive)
-        }
+        }.buttonStyle(.plain)
     }
 }
 
@@ -121,7 +119,7 @@ struct PostItemButtons: View {
                             .fontWeight(.bold)
                             .frame(width: 18, height: 18)
                     }
-                }.frame(width: 40)
+                }.frame(width: 40).buttonStyle(.borderless)
             }
         }
         .tint(.primary)

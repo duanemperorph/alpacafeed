@@ -29,11 +29,11 @@ struct SettingsHeader: View {
     }
 }
 
-struct SettingsButtonStyle: ButtonStyle {
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label.foregroundColor(configuration.isPressed ? .primary.opacity(0.5) : .primary)
-    }
-}
+//struct SettingsButtonStyle: ButtonStyle {
+//    func makeBody(configuration: Configuration) -> some View {
+//        configuration.label.foregroundColor(configuration.isPressed ? .primary.opacity(0.5) : .primary)
+//    }
+//}
 
 struct SettingsButton<ContentView: View>: View {
     var action: () -> Void
@@ -43,7 +43,8 @@ struct SettingsButton<ContentView: View>: View {
         Button(action: action) {
             contents
         }
-        .buttonStyle(SettingsButtonStyle())
+        .tint(.primary)
+        .buttonStyle(.borderless)
     }
 }
 

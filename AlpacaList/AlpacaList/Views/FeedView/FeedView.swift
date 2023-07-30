@@ -25,15 +25,13 @@ struct FeedView: View {
         ZStack {
             FeedViewBackground()
             
-            ScrollView {
-                VStack {
-                    ForEach(postItems) { item in
-                        PostItemView(postItem: item)
-                            .listRowBackground(Color.clear)
-                            .listRowInsets(EdgeInsets(top: 5, leading: 10, bottom: 5, trailing: 10))
-                    }
-                }.padding(10)
+            List(postItems) { item in
+                PostItemView(postItem: item)
+                    .listRowBackground(Color.clear)
+                    .listRowInsets(EdgeInsets(top: 5, leading: 10, bottom: 5, trailing: 10))
             }
+            .padding(0)
+            .listStyle(PlainListStyle())
             .scrollContentBackground(.hidden)
             .gesture(listDrag)
             .safeAreaInset(edge: .top) {

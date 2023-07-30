@@ -30,7 +30,7 @@ struct PostItemView: View {
                            alignment: .leading)
             }
             
-            Text(postItem.username)
+            Text("@\(postItem.username)")
                 .frame(maxWidth: .infinity,
                         alignment: .leading)
             
