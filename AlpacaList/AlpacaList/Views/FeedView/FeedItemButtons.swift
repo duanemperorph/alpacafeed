@@ -1,5 +1,5 @@
 //
-//  FeedItemButtons.swift
+//  PostItemButtons.swift
 //  AlpacaList
 //
 //  Created by Lucas Nguyen on 7/23/23.
@@ -8,18 +8,18 @@
 import SwiftUI
 
 extension View {
-    @ViewBuilder func feedItemButtonStyle(isActive: Bool) -> some View {
+    @ViewBuilder func postItemButtonStyle(isActive: Bool) -> some View {
         if (isActive) {
             self
-                .feedItemButtonStyle()
-                .feedItemButtonActiveStyle()
+                .postItemButtonStyle()
+                .postItemButtonActiveStyle()
         }
         else {
-            self.feedItemButtonStyle()
+            self.postItemButtonStyle()
         }
     }
     
-    func feedItemButtonStyle() -> some View {
+    func postItemButtonStyle() -> some View {
         return self
             .padding (5)
             .overlay(
@@ -28,14 +28,14 @@ extension View {
                 )
     }
     
-    func feedItemButtonActiveStyle() -> some View {
+    func postItemButtonActiveStyle() -> some View {
         return self
             .background(Color.purple)
             .cornerRadius(8)
     }
 }
 
-struct FeedItemExpandCommentsButton: View {
+struct PostItemExpandCommentsButton: View {
     @State var isActive = false
     
     var body: some View {
@@ -47,14 +47,14 @@ struct FeedItemExpandCommentsButton: View {
                     .fontWeight(.semibold)
             }
             .frame(maxWidth: .infinity)
-            .feedItemButtonStyle(isActive: isActive)
+            .postItemButtonStyle(isActive: isActive)
         }
     }
 }
 
-// FeedItemButtonWithCount
+// PostItemButtonWithCount
 // contains a button with a customizable label view and a count
-struct FeedItemButtonWithCount<Content: View>: View {
+struct PostItemButtonWithCount<Content: View>: View {
     let count = 100
     @State var isActive = false
     let action: () -> Void
@@ -68,16 +68,16 @@ struct FeedItemButtonWithCount<Content: View>: View {
                 iconView().fontWeight(.bold)
                 Text(String(count))
             }
-            .feedItemButtonStyle(isActive: isActive)
+            .postItemButtonStyle(isActive: isActive)
         }
     }
 }
 
-struct FeedItemButtons: View {
+struct PostItemButtons: View {
     var body: some View {
         VStack {
             HStack {
-                FeedItemButtonWithCount(action: {
+                PostItemButtonWithCount(action: {
                     // Action for upvote button
                 }, iconView: {
                     Image(systemName: "hand.thumbsup")
@@ -85,7 +85,7 @@ struct FeedItemButtons: View {
                 
                 Spacer()
                 
-                FeedItemButtonWithCount(action: {
+                PostItemButtonWithCount(action: {
                     // Action for downvote button
                 }, iconView: {
                     Image(systemName: "hand.thumbsdown")
@@ -93,9 +93,9 @@ struct FeedItemButtons: View {
                 
                 Spacer()
                 
-                // Add more FeedItemButtonWithCount instances for other buttons if needed
+                // Add more PostItemButtonWithCount instances for other buttons if needed
                 
-                FeedItemButtonWithCount(action: {
+                PostItemButtonWithCount(action: {
                     // Action for boost button
                 }, iconView: {
                     Text("🚀")
@@ -109,7 +109,7 @@ struct FeedItemButtons: View {
                     Text("100")
                 }
                 .frame(width: 60)
-                FeedItemExpandCommentsButton()
+                PostItemExpandCommentsButton()
                     .padding(.horizontal, 10)
                 HStack {
                     
@@ -128,11 +128,11 @@ struct FeedItemButtons: View {
     }
 }
 
-struct FeedItemButtons_Previews: PreviewProvider {
+struct PostItemButtons_Previews: PreviewProvider {
     static var previews: some View {
         ZStack {
             FeedViewBackground()
-            FeedItemButtons()
+            PostItemButtons()
                 .padding(10)
                 .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 8))
         }

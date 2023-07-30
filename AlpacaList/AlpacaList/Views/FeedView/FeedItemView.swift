@@ -1,5 +1,5 @@
 //
-//  FeedItemView.swift
+//  PostItemView.swift
 //  AlpacaList
 //
 //  Created by Lucas Nguyen on 7/1/23.
@@ -9,15 +9,15 @@ import SwiftUI
 
 
 // Swift view displaying a feed item
-struct FeedItemView: View {
-    let feedItem: FeedItem
+struct PostItemView: View {
+    let postItem: PostItem
     
     var body: some View {
         VStack(alignment: .leading) {
-            Text(feedItem.title)
+            Text(postItem.title)
                 .font(.headline)
             
-            if let thumbnail = feedItem.thumbnail {
+            if let thumbnail = postItem.thumbnail {
                 // Display thumbnail
                 Image(thumbnail)
                     .resizable()
@@ -25,16 +25,16 @@ struct FeedItemView: View {
                     .frame(maxWidth: .infinity, maxHeight: 200)
             } else {
                 // Display body
-                Text(feedItem.body)
+                Text(postItem.body)
                     .frame(maxWidth: .infinity,
                            alignment: .leading)
             }
             
-            Text(feedItem.username)
+            Text(postItem.username)
                 .frame(maxWidth: .infinity,
                         alignment: .leading)
             
-            FeedItemButtons()
+            PostItemButtons()
         }
         .padding(15)
         .frame(maxWidth: .infinity)
@@ -43,9 +43,11 @@ struct FeedItemView: View {
 }
 
 struct FeedViewItem_Previews: PreviewProvider {
+    static let mockPostItems = MockDataGenerator.generatePosts()
+    
     static var previews: some View {
         ZStack {
-            FeedView(feedItems: mockFeedItems)
+            FeedView(postItems: mockPostItems)
         }
     }
 }
