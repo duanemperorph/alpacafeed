@@ -11,7 +11,7 @@ import SwiftUI
 struct AlpacaListApp: App {
     var body: some Scene {
         WindowGroup {
-            FeedView(feedItems: exampleFeedItems)
+            FeedView(feedItems: mockFeedItems)
         }
     }
 }

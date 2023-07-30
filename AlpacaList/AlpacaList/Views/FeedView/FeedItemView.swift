@@ -45,7 +45,7 @@ struct FeedItemView: View {
 struct FeedViewItem_Previews: PreviewProvider {
     static var previews: some View {
         ZStack {
-            FeedView(feedItems: exampleFeedItems)
+            FeedView(feedItems: mockFeedItems)
         }
     }
 }

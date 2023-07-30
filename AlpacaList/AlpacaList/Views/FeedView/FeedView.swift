@@ -45,6 +45,6 @@ struct FeedView: View {
 
 struct FeedView_Previews: PreviewProvider {
     static var previews: some View {
-        FeedView(feedItems: exampleFeedItems)
+        FeedView(feedItems: mockFeedItems)
     }
 }
