@@ -9,11 +9,11 @@ import SwiftUI
 
 @main
 struct AlpacaListApp: App {
-    let mockPostItems = MockDataGenerator.generatePosts()
+    let mockFeedItems = MockDataGenerator.generatePosts()
     
     var body: some Scene {
         WindowGroup {
-            FeedView(postItems: mockPostItems)
+            FeedView(postItems: mockFeedItems)
         }
     }
 }

@@ -8,9 +8,8 @@
 import Foundation
 
 class MockDataGenerator {
-
-    static func generatePosts(length: Int = 20, childLength: Int = 5, depth: Int = 3) -> [PostItem] {
-        var items: [PostItem] = []
+    static func generatePosts(length: Int = 20, childLength: Int = 5, depth: Int = 3) -> [FeedItem] {
+        var items: [FeedItem] = []
         
         for _ in 0..<length {
             let user = mockUsers.randomElement()!
@@ -19,23 +18,22 @@ class MockDataGenerator {
             let children = generateChildren(length: childLength, depth: depth)
             
             // create an item and add to the items array
-            items.append(PostItem(thumbnail: generateThumbnail(), title: title, body: content, username: user, date: Date(), children: children))
-        
+            items.append(FeedItem.createPost(id: UUID(), username: user, date: Date(), title: title, body: content, thumbnail: generateThumbnail()))
         }
         
         return items
     }
     
-    static func generateChildren(length: Int, depth: Int) -> [CommentItem] {
-        var items: [CommentItem] = []
+    static func generateChildren(length: Int, depth: Int, indention: Int = 1) -> [FeedItem] {
+        var items: [FeedItem] = []
         
         for _ in 0..<length {
             let user = mockUsers.randomElement()!
             let content = mockResponses.randomElement()!
-            let children = depth > 0 ? generateChildren(length: length, depth: depth - 1) : []
+            let children = depth > 0 ? generateChildren(length: length, depth: depth - 1, indention: indention + 1) : []
             
             // create an item and add to the items array
-            items.append(CommentItem(text: content, username: user, date: Date(), children: children))
+            items.append(FeedItem.createComment(id: UUID(), username: user, date: Date(), body: content, indention: indention))
         
         }
         

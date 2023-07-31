@@ -1,5 +1,5 @@
 //
-//  PostItemView.swift
+//  FeedItemView.swift
 //  AlpacaList
 //
 //  Created by Lucas Nguyen on 7/1/23.
@@ -9,13 +9,19 @@ import SwiftUI
 
 
 // Swift view displaying a feed item
-struct PostItemView: View {
-    let postItem: PostItem
+struct FeedItemView: View {
+    let postItem: FeedItem
     
     var body: some View {
         VStack(alignment: .leading) {
-            Text(postItem.title)
-                .font(.headline)
+            if let title = postItem.title {
+                Text(title)
+                    .font(.headline)
+            }
+            
+            Text("@\(postItem.username)")
+                .frame(maxWidth: .infinity,
+                        alignment: .leading)
             
             if let thumbnail = postItem.thumbnail {
                 // Display thumbnail
@@ -23,18 +29,14 @@ struct PostItemView: View {
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(maxWidth: .infinity, maxHeight: 200)
-            } else {
+            } else if let body = postItem.body {
                 // Display body
-                Text(postItem.body)
+                Text(body)
                     .frame(maxWidth: .infinity,
                            alignment: .leading)
             }
-            
-            Text("@\(postItem.username)")
-                .frame(maxWidth: .infinity,
-                        alignment: .leading)
-            
-            PostItemButtons()
+            Spacer().frame(height: 15)
+            FeedItemButtons()
         }
         .padding(15)
         .frame(maxWidth: .infinity)
@@ -43,11 +45,11 @@ struct PostItemView: View {
 }
 
 struct FeedViewItem_Previews: PreviewProvider {
-    static let mockPostItems = MockDataGenerator.generatePosts()
+    static let mockFeedItems = MockDataGenerator.generatePosts()
     
     static var previews: some View {
         ZStack {
-            FeedView(postItems: mockPostItems)
+            FeedView(postItems: mockFeedItems)
         }
     }
 }

@@ -1,5 +1,5 @@
 //
-//  PostItemButtons.swift
+//  FeedItemButtons.swift
 //  AlpacaList
 //
 //  Created by Lucas Nguyen on 7/23/23.
@@ -35,7 +35,7 @@ extension View {
     }
 }
 
-struct PostItemExpandCommentsButton: View {
+struct FeedItemExpandCommentsButton: View {
     @State var isActive = false
     
     var body: some View {
@@ -50,9 +50,9 @@ struct PostItemExpandCommentsButton: View {
     }
 }
 
-// PostItemButtonWithCount
+// FeedItemButtonWithCount
 // contains a button with a customizable label view and a count
-struct PostItemButtonWithCount<Content: View>: View {
+struct FeedItemButtonWithCount<Content: View>: View {
     let count = 100
     @State var isActive = false
     let action: () -> Void
@@ -71,11 +71,11 @@ struct PostItemButtonWithCount<Content: View>: View {
     }
 }
 
-struct PostItemButtons: View {
+struct FeedItemButtons: View {
     var body: some View {
         VStack {
             HStack {
-                PostItemButtonWithCount(action: {
+                FeedItemButtonWithCount(action: {
                     // Action for upvote button
                 }, iconView: {
                     Image(systemName: "hand.thumbsup")
@@ -83,7 +83,7 @@ struct PostItemButtons: View {
                 
                 Spacer()
                 
-                PostItemButtonWithCount(action: {
+                FeedItemButtonWithCount(action: {
                     // Action for downvote button
                 }, iconView: {
                     Image(systemName: "hand.thumbsdown")
@@ -91,9 +91,9 @@ struct PostItemButtons: View {
                 
                 Spacer()
                 
-                // Add more PostItemButtonWithCount instances for other buttons if needed
+                // Add more FeedItemButtonWithCount instances for other buttons if needed
                 
-                PostItemButtonWithCount(action: {
+                FeedItemButtonWithCount(action: {
                     // Action for boost button
                 }, iconView: {
                     Text("🚀")
@@ -107,7 +107,7 @@ struct PostItemButtons: View {
                     Text("100")
                 }
                 .frame(width: 60)
-                PostItemExpandCommentsButton()
+                FeedItemExpandCommentsButton()
                     .padding(.horizontal, 10)
                 HStack {
                     
@@ -126,11 +126,11 @@ struct PostItemButtons: View {
     }
 }
 
-struct PostItemButtons_Previews: PreviewProvider {
+struct FeedItemButtons_Previews: PreviewProvider {
     static var previews: some View {
         ZStack {
             FeedViewBackground()
-            PostItemButtons()
+            FeedItemButtons()
                 .padding(10)
                 .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 8))
         }
