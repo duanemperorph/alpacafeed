@@ -13,7 +13,7 @@ struct AlpacaListApp: App {
     
     var body: some Scene {
         WindowGroup {
-            FeedView(postItems: mockFeedItems)
+            PostFeedView(postItems: mockFeedItems)
         }
     }
 }

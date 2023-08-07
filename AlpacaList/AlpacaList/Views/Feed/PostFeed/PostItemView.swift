@@ -9,7 +9,7 @@ import SwiftUI
 
 
 // Swift view displaying a feed item
-struct FeedItemView: View {
+struct PostItemView: View {
     let postItem: FeedItem
     
     var body: some View {
@@ -49,7 +49,7 @@ struct FeedViewItem_Previews: PreviewProvider {
     
     static var previews: some View {
         ZStack {
-            FeedView(postItems: mockFeedItems)
+            PostFeedView(postItems: mockFeedItems)
         }
     }
 }

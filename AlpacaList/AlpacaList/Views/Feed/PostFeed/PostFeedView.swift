@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct FeedView: View {
+struct PostFeedView: View {
     @State var postItems: [FeedItem] = []
     @State var isTopBarOpen = false
     
@@ -26,7 +26,7 @@ struct FeedView: View {
             FeedViewBackground()
             
             List(postItems) { item in
-                FeedItemView(postItem: item)
+                PostItemView(postItem: item)
                     .listRowBackground(Color.clear)
                     .listRowInsets(EdgeInsets(top: 5, leading: 10, bottom: 5, trailing: 10))
             }
@@ -45,6 +45,6 @@ struct FeedView_Previews: PreviewProvider {
     static let mockFeedItems = MockDataGenerator.generatePosts()
     
     static var previews: some View {
-        FeedView(postItems: mockFeedItems)
+        PostFeedView(postItems: mockFeedItems)
     }
 }
