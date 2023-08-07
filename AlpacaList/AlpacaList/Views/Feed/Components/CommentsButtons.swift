@@ -35,7 +35,7 @@ struct CommentItemButtons_Previews: PreviewProvider {
     static var previews: some View {
         ZStack {
             FeedViewBackground()
-            PostItemButtons()
+            CommentItemButtons()
                 .padding(10)
                 .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 8))
         }

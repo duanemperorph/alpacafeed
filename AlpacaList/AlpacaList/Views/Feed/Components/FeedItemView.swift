@@ -7,36 +7,30 @@
 
 import SwiftUI
 
-
 // Swift view displaying a feed item
-struct PostItemView: View {
+struct FeedItemView: View {
     let postItem: FeedItem
     
     var body: some View {
         VStack(alignment: .leading) {
             if let title = postItem.title {
-                Text(title)
-                    .font(.headline)
+                PostTitle(title: title)
             }
             
-            Text("@\(postItem.username)")
-                .frame(maxWidth: .infinity,
-                        alignment: .leading)
+            PostUsername(username: postItem.username)
             
             if let thumbnail = postItem.thumbnail {
-                // Display thumbnail
-                Image(thumbnail)
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(maxWidth: .infinity, maxHeight: 200)
+                PostThumbnail(thumbnail: thumbnail)
             } else if let body = postItem.body {
-                // Display body
-                Text(body)
-                    .frame(maxWidth: .infinity,
-                           alignment: .leading)
+                PostBody(bodyText: body)
             }
             Spacer().frame(height: 15)
-            PostItemButtons()
+            switch postItem.style {
+                case .post:
+                    PostItemButtons()
+                case .comment:
+                    CommentItemButtons()
+            }
         }
         .padding(15)
         .frame(maxWidth: .infinity)

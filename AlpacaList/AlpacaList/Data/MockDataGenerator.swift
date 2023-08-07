@@ -18,7 +18,7 @@ class MockDataGenerator {
             let children = generateChildren(length: childLength, depth: depth)
             
             // create an item and add to the items array
-            items.append(FeedItem.createPost(id: UUID(), username: user, date: Date(), title: title, body: content, thumbnail: generateThumbnail()))
+            items.append(FeedItem.createPost(id: UUID(), username: user, date: Date(), title: title, body: content, thumbnail: generateThumbnail(), children: children))
         }
         
         return items
@@ -33,7 +33,7 @@ class MockDataGenerator {
             let children = depth > 0 ? generateChildren(length: length, depth: depth - 1, indention: indention + 1) : []
             
             // create an item and add to the items array
-            items.append(FeedItem.createComment(id: UUID(), username: user, date: Date(), body: content, indention: indention))
+            items.append(FeedItem.createComment(id: UUID(), username: user, date: Date(), body: content, indention: indention, children: children))
         
         }
         

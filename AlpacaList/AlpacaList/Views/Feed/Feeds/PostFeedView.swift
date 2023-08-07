@@ -26,7 +26,7 @@ struct PostFeedView: View {
             FeedViewBackground()
             
             List(postItems) { item in
-                PostItemView(postItem: item)
+                FeedItemView(postItem: item)
                     .listRowBackground(Color.clear)
                     .listRowInsets(EdgeInsets(top: 5, leading: 10, bottom: 5, trailing: 10))
             }
