@@ -36,7 +36,7 @@ struct PostItemView: View {
                            alignment: .leading)
             }
             Spacer().frame(height: 15)
-            FeedItemButtons()
+            PostItemButtons()
         }
         .padding(15)
         .frame(maxWidth: .infinity)
