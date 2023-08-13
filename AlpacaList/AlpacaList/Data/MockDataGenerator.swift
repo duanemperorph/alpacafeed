@@ -8,14 +8,14 @@
 import Foundation
 
 class MockDataGenerator {
-    static func generatePosts(length: Int = 20, childLength: Int = 5, depth: Int = 3) -> [FeedItem] {
+    static func generatePosts(length: Int = 20, childLength: Int = 10, depth: Int = 3) -> [FeedItem] {
         var items: [FeedItem] = []
         
         for _ in 0..<length {
             let user = mockUsers.randomElement()!
             let title = mockTitles.randomElement()!
             let content = mockResponses.randomElement()!
-            let children = generateChildren(length: childLength, depth: depth)
+            let children = generateChildren(maxLength: childLength, depth: depth)
             
             // create an item and add to the items array
             items.append(FeedItem.createPost(id: UUID(), username: user, date: Date(), title: title, body: content, thumbnail: generateThumbnail(), children: children))
@@ -24,13 +24,14 @@ class MockDataGenerator {
         return items
     }
     
-    static func generateChildren(length: Int, depth: Int, indention: Int = 1) -> [FeedItem] {
+    static func generateChildren(maxLength: Int, depth: Int, indention: Int = 1) -> [FeedItem] {
         var items: [FeedItem] = []
+        let length = Int.random(in: 0...maxLength)
         
         for _ in 0..<length {
             let user = mockUsers.randomElement()!
             let content = mockResponses.randomElement()!
-            let children = depth > 0 ? generateChildren(length: length, depth: depth - 1, indention: indention + 1) : []
+            let children = depth > 0 ? generateChildren(maxLength: maxLength, depth: depth - 1, indention: indention + 1) : []
             
             // create an item and add to the items array
             items.append(FeedItem.createComment(id: UUID(), username: user, date: Date(), body: content, indention: indention, children: children))

@@ -22,9 +22,9 @@ struct FeedItem: Identifiable {
     let body: String?
     let thumbnail: String?
     
-    let children: [FeedItem]?
+    var children: [FeedItem]?
     let indention: Int?
-    let isExpaneded: Bool = false
+    var isExpanded: Bool = false
     
     static func createPost(id: UUID, username: String, date: Date, title: String, body: String?, thumbnail: String?, children: [FeedItem]) -> FeedItem {
         // Create a new feed item
@@ -36,5 +36,21 @@ struct FeedItem: Identifiable {
         // Create a new feed item
         return FeedItem(style: .comment, id: id, username: username, date: date, title: nil, body: body, thumbnail: nil, children: children, indention: indention)
     
+    }
+}
+
+extension Array<FeedItem> {
+    func recursiveFindItem(withId: UUID) -> FeedItem? {
+        for item in self {
+            if item.id == withId {
+                return item
+            }
+            
+            if let child = item.children?.recursiveFindItem(withId: withId) {
+                return child
+            }
+        }
+        
+        return nil
     }
 }

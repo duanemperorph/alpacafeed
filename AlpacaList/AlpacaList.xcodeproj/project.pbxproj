@@ -10,6 +10,7 @@
 		370A25AF2A54B9F70076D378 /* TopBarMinimized.swift in Sources */ = {isa = PBXBuildFile; fileRef = 370A25AE2A54B9F70076D378 /* TopBarMinimized.swift */; };
 		370A25B62A54FA400076D378 /* TopBarContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 370A25B52A54FA400076D378 /* TopBarContainer.swift */; };
 		372A0DEE2A64B40C002F851F /* InstanceSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 372A0DED2A64B40C002F851F /* InstanceSettings.swift */; };
+		372DC5992A8982FD00843D14 /* ViewModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 372DC5982A8982FD00843D14 /* ViewModels.swift */; };
 		37346BD32A520AB800CB346A /* TopBarExpanded.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37346BD22A520AB800CB346A /* TopBarExpanded.swift */; };
 		37350F1F2A6DF2DC00DD239B /* PostItemButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37350F1E2A6DF2DC00DD239B /* PostItemButtons.swift */; };
 		37350F212A6DF4E000DD239B /* FeedViewBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37350F202A6DF4E000DD239B /* FeedViewBackground.swift */; };
@@ -53,6 +54,7 @@
 		370A25AE2A54B9F70076D378 /* TopBarMinimized.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopBarMinimized.swift; sourceTree = "<group>"; };
 		370A25B52A54FA400076D378 /* TopBarContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopBarContainer.swift; sourceTree = "<group>"; };
 		372A0DED2A64B40C002F851F /* InstanceSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstanceSettings.swift; sourceTree = "<group>"; };
+		372DC5982A8982FD00843D14 /* ViewModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModels.swift; sourceTree = "<group>"; };
 		37346BD22A520AB800CB346A /* TopBarExpanded.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopBarExpanded.swift; sourceTree = "<group>"; };
 		37350F1E2A6DF2DC00DD239B /* PostItemButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostItemButtons.swift; sourceTree = "<group>"; };
 		37350F202A6DF4E000DD239B /* FeedViewBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewBackground.swift; sourceTree = "<group>"; };
@@ -217,6 +219,7 @@
 				37CF46D72A50FC8A00952075 /* FeedItem.swift */,
 				373DABB22A75D9E500DF17EB /* MockDataGenerator.swift */,
 				373DABB82A75E8F100DF17EB /* MockDataStrings.swift */,
+				372DC5982A8982FD00843D14 /* ViewModels.swift */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -379,6 +382,7 @@
 				37D9FED62A5BC46300E539A6 /* SettingsComponents.swift in Sources */,
 				373DABB92A75E8F100DF17EB /* MockDataStrings.swift in Sources */,
 				37D9FED22A5BA31100E539A6 /* UserSettings.swift in Sources */,
+				372DC5992A8982FD00843D14 /* ViewModels.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
