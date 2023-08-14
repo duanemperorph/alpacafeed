@@ -36,11 +36,12 @@ extension View {
 }
 
 struct ExpandCommentsButton: View {
-    @State var isActive = false
+    let isActive: Bool
+    let toggleActive: () -> Void
     
     var body: some View {
         Button {
-            isActive.toggle()
+            toggleActive()
         } label: {
             Image(systemName: isActive ? "chevron.up" : "chevron.down")
                 .fontWeight(.semibold)

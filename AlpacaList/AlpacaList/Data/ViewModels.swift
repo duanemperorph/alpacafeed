@@ -7,17 +7,24 @@
 
 import Foundation
 
-class CommentsViewModel {
-    var post: FeedItem
+class CommentsViewModel: ObservableObject {
+    @Published var post: FeedItem
     
     init(post: FeedItem) {
         self.post = post
     }
     
     func toggleExpandedForCommentWithId(id: UUID) {
-        if var foundItem = post.children?.recursiveFindItem(withId: id) {
-            foundItem.isExpanded.toggle()
+        guard var children = post.children else { return }
+        
+        children.recursiveFindAndMutateItem(withId: id) { item in
+            item.isExpanded.toggle()
         }
+    }
+    
+    static func withMockData() -> CommentsViewModel {
+        let mockData = MockDataGenerator.generatePosts()
+        return CommentsViewModel(post: mockData[0])
     }
 }
 
@@ -35,5 +42,10 @@ class PostsViewModel {
         else {
             return nil
         }
+    }
+    
+    static func withMockData() -> PostsViewModel {
+        let mockData = MockDataGenerator.generatePosts()
+        return PostsViewModel(rootPosts: mockData)
     }
 }

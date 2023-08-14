@@ -61,4 +61,33 @@ extension Array<FeedItem> {
         
         return nil
     }
+    
+    /**
+     * @param withId: id of object to find
+     * @param mutation: callback for the mutation funciton
+     * @returns true if item was found and mutated
+     */
+    @discardableResult
+    mutating func recursiveFindAndMutateItem(withId id: UUID, mutation: (inout FeedItem) -> Void) -> Bool {
+        for (i, item) in enumerated() {
+            var mutableItem = item
+            
+            if item.id == id {
+                mutation(&mutableItem)
+                self[i] = mutableItem
+                return true
+            }
+            
+            else if var children = item.children {
+                let didMutateChild = children.recursiveFindAndMutateItem(withId: id, mutation: mutation)
+                
+                if (didMutateChild) {
+                    return true
+                }
+            }
+        }
+        
+        return false
+    
+    }
 }

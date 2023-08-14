@@ -8,11 +8,11 @@
 import SwiftUI
 
 struct CommentsFeedView: View {
-    let rootItem: FeedItem
+    let model: CommentsViewModel
     @State var isTopBarOpen = false
     
     var items: [FeedItem] {
-        return rootItem.getSelfWithChildrenRecursively(forceExpanded: true)
+        return model.post.getSelfWithChildrenRecursively(forceExpanded: true)
     }
     
     var listDrag: some Gesture {
@@ -29,7 +29,7 @@ struct CommentsFeedView: View {
         ZStack {
             FeedViewBackground()
             List(items) { item in
-                FeedItemView(postItem: item)
+                FeedItemView(item: item, containerModel: model)
                     .listRowBackground(Color.clear)
                     .listRowInsets(EdgeInsets(top: 5, leading: 10 + indentionForItem(item: item), bottom: 5, trailing: 10))
             }
@@ -49,9 +49,9 @@ struct CommentsFeedView: View {
 }
 
 struct CommentsFeedView_Previews: PreviewProvider {
-    static let mockFeedItems = MockDataGenerator.generatePosts()
+    static let model = CommentsViewModel.withMockData()
     
     static var previews: some View {
-        CommentsFeedView(rootItem: mockFeedItems.randomElement()!)
+        CommentsFeedView(model: model)
     }
 }

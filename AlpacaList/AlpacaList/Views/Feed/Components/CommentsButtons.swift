@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct CommentItemButtons: View {
+    let item: FeedItem
+    let toggleExpanded: () -> Void
+    
     var body: some View {
         VStack {
             HStack {
@@ -22,7 +25,7 @@ struct CommentItemButtons: View {
             HStack {
                 CommentsCountView()
                 .frame(width: 60)
-                ExpandCommentsButton()
+                ExpandCommentsButton(isActive: item.isExpanded, toggleActive: toggleExpanded)
                     .padding(.horizontal, 10)
                 PlusButton().frame(width: 40)
             }
@@ -31,13 +34,14 @@ struct CommentItemButtons: View {
     }
 }
 
-struct CommentItemButtons_Previews: PreviewProvider {
-    static var previews: some View {
-        ZStack {
-            FeedViewBackground()
-            CommentItemButtons()
-                .padding(10)
-                .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 8))
-        }
-    }
-}
+//struct CommentItemButtons_Previews: PreviewProvider {
+//    
+//    static var previews: some View {
+//        ZStack {
+//            FeedViewBackground()
+//            CommentItemButtons()
+//                .padding(10)
+//                .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 8))
+//        }
+//    }
+//}
