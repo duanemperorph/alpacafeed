@@ -17,8 +17,24 @@ class CommentsViewModel: ObservableObject {
     func toggleExpandedForCommentWithId(id: UUID) {
         guard var children = post.children else { return }
         
-        children.recursiveFindAndMutateItem(withId: id) { item in
+        let didMutate = children.recursiveFindAndMutateItem(withId: id) { item in
             item.isExpanded.toggle()
+        }
+        
+        if didMutate {
+            print("didMutate")
+            var newPost = post
+            newPost.children = children
+            post = newPost
+            printExpanded()
+        }
+    }
+    
+    func printExpanded() {
+        guard let children = post.children else { return }
+        
+        for item in children {
+            print("isExpanded: ", item.isExpanded)
         }
     }
     

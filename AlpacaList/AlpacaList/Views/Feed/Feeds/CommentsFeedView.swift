@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct CommentsFeedView: View {
-    let model: CommentsViewModel
+    @ObservedObject var model: CommentsViewModel
     @State var isTopBarOpen = false
     
     var items: [FeedItem] {
@@ -44,7 +44,7 @@ struct CommentsFeedView: View {
     }
     
     func indentionForItem(item: FeedItem) -> Double {
-        return Double(item.indention ?? 0) * 10
+        return Double(item.indention ?? 0) * 20
     }
 }
 

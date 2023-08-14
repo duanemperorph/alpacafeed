@@ -82,6 +82,8 @@ extension Array<FeedItem> {
                 let didMutateChild = children.recursiveFindAndMutateItem(withId: id, mutation: mutation)
                 
                 if (didMutateChild) {
+                    mutableItem.children = children
+                    self[i] = mutableItem
                     return true
                 }
             }
