@@ -19,10 +19,6 @@ class CommentsViewModel {
             foundItem.isExpanded.toggle()
         }
     }
-    
-    var expandedComments: [FeedItem] {
-        
-    }
 }
 
 class PostsViewModel {

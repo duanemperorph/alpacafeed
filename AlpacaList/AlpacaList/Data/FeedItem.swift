@@ -37,6 +37,14 @@ struct FeedItem: Identifiable {
         return FeedItem(style: .comment, id: id, username: username, date: date, title: nil, body: body, thumbnail: nil, children: children, indention: indention)
     
     }
+    
+    func getSelfWithChildrenRecursively(forceExpanded: Bool = false) -> [FeedItem] {
+        if let children = self.children,
+            isExpanded || forceExpanded {
+            return [self] + children.flatMap { $0.getSelfWithChildrenRecursively() }
+        }
+        return [self]
+    }
 }
 
 extension Array<FeedItem> {

@@ -12,12 +12,7 @@ struct CommentsFeedView: View {
     @State var isTopBarOpen = false
     
     var items: [FeedItem] {
-        if let children = rootItem.children {
-            return [rootItem] + children
-        }
-        else {
-            return [rootItem]
-        }
+        return rootItem.getSelfWithChildrenRecursively(forceExpanded: true)
     }
     
     var listDrag: some Gesture {
