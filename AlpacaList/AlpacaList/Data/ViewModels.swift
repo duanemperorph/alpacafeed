@@ -7,61 +7,89 @@
 
 import Foundation
 
-class CommentsViewModel: ObservableObject {
-    @Published var post: FeedItem
+/*
+ struct FeedItem: Identifiable {
+     let style: FeedItemStyle
+     let id: UUID
+     let username: String
+     let date: Date
+     
+     let title: String?
+     let body: String?
+     let thumbnail: String?
+ */
+
+class CommentViewModel: ObservableObject {
+    @Published var isExpanded: Bool = false
+    let indention: Int
+    let commentItem: FeedItem
+    let children: [CommentViewModel]
     
-    init(post: FeedItem) {
-        self.post = post
+    init(commentItem: FeedItem, indention: Int = 0) {
+        self.indention = indention
+        self.commentItem = commentItem
+        self.children = commentItem.children.map { CommentViewModel(commentItem: $0, indention: indention + 1) }
     }
     
-    func toggleExpandedForCommentWithId(id: UUID) {
-        guard var children = post.children else { return }
-        
-        let didMutate = children.recursiveFindAndMutateItem(withId: id) { item in
-            item.isExpanded.toggle()
-        }
-        
-        if didMutate {
-            print("didMutate")
-            var newPost = post
-            newPost.children = children
-            post = newPost
-            printExpanded()
+    var visibleChildren: [CommentViewModel] {
+        if isExpanded {
+            return children
+        } else {
+            return []
         }
     }
     
-    func printExpanded() {
-        guard let children = post.children else { return }
-        
-        for item in children {
-            print("isExpanded: ", item.isExpanded)
+    var recursiveVisibleChildren: [CommentViewModel] {
+        var visibleChildren = [CommentViewModel]()
+        for child in children {
+            visibleChildren.append(child)
+            visibleChildren.append(contentsOf: child.recursiveVisibleChildren)
         }
+        return visibleChildren
     }
     
-    static func withMockData() -> CommentsViewModel {
-        let mockData = MockDataGenerator.generatePosts()
-        return CommentsViewModel(post: mockData[0])
+    var selfWithRecursiveVisibleChildren: [CommentViewModel] {
+        return [self] + recursiveVisibleChildren
     }
 }
 
-class PostsViewModel {
-    let rootPosts: [FeedItem]
- 
-    init(rootPosts: [FeedItem]) {
-        self.rootPosts = rootPosts
+class CommentsListViewModel: ObservableObject {
+    let postItem: FeedItem
+    let comments: [CommentViewModel]
+    
+    init(post: FeedItem) {
+        self.postItem = post
+        self.comments = post.children.map { CommentViewModel(commentItem: $0) }
     }
     
-    func getCommentsViewModelForPost(withId: UUID) -> CommentsViewModel? {
-        if let post = rootPosts.first(where: { $0.id == withId }) {
-            return CommentsViewModel(post: post)
+    var visibleComments: [CommentViewModel] {
+        return comments.flatMap ({ $0.selfWithRecursiveVisibleChildren })
+    }
+    
+    static func withMockData() -> CommentsListViewModel {
+        let mockData = MockDataGenerator.generatePosts()
+        return CommentsListViewModel(post: mockData[0])
+    }
+}
+
+class PostsListViewModel {
+    let rootPostItems: [FeedItem]
+ 
+    init(rootPosts: [FeedItem]) {
+        self.rootPostItems = rootPosts
+    }
+    
+    func getCommentsViewModelForPost(withId: UUID) -> CommentsListViewModel? {
+        if let post = rootPostItems.first(where: { $0.id == withId }) {
+            return CommentsListViewModel(post: post)
         }
         else {
             return nil
         }
     }
     
-    static func withMockData() -> PostsViewModel {
+    static func withMockData() -> PostsListViewModel {
         let mockData = MockDataGenerator.generatePosts()
-        return PostsViewModel(rootPosts: mockData)
+        return PostsListViewModel(rootPosts: mockData)
     }
 }

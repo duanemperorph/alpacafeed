@@ -10,9 +10,9 @@ import SwiftUI
 // Swift view displaying a feed item
 struct FeedItemView: View {
     let item: FeedItem
-    let containerModel: CommentsViewModel?
+    let containerModel: CommentsListViewModel?
     
-    init(item: FeedItem, containerModel: CommentsViewModel? = nil) {
+    init(item: FeedItem, containerModel: CommentsListViewModel? = nil) {
         self.item = item
         self.containerModel = containerModel
     }
@@ -45,7 +45,7 @@ struct FeedItemView: View {
     
     func toggleExpanded() {
         print("toggle expanded")
-        containerModel?.toggleExpandedForCommentWithId(id: item.id)
+        item.isExpanded.toggle()
     }
 }
 

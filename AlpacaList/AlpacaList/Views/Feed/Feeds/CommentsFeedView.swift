@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct CommentsFeedView: View {
-    @ObservedObject var model: CommentsViewModel
+    @ObservedObject var model: CommentsListViewModel
     @State var isTopBarOpen = false
     
     var items: [FeedItem] {
@@ -49,7 +49,7 @@ struct CommentsFeedView: View {
 }
 
 struct CommentsFeedView_Previews: PreviewProvider {
-    static let model = CommentsViewModel.withMockData()
+    static let model = CommentsListViewModel.withMockData()
     
     static var previews: some View {
         CommentsFeedView(model: model)

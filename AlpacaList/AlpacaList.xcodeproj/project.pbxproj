@@ -30,6 +30,7 @@
 		37CF46D82A50FC8A00952075 /* FeedItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37CF46D72A50FC8A00952075 /* FeedItem.swift */; };
 		37D9FED22A5BA31100E539A6 /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37D9FED12A5BA31100E539A6 /* UserSettings.swift */; };
 		37D9FED62A5BC46300E539A6 /* SettingsComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37D9FED52A5BC46300E539A6 /* SettingsComponents.swift */; };
+		37DC2B852A9BD59300D6B879 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37DC2B842A9BD59300D6B879 /* Helpers.swift */; };
 		37F689502A510D82004E27DF /* FeedItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F6894F2A510D82004E27DF /* FeedItemView.swift */; };
 /* End PBXBuildFile section */
 
@@ -77,6 +78,7 @@
 		37CF46D72A50FC8A00952075 /* FeedItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItem.swift; sourceTree = "<group>"; };
 		37D9FED12A5BA31100E539A6 /* UserSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettings.swift; sourceTree = "<group>"; };
 		37D9FED52A5BC46300E539A6 /* SettingsComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsComponents.swift; sourceTree = "<group>"; };
+		37DC2B842A9BD59300D6B879 /* Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
 		37F6894F2A510D82004E27DF /* FeedItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -216,10 +218,11 @@
 		37CF46D52A50FC4800952075 /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				372DC5982A8982FD00843D14 /* ViewModels.swift */,
 				37CF46D72A50FC8A00952075 /* FeedItem.swift */,
+				37DC2B842A9BD59300D6B879 /* Helpers.swift */,
 				373DABB22A75D9E500DF17EB /* MockDataGenerator.swift */,
 				373DABB82A75E8F100DF17EB /* MockDataStrings.swift */,
-				372DC5982A8982FD00843D14 /* ViewModels.swift */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -367,6 +370,7 @@
 				376BB76B2A8080BA00AE9FB0 /* Buttons.swift in Sources */,
 				37346BD32A520AB800CB346A /* TopBarExpanded.swift in Sources */,
 				370A25B62A54FA400076D378 /* TopBarContainer.swift in Sources */,
+				37DC2B852A9BD59300D6B879 /* Helpers.swift in Sources */,
 				37CF46AD2A50FAF700952075 /* PostFeedView.swift in Sources */,
 				37CF46AB2A50FAF700952075 /* AlpacaListApp.swift in Sources */,
 				376BB76E2A80846200AE9FB0 /* CommentsButtons.swift in Sources */,
