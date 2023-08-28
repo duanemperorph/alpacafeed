@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct PostFeedView: View {
-    @State var postItems: [FeedItem] = []
+    @State var model: PostsListViewModel
     @State var isTopBarOpen = false
     
     var listDrag: some Gesture {
@@ -25,8 +25,8 @@ struct PostFeedView: View {
         ZStack {
             FeedViewBackground()
             
-            List(postItems) { item in
-                FeedItemView(item: item)
+            List(model.posts) { post in
+                FeedItemView(model: post)
                     .listRowBackground(Color.clear)
                     .listRowInsets(EdgeInsets(top: 5, leading: 10, bottom: 5, trailing: 10))
             }
@@ -45,6 +45,7 @@ struct FeedView_Previews: PreviewProvider {
     static let mockFeedItems = MockDataGenerator.generatePosts()
     
     static var previews: some View {
-        PostFeedView(postItems: mockFeedItems)
+        let model = PostsListViewModel(rootPosts: mockFeedItems)
+       PostFeedView(model: model)
     }
 }

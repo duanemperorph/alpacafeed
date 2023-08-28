@@ -9,7 +9,6 @@ import Foundation
 
 /*
  struct FeedItem: Identifiable {
-     let style: FeedItemStyle
      let id: UUID
      let username: String
      let date: Date
@@ -19,19 +18,41 @@ import Foundation
      let thumbnail: String?
  */
 
-class CommentViewModel: ObservableObject {
-    @Published var isExpanded: Bool = false
+enum FeedItemStyle {
+    case post
+    case comment
+}
+
+protocol FeedItemViewModelListContainer: AnyObject {
+    func updateVisibleComments()
+}
+
+class FeedItemViewModel: ObservableObject, Identifiable {
+    @Published var isExpanded: Bool = false {
+        didSet {
+            containerDelegate?.updateVisibleComments()
+        }
+    }
+    let style: FeedItemStyle
     let indention: Int
-    let commentItem: FeedItem
-    let children: [CommentViewModel]
+    let feedItem: FeedItem
+    let children: [FeedItemViewModel]
     
-    init(commentItem: FeedItem, indention: Int = 0) {
-        self.indention = indention
-        self.commentItem = commentItem
-        self.children = commentItem.children.map { CommentViewModel(commentItem: $0, indention: indention + 1) }
+    weak var containerDelegate: FeedItemViewModelListContainer?
+    
+    var id: UUID {
+        return feedItem.id
     }
     
-    var visibleChildren: [CommentViewModel] {
+    init(commentItem: FeedItem, style: FeedItemStyle, containerDelegate: FeedItemViewModelListContainer? = nil, indention: Int = 0) {
+        self.style = style
+        self.indention = indention
+        self.feedItem = commentItem
+        self.containerDelegate = containerDelegate
+        self.children = commentItem.children.map { FeedItemViewModel(commentItem: $0, style: .comment, containerDelegate: containerDelegate, indention: indention + 1) }
+    }
+    
+    var visibleChildren: [FeedItemViewModel] {
         if isExpanded {
             return children
         } else {
@@ -39,8 +60,11 @@ class CommentViewModel: ObservableObject {
         }
     }
     
-    var recursiveVisibleChildren: [CommentViewModel] {
-        var visibleChildren = [CommentViewModel]()
+    var recursiveVisibleChildren: [FeedItemViewModel] {
+        guard isExpanded else { return [] }
+        
+        var visibleChildren = [FeedItemViewModel]()
+        
         for child in children {
             visibleChildren.append(child)
             visibleChildren.append(contentsOf: child.recursiveVisibleChildren)
@@ -48,27 +72,36 @@ class CommentViewModel: ObservableObject {
         return visibleChildren
     }
     
-    var selfWithRecursiveVisibleChildren: [CommentViewModel] {
+    var selfWithRecursiveVisibleChildren: [FeedItemViewModel] {
         return [self] + recursiveVisibleChildren
     }
 }
 
-class CommentsListViewModel: ObservableObject {
+class CommentsListViewModel: ObservableObject, FeedItemViewModelListContainer {
     let postItem: FeedItem
-    let comments: [CommentViewModel]
+    let postViewModel: FeedItemViewModel
+    var comments: [FeedItemViewModel] = []
+    @Published var visibleComments: [FeedItemViewModel] = []
     
     init(post: FeedItem) {
         self.postItem = post
-        self.comments = post.children.map { CommentViewModel(commentItem: $0) }
+        self.postViewModel = FeedItemViewModel(commentItem: post, style: .post)
+        self.comments = post.children.map { FeedItemViewModel(commentItem: $0, style: .comment, containerDelegate: self) }
+        updateVisibleComments()
     }
     
-    var visibleComments: [CommentViewModel] {
-        return comments.flatMap ({ $0.selfWithRecursiveVisibleChildren })
+    // returns feed item for the current post item with all of the comments
+    var postWithComments: [FeedItemViewModel] {
+        return [postViewModel] + visibleComments
     }
     
     static func withMockData() -> CommentsListViewModel {
         let mockData = MockDataGenerator.generatePosts()
         return CommentsListViewModel(post: mockData[0])
+    }
+    
+    func updateVisibleComments() {
+        visibleComments = comments.flatMap ({ $0.selfWithRecursiveVisibleChildren })
     }
 }
 
@@ -77,6 +110,10 @@ class PostsListViewModel {
  
     init(rootPosts: [FeedItem]) {
         self.rootPostItems = rootPosts
+    }
+    
+    var posts: [FeedItemViewModel] {
+        return rootPostItems.map { FeedItemViewModel(commentItem: $0, style: .post) }
     }
     
     func getCommentsViewModelForPost(withId: UUID) -> CommentsListViewModel? {

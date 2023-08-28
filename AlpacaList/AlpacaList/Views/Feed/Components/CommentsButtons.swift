@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct CommentItemButtons: View {
-    let item: FeedItem
+    @ObservedObject var model: FeedItemViewModel
     let toggleExpanded: () -> Void
     
     var body: some View {
@@ -19,13 +19,12 @@ struct CommentItemButtons: View {
                 ThumbDownButton()
                 Spacer()
                 BoostButton()
-                
             }
             Spacer().frame(height: 20)
             HStack {
                 CommentsCountView()
                 .frame(width: 60)
-                ExpandCommentsButton(isActive: item.isExpanded, toggleActive: toggleExpanded)
+                ExpandCommentsButton(isActive: model.isExpanded, toggleActive: toggleExpanded)
                     .padding(.horizontal, 10)
                 PlusButton().frame(width: 40)
             }

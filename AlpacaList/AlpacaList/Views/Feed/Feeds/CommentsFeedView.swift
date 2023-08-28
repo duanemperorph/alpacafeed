@@ -11,10 +11,6 @@ struct CommentsFeedView: View {
     @ObservedObject var model: CommentsListViewModel
     @State var isTopBarOpen = false
     
-    var items: [FeedItem] {
-        return model.post.getSelfWithChildrenRecursively(forceExpanded: true)
-    }
-    
     var listDrag: some Gesture {
         DragGesture(coordinateSpace: .local).onChanged { data in
             if (isTopBarOpen && data.translation.height < 0) {
@@ -26,10 +22,12 @@ struct CommentsFeedView: View {
     }
     
     var body: some View {
+        let items = model.postWithComments
+        
         ZStack {
             FeedViewBackground()
             List(items) { item in
-                FeedItemView(item: item, containerModel: model)
+                FeedItemView(model: item)
                     .listRowBackground(Color.clear)
                     .listRowInsets(EdgeInsets(top: 5, leading: 10 + indentionForItem(item: item), bottom: 5, trailing: 10))
             }
@@ -43,8 +41,8 @@ struct CommentsFeedView: View {
         }
     }
     
-    func indentionForItem(item: FeedItem) -> Double {
-        return Double(item.indention ?? 0) * 20
+    func indentionForItem(item: FeedItemViewModel) -> Double {
+        return Double(item.indention) * 20
     }
 }
 

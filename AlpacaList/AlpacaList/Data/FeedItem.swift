@@ -7,13 +7,7 @@
 
 import Foundation
 
-enum FeedItemStyle {
-    case post
-    case comment
-}
-
 struct FeedItem: Identifiable {
-    let style: FeedItemStyle
     let id: UUID
     let username: String
     let date: Date
@@ -26,13 +20,13 @@ struct FeedItem: Identifiable {
     
     static func createPost(id: UUID, username: String, date: Date, title: String, body: String?, thumbnail: String?, children: [FeedItem]) -> FeedItem {
         // Create a new feed item
-        return FeedItem(style: .post, id: id, username: username, date: date, title: title, body: body, thumbnail: thumbnail, children: children)
+        return FeedItem(id: id, username: username, date: date, title: title, body: body, thumbnail: thumbnail, children: children)
         
     }
     
     static func createComment(id: UUID, username: String, date: Date, body: String, indention: Int, children: [FeedItem]) -> FeedItem {
         // Create a new feed item
-        return FeedItem(style: .comment, id: id, username: username, date: date, title: nil, body: body, thumbnail: nil, children: children)
+        return FeedItem(id: id, username: username, date: date, title: nil, body: body, thumbnail: nil, children: children)
     
     }
 }

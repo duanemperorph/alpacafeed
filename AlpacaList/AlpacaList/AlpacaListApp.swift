@@ -12,8 +12,9 @@ struct AlpacaListApp: App {
     let mockFeedItems = MockDataGenerator.generatePosts()
     
     var body: some Scene {
+        let model = PostsListViewModel(rootPosts: mockFeedItems)
         WindowGroup {
-            PostFeedView(postItems: mockFeedItems)
+            PostFeedView(model: model)
         }
     }
 }

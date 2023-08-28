@@ -9,15 +9,15 @@ import SwiftUI
 
 // Swift view displaying a feed item
 struct FeedItemView: View {
-    let item: FeedItem
-    let containerModel: CommentsListViewModel?
+    @ObservedObject var model: FeedItemViewModel
     
-    init(item: FeedItem, containerModel: CommentsListViewModel? = nil) {
-        self.item = item
-        self.containerModel = containerModel
+    init(model: FeedItemViewModel) {
+        self.model = model
     }
     
     var body: some View {
+        let item = model.feedItem
+        
         VStack(alignment: .leading) {
             if let title = item.title {
                 PostTitle(title: title)
@@ -31,11 +31,11 @@ struct FeedItemView: View {
                 PostBody(bodyText: body)
             }
             Spacer().frame(height: 15)
-            switch item.style {
+            switch model.style {
                 case .post:
                     PostItemButtons()
                 case .comment:
-                CommentItemButtons(item: item, toggleExpanded: toggleExpanded)
+                CommentItemButtons(model: model, toggleExpanded: toggleExpanded)
             }
         }
         .padding(15)
@@ -45,7 +45,7 @@ struct FeedItemView: View {
     
     func toggleExpanded() {
         print("toggle expanded")
-        item.isExpanded.toggle()
+        model.isExpanded.toggle()
     }
 }
 
