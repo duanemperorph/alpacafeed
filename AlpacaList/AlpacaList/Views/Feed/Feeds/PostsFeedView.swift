@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct PostFeedView: View {
+struct PostsFeedView: View {
     @State var model: PostsListViewModel
     @State var isTopBarOpen = false
     
@@ -46,6 +46,6 @@ struct FeedView_Previews: PreviewProvider {
     
     static var previews: some View {
         let model = PostsListViewModel(rootPosts: mockFeedItems)
-       PostFeedView(model: model)
+       PostsFeedView(model: model)
     }
 }

@@ -105,6 +105,16 @@ class CommentsListViewModel: ObservableObject, FeedItemViewModelListContainer {
     }
 }
 
+extension CommentsListViewModel: Hashable {
+    static func == (lhs: CommentsListViewModel, rhs: CommentsListViewModel) -> Bool {
+        return lhs.postItem.id == rhs.postItem.id
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(postItem.id)
+    }
+}
+
 class PostsListViewModel {
     let rootPostItems: [FeedItem]
  
