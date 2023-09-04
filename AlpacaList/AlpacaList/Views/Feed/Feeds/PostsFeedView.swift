@@ -26,9 +26,13 @@ struct PostsFeedView: View {
             FeedViewBackground()
             
             List(model.posts) { post in
-                FeedItemView(model: post)
-                    .listRowBackground(Color.clear)
-                    .listRowInsets(EdgeInsets(top: 5, leading: 10, bottom: 5, trailing: 10))
+                NavigationLink(
+                    value: NavigationDestination.postDetails(postItem: post.feedItem),
+                    label: {
+                        FeedItemView(model: post)
+                            .listRowBackground(Color.clear)
+                            .listRowInsets(EdgeInsets(top: 5, leading: 10, bottom: 5, trailing: 10))
+                    })
             }
             .padding(0)
             .listStyle(PlainListStyle())

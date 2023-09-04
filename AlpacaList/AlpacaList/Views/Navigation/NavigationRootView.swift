@@ -7,15 +7,41 @@
 
 import SwiftUI
 
+enum NavigationDestination {
+    case postDetails(postItem: FeedItem)
+//    case instanceSettings
+//    case userSettings
+}
+
+extension NavigationDestination: Hashable {
+    static func == (lhs: NavigationDestination, rhs: NavigationDestination) -> Bool {
+        switch (lhs, rhs) {
+        case (.postDetails(let lhsPost), .postDetails(let rhsPost)):
+            return lhsPost.id == rhsPost.id
+        }
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        switch self {
+        case .postDetails(let postItem):
+            hasher.combine(postItem.id)
+        }
+    }
+}
+
 struct NavigationRootView: View {
     @State var rootModel: PostsListViewModel
     
     var body: some View {
         NavigationStack() {
             PostsFeedView(model: rootModel)
-        }
-        .navigationDestination(for: CommentsListViewModel.self) {
-            CommentsFeedView(model: $0)
+            .navigationDestination(for: NavigationDestination.self) { dest in
+                switch dest {
+                case .postDetails(let postItem):
+                    let model = CommentsListViewModel(post: postItem)
+                    CommentsFeedView(model:model)
+                }
+            }
         }
     }
 }
