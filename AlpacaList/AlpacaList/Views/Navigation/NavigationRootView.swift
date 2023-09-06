@@ -31,9 +31,10 @@ extension NavigationDestination: Hashable {
 
 struct NavigationRootView: View {
     @State var rootModel: PostsListViewModel
+    @State var navigationStack: [NavigationDestination] = []
     
     var body: some View {
-        NavigationStack() {
+        NavigationStack(path: $navigationStack) {
             PostsFeedView(model: rootModel)
             .navigationDestination(for: NavigationDestination.self) { dest in
                 switch dest {

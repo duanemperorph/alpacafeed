@@ -18,26 +18,31 @@ struct FeedItemView: View {
     var body: some View {
         let item = model.feedItem
         
-        VStack(alignment: .leading) {
-            if let title = item.title {
-                PostTitle(title: title)
-            }
-            
-            PostUsername(username: item.username)
-            
-            if let thumbnail = item.thumbnail {
-                PostThumbnail(thumbnail: thumbnail)
-            } else if let body = item.body {
-                PostBody(bodyText: body)
-            }
-            Spacer().frame(height: 15)
-            switch model.style {
+        Button(action: {
+            print("button")
+        }) {
+            VStack(alignment: .leading) {
+                if let title = item.title {
+                    PostTitle(title: title)
+                }
+                
+                PostUsername(username: item.username)
+                
+                if let thumbnail = item.thumbnail {
+                    PostThumbnail(thumbnail: thumbnail)
+                } else if let body = item.body {
+                    PostBody(bodyText: body)
+                }
+                Spacer().frame(height: 15)
+                switch model.style {
                 case .post:
                     PostItemButtons()
                 case .comment:
-                CommentItemButtons(model: model, toggleExpanded: toggleExpanded)
+                    CommentItemButtons(model: model, toggleExpanded: toggleExpanded)
+                }
             }
         }
+        .buttonStyle(.plain)
         .padding(15)
         .frame(maxWidth: .infinity)
         .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 8))
