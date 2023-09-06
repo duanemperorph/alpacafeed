@@ -29,12 +29,25 @@ extension NavigationDestination: Hashable {
     }
 }
 
+class NavigationRootController: ObservableObject {
+    @Published var navigationStack: [NavigationDestination] = []
+    
+    func push(_ destination: NavigationDestination) {
+        navigationStack.append(destination)
+    }
+    
+    func pop() {
+        navigationStack.removeLast()
+    }
+
+}
+
 struct NavigationRootView: View {
     @State var rootModel: PostsListViewModel
-    @State var navigationStack: [NavigationDestination] = []
+    @EnvironmentObject var navigationRootController: NavigationRootController
     
     var body: some View {
-        NavigationStack(path: $navigationStack) {
+        NavigationStack(path: $navigationRootController.navigationStack) {
             PostsFeedView(model: rootModel)
             .navigationDestination(for: NavigationDestination.self) { dest in
                 switch dest {
@@ -48,10 +61,7 @@ struct NavigationRootView: View {
 }
 
 struct NavigationRootView_Previews: PreviewProvider {
-    static let mockFeedItems = MockDataGenerator.generatePosts()
-    
     static var previews: some View {
-        let model = PostsListViewModel(rootPosts: mockFeedItems)
-        NavigationRootView(rootModel: model)
+        return RootPreviews()
     }
 }

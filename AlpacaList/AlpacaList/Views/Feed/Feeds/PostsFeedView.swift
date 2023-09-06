@@ -11,6 +11,8 @@ struct PostsFeedView: View {
     @State var model: PostsListViewModel
     @State var isTopBarOpen = false
     
+    @EnvironmentObject var navigationRootController: NavigationRootController
+    
     var listDrag: some Gesture {
         DragGesture(coordinateSpace: .local).onChanged { data in
             if (isTopBarOpen && data.translation.height < 0) {
@@ -26,7 +28,9 @@ struct PostsFeedView: View {
             FeedViewBackground()
             
             List(model.posts) { post in
-                FeedItemView(model: post)
+                FeedItemView(model: post, onClick: { item in
+                    navigationRootController.push(.postDetails(postItem: item))
+                })
                     .listRowBackground(Color.clear)
                     .listRowInsets(EdgeInsets(top: 5, leading: 10, bottom: 5, trailing: 10))
             }
@@ -45,7 +49,6 @@ struct FeedView_Previews: PreviewProvider {
     static let mockFeedItems = MockDataGenerator.generatePosts()
     
     static var previews: some View {
-        let model = PostsListViewModel(rootPosts: mockFeedItems)
-       PostsFeedView(model: model)
+        return RootPreviews()
     }
 }

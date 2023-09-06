@@ -9,17 +9,24 @@ import SwiftUI
 
 // Swift view displaying a feed item
 struct FeedItemView: View {
+    typealias OnClick = (FeedItem) -> Void
+    
     @ObservedObject var model: FeedItemViewModel
     
-    init(model: FeedItemViewModel) {
+    let onClick: OnClick?
+    
+    init(model: FeedItemViewModel, onClick: OnClick? = nil) {
         self.model = model
+        self.onClick = onClick
     }
     
     var body: some View {
         let item = model.feedItem
         
         Button(action: {
-            print("button")
+            if let onClick = onClick {
+                onClick(model.feedItem)
+            }
         }) {
             VStack(alignment: .leading) {
                 if let title = item.title {
@@ -41,11 +48,11 @@ struct FeedItemView: View {
                     CommentItemButtons(model: model, toggleExpanded: toggleExpanded)
                 }
             }
+            .padding(15)
+            .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 8))
         }
         .buttonStyle(.plain)
-        .padding(15)
         .frame(maxWidth: .infinity)
-        .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 8))
     }
     
     func toggleExpanded() {
@@ -54,12 +61,8 @@ struct FeedItemView: View {
     }
 }
 
-//struct FeedViewItem_Previews: PreviewProvider {
-//    static let mockFeedItems = MockDataGenerator.generatePosts()
-//
-//    static var previews: some View {
-//        ZStack {
-//            PostFeedView(items: mockFeedItems)
-//        }
-//    }
-//}
+struct FeedViewItem_Previews: PreviewProvider {
+    static var previews: some View {
+        return RootPreviews()
+    }
+}

@@ -10,6 +10,7 @@ import SwiftUI
 @main
 struct AlpacaListApp: App {
     let mockFeedItems = MockDataGenerator.generatePosts()
+    let navigationRootController: NavigationRootController = NavigationRootController()
     
     var body: some Scene {
         let model = PostsListViewModel(rootPosts: mockFeedItems)
