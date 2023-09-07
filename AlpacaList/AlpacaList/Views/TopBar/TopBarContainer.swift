@@ -10,10 +10,10 @@ import SwiftUI
 struct TopBarContainer: View {
     @Environment(\.colorScheme) var envColorScheme
     
-    @Binding var isOpen: Bool
-    
     @State var communityName = "lemmyworld@lemmy.world"
     @State var userName = "imacat@kbin.social"
+    
+    @EnvironmentObject var topBarController: TopBarController
     
     var backgroundColorScheme: ColorScheme {
         return envColorScheme == .dark ? ColorScheme.light : ColorScheme.dark
@@ -22,14 +22,14 @@ struct TopBarContainer: View {
     var topBarTap: some Gesture {
         TapGesture().onEnded { _ in
             withAnimation(.easeInOut(duration: 0.3)) {
-                isOpen = true
+                topBarController.expand()
             }
         }
     }
     
     var body: some View {
         VStack {
-            if (isOpen) {
+            if (topBarController.isExpanded) {
                 TopBarExpanded(
                     communityName: $communityName,
                     userName: $userName
@@ -45,18 +45,18 @@ struct TopBarContainer: View {
     }
 }
 
-struct TopBarContainer_Previews: PreviewProvider {
-    @State static var isOpen = false
-    
-    static var previews: some View {
-        ZStack {
-            LinearGradient(
-                gradient: Gradient(colors: [.blue, .purple]),
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
-            .edgesIgnoringSafeArea(.all)
-            TopBarContainer(isOpen: $isOpen)
-        }
-    }
-}
+//struct TopBarContainer_Previews: PreviewProvider {
+//    @State static var isOpen = false
+//
+//    static var previews: some View {
+//        ZStack {
+//            LinearGradient(
+//                gradient: Gradient(colors: [.blue, .purple]),
+//                startPoint: .topLeading,
+//                endPoint: .bottomTrailing
+//            )
+//            .edgesIgnoringSafeArea(.all)
+//            TopBarContainer()
+//        }
+//    }
+//}

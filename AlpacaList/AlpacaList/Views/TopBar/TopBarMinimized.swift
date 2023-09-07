@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct TopBarButtonMinimized: View {
+//    @EnvironmentObject var navigationRootController: NavigationRootController
+    
     var imageName: String
     var text: String
     
@@ -36,8 +38,20 @@ struct TopBarMinimized: View {
     var communityName: String
     var icon: String
     
+    @EnvironmentObject var navigationRootController: NavigationRootController
+    
     var body: some View {
         HStack {
+            if navigationRootController.canPop {
+                Button(action: {
+                    navigationRootController.pop()
+                }) {
+                    Image(systemName: "chevron.left")
+                }
+                .foregroundColor(.white)
+                .font(.system(size: 22)).fontWeight(.semibold)
+                Spacer().frame(width: 15)
+            }
             TopBarButtonMinimized(imageName: icon, text: communityName)
         }
         .font(.system(size: 18))
@@ -48,6 +62,9 @@ struct TopBarMinimized: View {
 }
 
 struct TopBarMinimized_Previews: PreviewProvider {
+    private static let navigationControllerCannotPop = NavigationRootController()
+    private static let navigationControllerCanPop = NavigationRootController(initialStack: [.postDetails(postItem: MockDataGenerator.generateRandomComment(maxLength: 1, depth: 1, indention: 1))])
+    
     static var previews: some View {
         ZStack {
             LinearGradient(
@@ -58,6 +75,9 @@ struct TopBarMinimized_Previews: PreviewProvider {
             .edgesIgnoringSafeArea(.all)
             VStack {
                 TopBarMinimized(communityName: "lemmyworld@lemmy.world", icon: "globe")
+                    .environmentObject(navigationControllerCannotPop)
+                TopBarMinimized(communityName: "lemmyworld@lemmy.world", icon: "globe")
+                    .environmentObject(navigationControllerCanPop)
             }
             .background(.regularMaterial)
             .environment(\.colorScheme, .dark)

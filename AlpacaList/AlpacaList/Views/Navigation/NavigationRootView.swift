@@ -24,7 +24,7 @@ struct NavigationRootView: View {
             }
         }
         .safeAreaInset(edge: .top) {
-            TopBarContainer(isOpen: $topBarController.isExpanded)
+            TopBarContainer()
         }
     }
 }

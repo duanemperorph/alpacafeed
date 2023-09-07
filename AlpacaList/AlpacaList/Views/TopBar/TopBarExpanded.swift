@@ -57,7 +57,7 @@ struct ButtonSubBarView: View {
             Button(action: {
                 // Action for gear button
             }) {
-                Image(systemName: "chevron.right")
+                Image(systemName: "arrow.clockwise")
             }
             Spacer()
             ModeSelectorButton()
@@ -66,7 +66,7 @@ struct ButtonSubBarView: View {
             Button(action: {
                 // Add your button action here
             }) {
-                Image(systemName: "arrow.clockwise")
+                Image(systemName: "chevron.up.chevron.down")
             }
             Spacer()
             Button(action: {

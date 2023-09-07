@@ -30,7 +30,19 @@ extension NavigationDestination: Hashable {
 }
 
 class NavigationRootController: ObservableObject {
-    @Published var navigationStack: [NavigationDestination] = []
+    @Published var navigationStack: [NavigationDestination]
+    
+    init() {
+        navigationStack = []
+    }
+    
+    init(initialStack: [NavigationDestination]) {
+        self.navigationStack = initialStack
+    }
+    
+    var canPop: Bool {
+        return navigationStack.count > 0
+    }
     
     func push(_ destination: NavigationDestination) {
         navigationStack.append(destination)
