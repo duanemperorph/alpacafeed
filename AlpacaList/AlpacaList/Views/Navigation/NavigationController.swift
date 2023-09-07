@@ -5,27 +5,39 @@
 //  Created by Lucas Nguyen on 9/6/23.
 //
 
-import Foundation
+import SwiftUI
 
 enum NavigationDestination {
     case postDetails(postItem: FeedItem)
-//    case instanceSettings
-//    case userSettings
+    case instanceSettings
+    case userSettings
 }
 
 extension NavigationDestination: Hashable {
     static func == (lhs: NavigationDestination, rhs: NavigationDestination) -> Bool {
         switch (lhs, rhs) {
-        case (.postDetails(let lhsPost), .postDetails(let rhsPost)):
-            return lhsPost.id == rhsPost.id
+        case (.postDetails(let postItem1), .postDetails(let postItem2)):
+            return postItem1.id == postItem2.id
+        case (.instanceSettings, .instanceSettings):
+            return true
+        case (.userSettings, .userSettings):
+            return true
+        default:
+            return false
         }
+    
     }
     
     func hash(into hasher: inout Hasher) {
         switch self {
         case .postDetails(let postItem):
             hasher.combine(postItem.id)
+        case .instanceSettings:
+            hasher.combine("instanceSettings")
+        case .userSettings:
+            hasher.combine("userSettings")
         }
+    
     }
 }
 
@@ -52,5 +64,15 @@ class NavigationRootController: ObservableObject {
         navigationStack.removeLast()
     }
 
-    
+    @ViewBuilder func viewForDestination(destination: NavigationDestination) -> some View {
+        switch (destination) {
+        case .postDetails(let postItem):
+            let model = CommentsListViewModel(post: postItem)
+            CommentsFeedView(model:model)
+        case .instanceSettings:
+            InstanceSettings()
+        case .userSettings:
+            UserSettings()
+        }
+    }
 }

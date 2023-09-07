@@ -15,12 +15,8 @@ struct NavigationRootView: View {
     var body: some View {
         NavigationStack(path: $navigationRootController.navigationStack) {
             PostsFeedView(model: rootModel)
-            .navigationDestination(for: NavigationDestination.self) { dest in
-                switch dest {
-                case .postDetails(let postItem):
-                    let model = CommentsListViewModel(post: postItem)
-                    CommentsFeedView(model:model)
-                }
+            .navigationDestination(for: NavigationDestination.self) {
+                navigationRootController.viewForDestination(destination: $0)
             }
         }
         .safeAreaInset(edge: .top) {
