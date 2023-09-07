@@ -9,6 +9,7 @@ import SwiftUI
 
 struct CommentsFeedView: View {
     @ObservedObject var model: CommentsListViewModel
+    @EnvironmentObject var navigationRootController: NavigationRootController
     @EnvironmentObject var topBarController: TopBarController
     
     var listDrag: some Gesture {
@@ -35,6 +36,9 @@ struct CommentsFeedView: View {
             .listStyle(PlainListStyle())
             .scrollContentBackground(.hidden)
             .gesture(listDrag)
+            .safeAreaInset(edge: .top) {
+                Spacer().frame(width: .infinity, height: topBarController.topBarInset)
+            }
         }
     }
     
@@ -44,9 +48,9 @@ struct CommentsFeedView: View {
 }
 
 struct CommentsFeedView_Previews: PreviewProvider {
-    static let model = CommentsListViewModel.withMockData()
+    static let mockFeedItems = MockDataGenerator.generatePosts()
     
     static var previews: some View {
-        CommentsFeedView(model: model)
+        return RootPreviews()
     }
 }

@@ -10,6 +10,10 @@ import Foundation
 class TopBarController: ObservableObject {
     @Published var isExpanded = false
     
+    var topBarInset: Double {
+        return isExpanded ? 170 : 80
+    }
+    
     func expand() {
         isExpanded = true
     }

@@ -46,13 +46,18 @@ struct ModeSelectorButton: View {
 }
 
 struct ButtonSubBarView: View {
+    @EnvironmentObject var navigationRootController: NavigationRootController
+    
     var body: some View {
+        let isBackButtonDisabled = !navigationRootController.canPop
         HStack {
             Button(action: {
-                // Action for gear button
+                navigationRootController.pop()
             }) {
                 Image(systemName: "chevron.left")
             }
+            .disabled(isBackButtonDisabled)
+            .opacity(isBackButtonDisabled ? 0.5 : 1)
             Spacer()
             Button(action: {
                 // Action for gear button
@@ -101,6 +106,9 @@ struct TopBarExpanded: View {
 }
 
 struct TopBarViewExpanded_Previews: PreviewProvider {
+    static let navigationRootController = NavigationRootController()
+    
+    
     static var previews: some View {
         ZStack {
             LinearGradient(
@@ -114,7 +122,7 @@ struct TopBarViewExpanded_Previews: PreviewProvider {
                     communityName: .constant("lemmyworld@lemmy.world"),
                     userName: .constant("dog@kbin.social")
                 )
-                
+                .environmentObject(navigationRootController)
             }
             .background(.regularMaterial)
             .environment(\.colorScheme, .dark)
