@@ -42,9 +42,22 @@ class NavigationRootController: ObservableObject {
 
 }
 
+class NavigationBarController: ObservableObject {
+    @Published var isExpanded = false
+    
+    func expand() {
+        isExpanded = true
+    }
+    
+    func collapse() {
+        isExpanded = false
+    }
+}
+
 struct NavigationRootView: View {
     @State var rootModel: PostsListViewModel
     @EnvironmentObject var navigationRootController: NavigationRootController
+    @EnvironmentObject var navigationBarController: NavigationBarController
     
     var body: some View {
         NavigationStack(path: $navigationRootController.navigationStack) {
@@ -56,6 +69,9 @@ struct NavigationRootView: View {
                     CommentsFeedView(model:model)
                 }
             }
+        }
+        .safeAreaInset(edge: .top) {
+            TopBarContainer(isOpen: $navigationBarController.isExpanded)
         }
     }
 }

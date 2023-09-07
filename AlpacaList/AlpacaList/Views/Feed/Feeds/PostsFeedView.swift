@@ -9,15 +9,15 @@ import SwiftUI
 
 struct PostsFeedView: View {
     @State var model: PostsListViewModel
-    @State var isTopBarOpen = false
-    
     @EnvironmentObject var navigationRootController: NavigationRootController
+    @EnvironmentObject var navigationBarController: NavigationBarController
+    
     
     var listDrag: some Gesture {
         DragGesture(coordinateSpace: .local).onChanged { data in
-            if (isTopBarOpen && data.translation.height < 0) {
+            if (navigationBarController.isExpanded && data.translation.height < 0) {
                 withAnimation(.easeInOut(duration: 0.3)) {
-                    isTopBarOpen = false
+                    navigationBarController.collapse()
                 }
             }
         }
@@ -39,7 +39,7 @@ struct PostsFeedView: View {
             .scrollContentBackground(.hidden)
             .gesture(listDrag)
             .safeAreaInset(edge: .top) {
-                TopBarContainer(isOpen: $isTopBarOpen)
+                Spacer().frame(width: .infinity,height: 80)
             }
         }
     }

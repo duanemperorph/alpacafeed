@@ -9,13 +9,13 @@ import SwiftUI
 
 struct CommentsFeedView: View {
     @ObservedObject var model: CommentsListViewModel
-    @State var isTopBarOpen = false
+    @EnvironmentObject var navigationBarController: NavigationBarController
     
     var listDrag: some Gesture {
         DragGesture(coordinateSpace: .local).onChanged { data in
-            if (isTopBarOpen && data.translation.height < 0) {
+            if (navigationBarController.isExpanded && data.translation.height < 0) {
                 withAnimation(.easeInOut(duration: 0.3)) {
-                    isTopBarOpen = false
+                    navigationBarController.collapse()
                 }
             }
         }
@@ -35,9 +35,6 @@ struct CommentsFeedView: View {
             .listStyle(PlainListStyle())
             .scrollContentBackground(.hidden)
             .gesture(listDrag)
-            .safeAreaInset(edge: .top) {
-                TopBarContainer(isOpen: $isTopBarOpen)
-            }
         }
     }
     
