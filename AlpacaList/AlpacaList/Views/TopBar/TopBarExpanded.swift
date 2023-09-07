@@ -3,18 +3,23 @@ import SwiftUI
 struct ImageTextFieldPairView: View {
     var imageName: String
     @Binding var text: String
+    var action: () -> Void
     
     var body: some View {
-        HStack(spacing: 10) {
-            Image(systemName: imageName)
-                .foregroundColor(.white)
-                .font(.system(size: 20))
-                .frame(width: 20, height: 20)
-            Text(text)
-                .font(.system(size: 18))
-                .padding(.horizontal, 4)
-                .frame(maxWidth: .infinity, alignment: .leading)
+        Button(action: action) {
+            HStack(spacing: 10) {
+                Image(systemName: imageName)
+                    .foregroundColor(.white)
+                    .font(.system(size: 20))
+                    .frame(width: 20, height: 20)
+                Text(text)
+                    .font(.system(size: 18))
+                    .padding(.horizontal, 4)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
         }
+        .tint(.primary)
+        .buttonStyle(.borderless)
         .padding(.horizontal, 10)
         .frame(maxWidth: .infinity, minHeight: 40)
         .background(Color.white.opacity(0.1).cornerRadius(10))
@@ -89,13 +94,19 @@ struct ButtonSubBarView: View {
 struct TopBarExpanded: View {
     @Binding var communityName: String
     @Binding var userName: String
+    @EnvironmentObject var navigationRootController: NavigationRootController
+    
     
     var body: some View {
         VStack {
-            ImageTextFieldPairView(imageName: "person.circle", text: $userName)
-                .frame(maxWidth: .infinity)
-            ImageTextFieldPairView(imageName: "globe", text: $communityName)
-                .frame(maxWidth: .infinity)
+            ImageTextFieldPairView(imageName: "person.circle", text: $userName) {
+                navigationRootController.push(.userSettings)
+            }
+            .frame(maxWidth: .infinity)
+            ImageTextFieldPairView(imageName: "globe", text: $communityName) {
+                navigationRootController.push(.instanceSettings)
+            }
+            .frame(maxWidth: .infinity)
             Spacer().frame(height: 15)
             ButtonSubBarView()
                 .padding(.horizontal, 10)
