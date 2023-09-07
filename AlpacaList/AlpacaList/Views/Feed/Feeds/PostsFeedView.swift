@@ -10,14 +10,14 @@ import SwiftUI
 struct PostsFeedView: View {
     @State var model: PostsListViewModel
     @EnvironmentObject var navigationRootController: NavigationRootController
-    @EnvironmentObject var navigationBarController: NavigationBarController
+    @EnvironmentObject var topBarController: TopBarController
     
     
     var listDrag: some Gesture {
         DragGesture(coordinateSpace: .local).onChanged { data in
-            if (navigationBarController.isExpanded && data.translation.height < 0) {
+            if (topBarController.isExpanded && data.translation.height < 0) {
                 withAnimation(.easeInOut(duration: 0.3)) {
-                    navigationBarController.collapse()
+                    topBarController.collapse()
                 }
             }
         }
