@@ -39,7 +39,7 @@ struct PostsFeedView: View {
             .scrollContentBackground(.hidden)
             .gesture(listDrag)
             .safeAreaInset(edge: .top) {
-                Spacer().frame(width: .infinity, height: topBarController.topBarInset)
+                Spacer().frame(height: topBarController.topBarInset)
             }
         }
     }
