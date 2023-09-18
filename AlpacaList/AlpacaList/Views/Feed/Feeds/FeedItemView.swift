@@ -13,11 +13,48 @@ struct FeedItemView: View {
     
     @ObservedObject var model: FeedItemViewModel
     
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
+    
     let onClick: OnClick?
     
     init(model: FeedItemViewModel, onClick: OnClick? = nil) {
         self.model = model
         self.onClick = onClick
+    }
+    
+    @ViewBuilder func mainBodyCompact(_ item: FeedItem) -> some View {
+        VStack(alignment: .leading) {
+            if let title = item.title {
+                PostTitle(title: title)
+            }
+            
+            PostUsername(username: item.username)
+            
+            if let thumbnail = item.thumbnail {
+                PostThumbnail(thumbnail: thumbnail)
+            } else if let body = item.body {
+                PostBody(bodyText: body)
+            }
+        }
+    }
+    
+    @ViewBuilder func mainBodyRegular(_ item: FeedItem) -> some View {
+        HStack {
+            if let thumbnail = item.thumbnail {
+                PostThumbnail(thumbnail: thumbnail)
+            }
+            VStack(alignment: .leading) {
+                if let title = item.title {
+                    PostTitle(title: title)
+                }
+                
+                PostUsername(username: item.username)
+                
+                if let body = item.body {
+                    PostBody(bodyText: body)
+                }
+            }
+        }
     }
     
     var body: some View {
@@ -28,17 +65,12 @@ struct FeedItemView: View {
                 onClick(model.feedItem)
             }
         }) {
-            VStack(alignment: .leading) {
-                if let title = item.title {
-                    PostTitle(title: title)
+            VStack {
+                if horizontalSizeClass == .compact {
+                    mainBodyCompact(item)
                 }
-                
-                PostUsername(username: item.username)
-                
-                if let thumbnail = item.thumbnail {
-                    PostThumbnail(thumbnail: thumbnail)
-                } else if let body = item.body {
-                    PostBody(bodyText: body)
+                else {
+                    mainBodyRegular(item)
                 }
                 Spacer().frame(height: 15)
                 switch model.style {
