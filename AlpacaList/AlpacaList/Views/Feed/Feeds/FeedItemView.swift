@@ -43,7 +43,7 @@ struct FeedItemView: View {
         HStack {
             if let thumbnail = item.thumbnail {
                 PostThumbnail(thumbnail: thumbnail)
-                    .frame(maxWidth: .infinity, maxHeight: 350)
+                    .frame(maxWidth: 350, maxHeight: 250)
             }
             VStack(alignment: .leading) {
                 if let title = item.title {
