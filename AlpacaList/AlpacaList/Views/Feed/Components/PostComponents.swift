@@ -44,7 +44,6 @@ struct PostThumbnail: View {
     var body: some View {
         Image(thumbnail)
             .resizable()
-            .aspectRatio(contentMode: .fit)
-            .frame(maxWidth: .infinity, maxHeight: 200)
+            .scaledToFit()
     }
 }

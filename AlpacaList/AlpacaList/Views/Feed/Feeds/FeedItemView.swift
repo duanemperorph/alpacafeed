@@ -32,6 +32,7 @@ struct FeedItemView: View {
             
             if let thumbnail = item.thumbnail {
                 PostThumbnail(thumbnail: thumbnail)
+                    .frame(maxWidth: .infinity, maxHeight: 200)
             } else if let body = item.body {
                 PostBody(bodyText: body)
             }
@@ -42,6 +43,7 @@ struct FeedItemView: View {
         HStack {
             if let thumbnail = item.thumbnail {
                 PostThumbnail(thumbnail: thumbnail)
+                    .frame(maxWidth: .infinity, maxHeight: 350)
             }
             VStack(alignment: .leading) {
                 if let title = item.title {
@@ -99,5 +101,9 @@ struct FeedViewItem_Previews: PreviewProvider {
         RootPreviews()
             .previewDevice(PreviewDevice(rawValue: "iPad Pro (11-inch) (4th generation)"))
             .previewDisplayName("iPad Pro 11\"")
+            .previewInterfaceOrientation(.landscapeLeft)
+        RootPreviews()
+            .previewDevice(PreviewDevice(rawValue: "iPad Pro (11-inch) (4th generation)"))
+            .previewDisplayName("iPad Pro 11\" - Port")
     }
 }
