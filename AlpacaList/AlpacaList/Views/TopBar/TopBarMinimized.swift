@@ -65,7 +65,7 @@ struct TopBarMinimized_Previews: PreviewProvider {
     private static let navigationControllerCannotPop = NavigationRootController()
     private static let navigationControllerCanPop = NavigationRootController(initialStack: [.postDetails(postItem: MockDataGenerator.generateRandomComment(maxLength: 1, depth: 1, indention: 1))])
     
-    static var previews: some View {
+    @ViewBuilder static var createPreview: some View {
         ZStack {
             LinearGradient(
                 gradient: Gradient(colors: [.blue, .purple]),
@@ -82,5 +82,12 @@ struct TopBarMinimized_Previews: PreviewProvider {
             .background(.regularMaterial)
             .environment(\.colorScheme, .dark)
         }
+    }
+    
+    static var previews: some View {
+        createPreview
+        createPreview
+            .previewDevice(PreviewDevice(rawValue: "iPad Pro (11-inch) (4th generation)"))
+            .previewDisplayName("iPad Pro 11\"")
     }
 }

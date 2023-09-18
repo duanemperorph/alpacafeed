@@ -95,18 +95,35 @@ struct TopBarExpanded: View {
     @Binding var communityName: String
     @Binding var userName: String
     @EnvironmentObject var navigationRootController: NavigationRootController
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
     
+    @ViewBuilder var instanceSettingsButton: some View {
+        ImageTextFieldPairView(imageName: "globe", text: $communityName) {
+            navigationRootController.push(.instanceSettings)
+        }
+        .frame(maxWidth: .infinity)
+    }
+    
+    @ViewBuilder var userSettingsButton: some View {
+        ImageTextFieldPairView(imageName: "person.circle", text: $userName) {
+            navigationRootController.push(.userSettings)
+        }
+        .frame(maxWidth: .infinity)
+    }
     
     var body: some View {
         VStack {
-            ImageTextFieldPairView(imageName: "person.circle", text: $userName) {
-                navigationRootController.push(.userSettings)
+            if horizontalSizeClass == .compact {
+                instanceSettingsButton
+                userSettingsButton
             }
-            .frame(maxWidth: .infinity)
-            ImageTextFieldPairView(imageName: "globe", text: $communityName) {
-                navigationRootController.push(.instanceSettings)
+            else {
+                HStack {
+                    instanceSettingsButton
+                    userSettingsButton
+                }
             }
-            .frame(maxWidth: .infinity)
+                
             Spacer().frame(height: 15)
             ButtonSubBarView()
                 .padding(.horizontal, 10)
@@ -119,8 +136,7 @@ struct TopBarExpanded: View {
 struct TopBarViewExpanded_Previews: PreviewProvider {
     static let navigationRootController = NavigationRootController()
     
-    
-    static var previews: some View {
+    @ViewBuilder static var createPreview: some View {
         ZStack {
             LinearGradient(
                 gradient: Gradient(colors: [.blue, .purple]),
@@ -138,5 +154,13 @@ struct TopBarViewExpanded_Previews: PreviewProvider {
             .background(.regularMaterial)
             .environment(\.colorScheme, .dark)
         }
+    }
+    
+    
+    static var previews: some View {
+            createPreview
+            createPreview
+                .previewDevice(PreviewDevice(rawValue: "iPad Pro (11-inch) (4th generation)"))
+                .previewDisplayName("iPad Pro 11\"")
     }
 }

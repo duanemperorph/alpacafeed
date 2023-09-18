@@ -63,6 +63,9 @@ struct FeedItemView: View {
 
 struct FeedViewItem_Previews: PreviewProvider {
     static var previews: some View {
-        return RootPreviews()
+        RootPreviews()
+        RootPreviews()
+            .previewDevice(PreviewDevice(rawValue: "iPad Pro (11-inch) (4th generation)"))
+            .previewDisplayName("iPad Pro 11\"")
     }
 }

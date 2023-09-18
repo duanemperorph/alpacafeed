@@ -49,6 +49,9 @@ struct FeedView_Previews: PreviewProvider {
     static let mockFeedItems = MockDataGenerator.generatePosts()
     
     static var previews: some View {
-        return RootPreviews()
+        RootPreviews()
+        RootPreviews()
+            .previewDevice(PreviewDevice(rawValue: "iPad Pro (11-inch) (4th generation)"))
+            .previewDisplayName("iPad Pro 11\"")
     }
 }

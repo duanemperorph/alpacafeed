@@ -9,7 +9,6 @@ import SwiftUI
 
 struct TopBarContainer: View {
     @Environment(\.colorScheme) var envColorScheme
-    @Environment(\.horizontalSizeClass) var horizontalSizeClass
     
     @State var communityName = "lemmyworld@lemmy.world"
     @State var userName = "imacat@kbin.social"
