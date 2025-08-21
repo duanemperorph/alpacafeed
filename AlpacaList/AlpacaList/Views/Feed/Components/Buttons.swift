@@ -41,13 +41,14 @@ struct ExpandCommentsButton: View {
     
     var body: some View {
         Button {
+            print("toggling \(isActive)")
             toggleActive()
         } label: {
             Image(systemName: isActive ? "chevron.up" : "chevron.down")
                 .fontWeight(.semibold)
                 .frame(maxWidth: .infinity)
                 .postItemButtonStyle(isActive: isActive)
-        }
+        }.buttonStyle(.borderless)
     }
 }
 
@@ -104,9 +105,11 @@ struct BoostButton: View {
 }
 
 struct PlusButton: View {
+    let action: () -> Void
+    
     var body: some View {
         Button {
-            // TOOO
+            action()
         } label: {
             Image(systemName: "plus")
                 .resizable()

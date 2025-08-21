@@ -162,8 +162,8 @@
 			isa = PBXGroup;
 			children = (
 				372DC5982A8982FD00843D14 /* PostsListVM.swift */,
-				3742DB9F2AA69A4200B7E83F /* FeedItemVM.swift */,
 				3742DBA12AA69C2500B7E83F /* CommentsListVM.swift */,
+				3742DB9F2AA69A4200B7E83F /* FeedItemVM.swift */,
 			);
 			path = VM;
 			sourceTree = "<group>";
@@ -277,8 +277,8 @@
 		37CF46D42A50FC3B00952075 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				37428E9E2AA9573600E59607 /* Navigation */,
 				3742DB982AA6636600B7E83F /* Root */,
+				37428E9E2AA9573600E59607 /* Navigation */,
 				37D9FED02A5BA2E900E539A6 /* Settings */,
 				376243A32A59FEA40026DB10 /* TopBar */,
 				370A25B02A54EF320076D378 /* Feed */,

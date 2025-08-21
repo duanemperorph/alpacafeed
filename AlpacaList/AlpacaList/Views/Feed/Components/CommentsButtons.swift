@@ -26,7 +26,7 @@ struct CommentItemButtons: View {
                 .frame(width: 60)
                 ExpandCommentsButton(isActive: model.isExpanded, toggleActive: toggleExpanded)
                     .padding(.horizontal, 10)
-                PlusButton().frame(width: 40)
+                PlusButton(action: {}).frame(width: 40)
             }
         }
         .tint(.primary)
