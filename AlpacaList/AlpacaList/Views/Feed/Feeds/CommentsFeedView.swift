@@ -37,7 +37,7 @@ struct CommentsFeedView: View {
             .scrollContentBackground(.hidden)
             .gesture(listDrag)
             .safeAreaInset(edge: .top) {
-                Spacer().frame(width: .infinity, height: topBarController.topBarInset - 40)
+                Spacer().frame(height: topBarController.topBarInset - 40)
             }
         }
     }
