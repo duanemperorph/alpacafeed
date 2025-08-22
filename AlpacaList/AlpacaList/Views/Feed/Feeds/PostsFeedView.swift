@@ -12,7 +12,6 @@ struct PostsFeedView: View {
     @EnvironmentObject var navigationRootController: NavigationRootController
     @EnvironmentObject var topBarController: TopBarController
     
-    
     var listDrag: some Gesture {
         DragGesture(coordinateSpace: .local).onChanged { data in
             if (topBarController.isExpanded && data.translation.height < 0) {
@@ -24,23 +23,12 @@ struct PostsFeedView: View {
     }
     
     var body: some View {
-        ZStack {
-            FeedViewBackground()
-            
-            List(model.posts) { post in
-                FeedItemView(model: post, onClick: { item in
-                    navigationRootController.push(.postDetails(postItem: item))
-                })
-                    .listRowBackground(Color.clear)
-                    .listRowInsets(EdgeInsets(top: 5, leading: 10, bottom: 5, trailing: 10))
-            }
-            .padding(0)
-            .listStyle(PlainListStyle())
-            .scrollContentBackground(.hidden)
-            .gesture(listDrag)
-            .safeAreaInset(edge: .top) {
-                Spacer().frame(height: topBarController.topBarInset)
-            }
+        FeedListView(listItems: model.posts) { item in
+            FeedItemView(model: item, onClick: { clickedItem in
+                navigationRootController.push(.postDetails(postItem: clickedItem))
+            })
+                .listRowBackground(Color.clear)
+                .listRowInsets(EdgeInsets(top: 5, leading: 10, bottom: 5, trailing: 10))
         }
     }
 }
