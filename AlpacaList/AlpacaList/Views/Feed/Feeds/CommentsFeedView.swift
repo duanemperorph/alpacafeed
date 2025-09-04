@@ -15,8 +15,7 @@ struct CommentsFeedView: View {
         
         FeedListView(listItems: items) { item in
             FeedItemView(model: item)
-                .listRowBackground(Color.clear)
-                .listRowInsets(EdgeInsets(top: 5, leading: 10 + indentionForItem(item: item), bottom: 5, trailing: 10))
+            // todo: indent
         }
     }
     

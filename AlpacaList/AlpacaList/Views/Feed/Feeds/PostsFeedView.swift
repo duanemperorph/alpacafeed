@@ -27,8 +27,6 @@ struct PostsFeedView: View {
             FeedItemView(model: item, onClick: { clickedItem in
                 navigationRootController.push(.postDetails(postItem: clickedItem))
             })
-                .listRowBackground(Color.clear)
-                .listRowInsets(EdgeInsets(top: 5, leading: 10, bottom: 5, trailing: 10))
         }
     }
 }

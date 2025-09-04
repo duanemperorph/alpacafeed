@@ -17,6 +17,7 @@ struct NavigationRootView: View {
             PostsFeedView(model: rootModel)
             .navigationDestination(for: NavigationDestination.self) {
                 navigationRootController.viewForDestination(destination: $0)
+                    .toolbar(.hidden)
             }
         }
         .safeAreaInset(edge: .top) {
