@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct FeedListView<ItemContent: View>: View {
-    @State var listItems: [FeedItemViewModel]
+    let listItems: [FeedItemViewModel]
     @ViewBuilder var itemViewContent: (FeedItemViewModel) -> ItemContent
     
     @EnvironmentObject var navigationRootController: NavigationRootController
