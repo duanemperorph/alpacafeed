@@ -15,7 +15,7 @@ struct CommentsFeedView: View {
         
         FeedListView(listItems: items) { item in
             FeedItemView(model: item)
-            // todo: indent
+                .padding(.leading, indentionForItem(item: item))
         }
     }
     
