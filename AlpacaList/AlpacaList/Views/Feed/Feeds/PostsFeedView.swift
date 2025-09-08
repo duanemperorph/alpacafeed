@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct PostsFeedView: View {
-    @State var model: PostsListViewModel
+    let model: PostsListViewModel
     @EnvironmentObject var navigationRootController: NavigationRootController
     @EnvironmentObject var topBarController: TopBarController
     

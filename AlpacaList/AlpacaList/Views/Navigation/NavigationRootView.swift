@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct NavigationRootView: View {
-    @State var rootModel: PostsListViewModel
+    let rootModel: PostsListViewModel
     @EnvironmentObject var navigationRootController: NavigationRootController
     @EnvironmentObject var topBarController: TopBarController
     
