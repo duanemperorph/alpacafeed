@@ -14,6 +14,10 @@
 		37346BD32A520AB800CB346A /* TopBarExpanded.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37346BD22A520AB800CB346A /* TopBarExpanded.swift */; };
 		37350F1F2A6DF2DC00DD239B /* PostItemButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37350F1E2A6DF2DC00DD239B /* PostItemButtons.swift */; };
 		37350F212A6DF4E000DD239B /* FeedViewBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37350F202A6DF4E000DD239B /* FeedViewBackground.swift */; };
+		373C2D5D2E70E6B400099DC1 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 373C2D582E70E52F00099DC1 /* AppCoordinator.swift */; };
+		373C2D5E2E70E6B400099DC1 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 373C2D592E70E52F00099DC1 /* Coordinator.swift */; };
+		373C2D5F2E70E6B400099DC1 /* FeedCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 373C2D5A2E70E52F00099DC1 /* FeedCoordinator.swift */; };
+		373C2D602E70E6B400099DC1 /* SettingsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 373C2D5B2E70E52F00099DC1 /* SettingsCoordinator.swift */; };
 		373DABB32A75D9E500DF17EB /* MockDataGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 373DABB22A75D9E500DF17EB /* MockDataGenerator.swift */; };
 		373DABB92A75E8F100DF17EB /* MockDataStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 373DABB82A75E8F100DF17EB /* MockDataStrings.swift */; };
 		37428E962AA91CE800E59607 /* RootPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37428E952AA91CE800E59607 /* RootPreview.swift */; };
@@ -67,6 +71,10 @@
 		37346BD22A520AB800CB346A /* TopBarExpanded.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopBarExpanded.swift; sourceTree = "<group>"; };
 		37350F1E2A6DF2DC00DD239B /* PostItemButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostItemButtons.swift; sourceTree = "<group>"; };
 		37350F202A6DF4E000DD239B /* FeedViewBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewBackground.swift; sourceTree = "<group>"; };
+		373C2D582E70E52F00099DC1 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
+		373C2D592E70E52F00099DC1 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
+		373C2D5A2E70E52F00099DC1 /* FeedCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedCoordinator.swift; sourceTree = "<group>"; };
+		373C2D5B2E70E52F00099DC1 /* SettingsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsCoordinator.swift; sourceTree = "<group>"; };
 		373DABB22A75D9E500DF17EB /* MockDataGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDataGenerator.swift; sourceTree = "<group>"; };
 		373DABB82A75E8F100DF17EB /* MockDataStrings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDataStrings.swift; sourceTree = "<group>"; };
 		37428E952AA91CE800E59607 /* RootPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootPreview.swift; sourceTree = "<group>"; };
@@ -141,6 +149,17 @@
 				376BB7712A80B7F000AE9FB0 /* CommentsFeedView.swift */,
 			);
 			path = Feeds;
+			sourceTree = "<group>";
+		};
+		373C2D5C2E70E52F00099DC1 /* Coordinator */ = {
+			isa = PBXGroup;
+			children = (
+				373C2D582E70E52F00099DC1 /* AppCoordinator.swift */,
+				373C2D592E70E52F00099DC1 /* Coordinator.swift */,
+				373C2D5A2E70E52F00099DC1 /* FeedCoordinator.swift */,
+				373C2D5B2E70E52F00099DC1 /* SettingsCoordinator.swift */,
+			);
+			path = Coordinator;
 			sourceTree = "<group>";
 		};
 		37428E9E2AA9573600E59607 /* Navigation */ = {
@@ -243,6 +262,7 @@
 		37CF46A92A50FAF700952075 /* AlpacaList */ = {
 			isa = PBXGroup;
 			children = (
+				373C2D5C2E70E52F00099DC1 /* Coordinator */,
 				3742DB9E2AA69A2A00B7E83F /* Misc */,
 				37CF46D52A50FC4800952075 /* Model */,
 				37CF46D42A50FC3B00952075 /* Views */,
@@ -439,6 +459,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				373C2D5D2E70E6B400099DC1 /* AppCoordinator.swift in Sources */,
+				373C2D5E2E70E6B400099DC1 /* Coordinator.swift in Sources */,
+				373C2D5F2E70E6B400099DC1 /* FeedCoordinator.swift in Sources */,
+				373C2D602E70E6B400099DC1 /* SettingsCoordinator.swift in Sources */,
 				376BB76B2A8080BA00AE9FB0 /* Buttons.swift in Sources */,
 				37346BD32A520AB800CB346A /* TopBarExpanded.swift in Sources */,
 				3742DBA02AA69A4200B7E83F /* FeedItemVM.swift in Sources */,

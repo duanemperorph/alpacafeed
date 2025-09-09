@@ -38,13 +38,26 @@ struct TopBarMinimized: View {
     var communityName: String
     var icon: String
     
-    @EnvironmentObject var navigationRootController: NavigationRootController
+    @EnvironmentObject var appCoordinator: AppCoordinator
     
     var body: some View {
+        let canPop: Bool = {
+            if let feedCoordinator = appCoordinator.getCurrentCoordinator() as? FeedCoordinator {
+                return feedCoordinator.canPop
+            } else if let settingsCoordinator = appCoordinator.getCurrentCoordinator() as? SettingsCoordinator {
+                return settingsCoordinator.canPop
+            }
+            return false
+        }()
+        
         HStack {
-            if navigationRootController.canPop {
+            if canPop {
                 Button(action: {
-                    navigationRootController.pop()
+                    if let feedCoordinator = appCoordinator.getCurrentCoordinator() as? FeedCoordinator {
+                        feedCoordinator.pop()
+                    } else if let settingsCoordinator = appCoordinator.getCurrentCoordinator() as? SettingsCoordinator {
+                        settingsCoordinator.pop()
+                    }
                 }) {
                     Image(systemName: "chevron.left")
                 }
@@ -62,8 +75,16 @@ struct TopBarMinimized: View {
 }
 
 struct TopBarMinimized_Previews: PreviewProvider {
-    private static let navigationControllerCannotPop = NavigationRootController()
-    private static let navigationControllerCanPop = NavigationRootController(initialStack: [.postDetails(postItem: MockDataGenerator.generateRandomComment(maxLength: 1, depth: 1, indention: 1))])
+    private static let appCoordinatorEmpty = AppCoordinator()
+    private static let appCoordinatorWithStack: AppCoordinator = {
+        let coordinator = AppCoordinator()
+        coordinator.start()
+        if let feedCoordinator = coordinator.getCurrentCoordinator() as? FeedCoordinator {
+            let mockItem = MockDataGenerator.generateRandomComment(maxLength: 1, depth: 1, indention: 1)
+            feedCoordinator.showPostDetails(postItem: mockItem)
+        }
+        return coordinator
+    }()
     
     @ViewBuilder static var createPreview: some View {
         ZStack {
@@ -75,9 +96,9 @@ struct TopBarMinimized_Previews: PreviewProvider {
             .edgesIgnoringSafeArea(.all)
             VStack {
                 TopBarMinimized(communityName: "lemmyworld@lemmy.world", icon: "globe")
-                    .environmentObject(navigationControllerCannotPop)
+                    .environmentObject(appCoordinatorEmpty)
                 TopBarMinimized(communityName: "lemmyworld@lemmy.world", icon: "globe")
-                    .environmentObject(navigationControllerCanPop)
+                    .environmentObject(appCoordinatorWithStack)
             }
             .background(.regularMaterial)
             .environment(\.colorScheme, .dark)

@@ -31,13 +31,26 @@ struct ImageTextFieldPairView: View {
 }
 
 struct ButtonSubBarView: View {
-    @EnvironmentObject var navigationRootController: NavigationRootController
+    @EnvironmentObject var appCoordinator: AppCoordinator
     
     var body: some View {
-        let isBackButtonDisabled = !navigationRootController.canPop
+        let canPop: Bool = {
+            if let feedCoordinator = appCoordinator.getCurrentCoordinator() as? FeedCoordinator {
+                return feedCoordinator.canPop
+            } else if let settingsCoordinator = appCoordinator.getCurrentCoordinator() as? SettingsCoordinator {
+                return settingsCoordinator.canPop
+            }
+            return false
+        }()
+        
+        let isBackButtonDisabled = !canPop
         HStack {
             Button(action: {
-                navigationRootController.pop()
+                if let feedCoordinator = appCoordinator.getCurrentCoordinator() as? FeedCoordinator {
+                    feedCoordinator.pop()
+                } else if let settingsCoordinator = appCoordinator.getCurrentCoordinator() as? SettingsCoordinator {
+                    settingsCoordinator.pop()
+                }
             }) {
                 Image(systemName: "chevron.left")
             }
@@ -74,19 +87,25 @@ struct ButtonSubBarView: View {
 struct TopBarExpanded: View {
     @Binding var communityName: String
     @Binding var userName: String
-    @EnvironmentObject var navigationRootController: NavigationRootController
+    @EnvironmentObject var appCoordinator: AppCoordinator
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     
     @ViewBuilder var instanceSettingsButton: some View {
         ImageTextFieldPairView(imageName: "globe", text: $communityName) {
-            navigationRootController.push(.instanceSettings)
+            appCoordinator.showSettings()
+            if let settingsCoordinator = appCoordinator.getCurrentCoordinator() as? SettingsCoordinator {
+                settingsCoordinator.showInstanceSettings()
+            }
         }
         .frame(maxWidth: .infinity)
     }
     
     @ViewBuilder var userSettingsButton: some View {
         ImageTextFieldPairView(imageName: "person.circle", text: $userName) {
-            navigationRootController.push(.userSettings)
+            appCoordinator.showSettings()
+            if let settingsCoordinator = appCoordinator.getCurrentCoordinator() as? SettingsCoordinator {
+                settingsCoordinator.showUserSettings()
+            }
         }
         .frame(maxWidth: .infinity)
     }
@@ -114,7 +133,7 @@ struct TopBarExpanded: View {
 }
 
 struct TopBarViewExpanded_Previews: PreviewProvider {
-    static let navigationRootController = NavigationRootController()
+    static let appCoordinator = AppCoordinator()
     
     @ViewBuilder static var createPreview: some View {
         ZStack {
@@ -129,7 +148,7 @@ struct TopBarViewExpanded_Previews: PreviewProvider {
                     communityName: .constant("lemmyworld@lemmy.world"),
                     userName: .constant("dog@kbin.social")
                 )
-                .environmentObject(navigationRootController)
+                .environmentObject(appCoordinator)
             }
             .background(.regularMaterial)
             .environment(\.colorScheme, .dark)

@@ -9,9 +9,14 @@ import SwiftUI
 
 @main
 struct AlpacaListApp: App {
+    @StateObject private var appCoordinator = AppCoordinator()
+    
     var body: some Scene {
         WindowGroup {
-            RootPreviews()
+            appCoordinator.createView()
+                .onAppear {
+                    appCoordinator.start()
+                }
         }
     }
 }

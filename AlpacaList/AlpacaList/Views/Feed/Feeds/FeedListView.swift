@@ -11,7 +11,6 @@ struct FeedListView<ItemContent: View>: View {
     let listItems: [FeedItemViewModel]
     @ViewBuilder var itemViewContent: (FeedItemViewModel) -> ItemContent
     
-    @EnvironmentObject var navigationRootController: NavigationRootController
     @EnvironmentObject var topBarController: TopBarController
     
     init(listItems: [FeedItemViewModel], itemViewContent: @escaping (FeedItemViewModel) -> ItemContent) {

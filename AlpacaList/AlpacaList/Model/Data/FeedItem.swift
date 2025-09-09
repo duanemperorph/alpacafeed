@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct FeedItem: Identifiable {
+struct FeedItem: Identifiable, Hashable {
     let id: UUID
     let username: String
     let date: Date
