@@ -1,0 +1,16 @@
+{
+  "source": "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/AlpacaList/Views/Feed/Components/Buttons.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "🚀",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 101
+        }
+      }
+    ]
+  },
+  "version": 1
+}

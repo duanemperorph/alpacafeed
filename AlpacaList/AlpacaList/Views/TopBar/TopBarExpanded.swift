@@ -31,13 +31,13 @@ struct ImageTextFieldPairView: View {
 }
 
 struct ButtonSubBarView: View {
-    @EnvironmentObject var navigationRootController: NavigationRootController
+    @EnvironmentObject var navigationCoordinator: NavigationCoordinator
     
     var body: some View {
-        let isBackButtonDisabled = !navigationRootController.canPop
+        let isBackButtonDisabled = !navigationCoordinator.canPop
         HStack {
             Button(action: {
-                navigationRootController.pop()
+                navigationCoordinator.pop()
             }) {
                 Image(systemName: "chevron.left")
             }
@@ -74,19 +74,19 @@ struct ButtonSubBarView: View {
 struct TopBarExpanded: View {
     @Binding var communityName: String
     @Binding var userName: String
-    @EnvironmentObject var navigationRootController: NavigationRootController
+    @EnvironmentObject var navigationCoordinator: NavigationCoordinator
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     
     @ViewBuilder var instanceSettingsButton: some View {
         ImageTextFieldPairView(imageName: "globe", text: $communityName) {
-            navigationRootController.push(.instanceSettings)
+            navigationCoordinator.push(.instanceSettings)
         }
         .frame(maxWidth: .infinity)
     }
     
     @ViewBuilder var userSettingsButton: some View {
         ImageTextFieldPairView(imageName: "person.circle", text: $userName) {
-            navigationRootController.push(.userSettings)
+            navigationCoordinator.push(.userSettings)
         }
         .frame(maxWidth: .infinity)
     }
@@ -114,7 +114,7 @@ struct TopBarExpanded: View {
 }
 
 struct TopBarViewExpanded_Previews: PreviewProvider {
-    static let navigationRootController = NavigationRootController()
+    static let navigationCoordinator = NavigationCoordinator()
     
     @ViewBuilder static var createPreview: some View {
         ZStack {
@@ -129,7 +129,7 @@ struct TopBarViewExpanded_Previews: PreviewProvider {
                     communityName: .constant("lemmyworld@lemmy.world"),
                     userName: .constant("dog@kbin.social")
                 )
-                .environmentObject(navigationRootController)
+                .environmentObject(navigationCoordinator)
             }
             .background(.regularMaterial)
             .environment(\.colorScheme, .dark)

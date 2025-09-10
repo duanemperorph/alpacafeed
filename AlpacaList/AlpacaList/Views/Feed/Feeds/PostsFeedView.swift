@@ -9,7 +9,7 @@ import SwiftUI
 
 struct PostsFeedView: View {
     let model: PostsListViewModel
-    @EnvironmentObject var navigationRootController: NavigationRootController
+    @EnvironmentObject var navigationCoordinator: NavigationCoordinator
     @EnvironmentObject var topBarController: TopBarController
     
     var listDrag: some Gesture {
@@ -25,7 +25,7 @@ struct PostsFeedView: View {
     var body: some View {
         FeedListView(listItems: model.posts) { item in
             FeedItemView(model: item, onClick: { clickedItem in
-                navigationRootController.push(.postDetails(postItem: clickedItem))
+                navigationCoordinator.push(.postDetails(postItem: clickedItem))
             })
         }
     }

@@ -1,0 +1,18 @@
+"/Users/lucasnguyen/projects/alpacafeed/AlpacaList/AlpacaList/Misc/Helpers.swift":
+  object: "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/Helpers.o"
+  dependencies: "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/Helpers.d"
+  const-values: "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/Helpers.swiftconstvalues"
+  swift-dependencies: "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/Helpers.swiftdeps"
+  diagnostics: "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/Helpers.dia"
+"/Users/lucasnguyen/projects/alpacafeed/AlpacaList/AlpacaList/Views/Feed/Feeds/FeedListView.swift":
+  diagnostics: "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/FeedListView.dia"
+  dependencies: "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/FeedListView.d"
+  object: "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/FeedListView.o"
+  swift-dependencies: "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/FeedListView.swiftdeps"
+  const-values: "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/FeedListView.swiftconstvalues"
+"/Users/lucasnguyen/projects/alpacafeed/AlpacaList/AlpacaList/Views/Feed/Components/CommentsButtons.swift":
+  diagnostics: "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/CommentsButtons.dia"
+  const-values: "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/CommentsButtons.swiftconstvalues"
+  dependencies: "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/CommentsButtons.d"
+  object: "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/CommentsButtons.o"
+  swift-dependencies: "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/CommentsButtons.swiftdeps"

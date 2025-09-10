@@ -1,0 +1,18 @@
+"/Users/lucasnguyen/projects/alpacafeed/AlpacaList/AlpacaList/Views/Feed/Components/Buttons.swift":
+  const-values: "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/arm64/Buttons.swiftconstvalues"
+  object: "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/arm64/Buttons.o"
+  diagnostics: "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/arm64/Buttons.dia"
+  dependencies: "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/arm64/Buttons.d"
+  swift-dependencies: "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/arm64/Buttons.swiftdeps"
+"/Users/lucasnguyen/projects/alpacafeed/AlpacaList/AlpacaList/Model/VM/FeedItemVM.swift":
+  diagnostics: "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/arm64/FeedItemVM.dia"
+  dependencies: "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/arm64/FeedItemVM.d"
+  const-values: "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/arm64/FeedItemVM.swiftconstvalues"
+  swift-dependencies: "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/arm64/FeedItemVM.swiftdeps"
+  object: "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/arm64/FeedItemVM.o"
+"/Users/lucasnguyen/projects/alpacafeed/AlpacaList/AlpacaList/Views/TopBar/TopBarContainer.swift":
+  object: "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/arm64/TopBarContainer.o"
+  dependencies: "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/arm64/TopBarContainer.d"
+  const-values: "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/arm64/TopBarContainer.swiftconstvalues"
+  swift-dependencies: "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/arm64/TopBarContainer.swiftdeps"
+  diagnostics: "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/arm64/TopBarContainer.dia"

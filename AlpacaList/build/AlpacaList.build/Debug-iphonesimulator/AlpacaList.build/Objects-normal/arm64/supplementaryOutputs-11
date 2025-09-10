@@ -1,0 +1,18 @@
+"/Users/lucasnguyen/projects/alpacafeed/AlpacaList/AlpacaList/Views/Navigation/NavigationRootView.swift":
+  diagnostics: "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/arm64/NavigationRootView.dia"
+  dependencies: "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/arm64/NavigationRootView.d"
+  object: "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/arm64/NavigationRootView.o"
+  const-values: "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/arm64/NavigationRootView.swiftconstvalues"
+  swift-dependencies: "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/arm64/NavigationRootView.swiftdeps"
+"/Users/lucasnguyen/projects/alpacafeed/AlpacaList/AlpacaList/Views/Settings/SettingsComponents.swift":
+  swift-dependencies: "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/arm64/SettingsComponents.swiftdeps"
+  diagnostics: "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/arm64/SettingsComponents.dia"
+  dependencies: "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/arm64/SettingsComponents.d"
+  object: "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/arm64/SettingsComponents.o"
+  const-values: "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/arm64/SettingsComponents.swiftconstvalues"
+"/Users/lucasnguyen/projects/alpacafeed/AlpacaList/AlpacaList/Views/Feed/Feeds/FeedItemView.swift":
+  object: "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/arm64/FeedItemView.o"
+  diagnostics: "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/arm64/FeedItemView.dia"
+  const-values: "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/arm64/FeedItemView.swiftconstvalues"
+  dependencies: "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/arm64/FeedItemView.d"
+  swift-dependencies: "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/arm64/FeedItemView.swiftdeps"

@@ -1,0 +1,16 @@
+{
+  "source": "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/AlpacaList/Views/Settings/UserSettings.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Add New User",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 30
+        }
+      }
+    ]
+  },
+  "version": 1
+}

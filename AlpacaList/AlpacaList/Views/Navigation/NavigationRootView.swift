@@ -9,14 +9,14 @@ import SwiftUI
 
 struct NavigationRootView: View {
     let rootModel: PostsListViewModel
-    @EnvironmentObject var navigationRootController: NavigationRootController
+    @EnvironmentObject var navigationCoordinator: NavigationCoordinator
     @EnvironmentObject var topBarController: TopBarController
     
     var body: some View {
-        NavigationStack(path: $navigationRootController.navigationStack) {
+        NavigationStack(path: $navigationCoordinator.navigationStack) {
             PostsFeedView(model: rootModel)
             .navigationDestination(for: NavigationDestination.self) {
-                navigationRootController.viewForDestination(destination: $0)
+                navigationCoordinator.viewForDestination(destination: $0)
                     .toolbar(.hidden)
             }
         }

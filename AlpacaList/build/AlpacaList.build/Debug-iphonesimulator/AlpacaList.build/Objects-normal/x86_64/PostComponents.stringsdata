@@ -1,0 +1,16 @@
+{
+  "source": "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/AlpacaList/Views/Feed/Components/PostComponents.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "@%@",
+        "location": {
+          "startingColumn": 14,
+          "startingLine": 25
+        }
+      }
+    ]
+  },
+  "version": 1
+}

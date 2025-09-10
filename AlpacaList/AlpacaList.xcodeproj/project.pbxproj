@@ -17,7 +17,7 @@
 		373DABB32A75D9E500DF17EB /* MockDataGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 373DABB22A75D9E500DF17EB /* MockDataGenerator.swift */; };
 		373DABB92A75E8F100DF17EB /* MockDataStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 373DABB82A75E8F100DF17EB /* MockDataStrings.swift */; };
 		37428E962AA91CE800E59607 /* RootPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37428E952AA91CE800E59607 /* RootPreview.swift */; };
-		37428E992AA9561900E59607 /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37428E982AA9561900E59607 /* NavigationController.swift */; };
+		37428E992AA9561900E59607 /* NavigationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37428E982AA9561900E59607 /* NavigationCoordinator.swift */; };
 		37428E9B2AA9568B00E59607 /* TopBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37428E9A2AA9568B00E59607 /* TopBarController.swift */; };
 		3742DB9A2AA6650100B7E83F /* NavigationRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3742DB992AA6650100B7E83F /* NavigationRootView.swift */; };
 		3742DBA02AA69A4200B7E83F /* FeedItemVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3742DB9F2AA69A4200B7E83F /* FeedItemVM.swift */; };
@@ -70,7 +70,7 @@
 		373DABB22A75D9E500DF17EB /* MockDataGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDataGenerator.swift; sourceTree = "<group>"; };
 		373DABB82A75E8F100DF17EB /* MockDataStrings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDataStrings.swift; sourceTree = "<group>"; };
 		37428E952AA91CE800E59607 /* RootPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootPreview.swift; sourceTree = "<group>"; };
-		37428E982AA9561900E59607 /* NavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
+		37428E982AA9561900E59607 /* NavigationCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationCoordinator.swift; sourceTree = "<group>"; };
 		37428E9A2AA9568B00E59607 /* TopBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopBarController.swift; sourceTree = "<group>"; };
 		3742DB992AA6650100B7E83F /* NavigationRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationRootView.swift; sourceTree = "<group>"; };
 		3742DB9F2AA69A4200B7E83F /* FeedItemVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemVM.swift; sourceTree = "<group>"; };
@@ -146,7 +146,7 @@
 		37428E9E2AA9573600E59607 /* Navigation */ = {
 			isa = PBXGroup;
 			children = (
-				37428E982AA9561900E59607 /* NavigationController.swift */,
+				37428E982AA9561900E59607 /* NavigationCoordinator.swift */,
 				3742DB992AA6650100B7E83F /* NavigationRootView.swift */,
 			);
 			path = Navigation;
@@ -447,7 +447,7 @@
 				37DC2B852A9BD59300D6B879 /* Helpers.swift in Sources */,
 				37CF46AD2A50FAF700952075 /* PostsFeedView.swift in Sources */,
 				37CF46AB2A50FAF700952075 /* AlpacaListApp.swift in Sources */,
-				37428E992AA9561900E59607 /* NavigationController.swift in Sources */,
+				37428E992AA9561900E59607 /* NavigationCoordinator.swift in Sources */,
 				376BB76E2A80846200AE9FB0 /* CommentsButtons.swift in Sources */,
 				376BB7722A80B7F000AE9FB0 /* CommentsFeedView.swift in Sources */,
 				3742DBA22AA69C2500B7E83F /* CommentsListVM.swift in Sources */,

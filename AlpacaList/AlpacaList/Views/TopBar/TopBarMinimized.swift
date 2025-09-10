@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct TopBarButtonMinimized: View {
-//    @EnvironmentObject var navigationRootController: NavigationRootController
+//    @EnvironmentObject var navigationCoordinator: NavigationCoordinator
     
     var imageName: String
     var text: String
@@ -38,13 +38,13 @@ struct TopBarMinimized: View {
     var communityName: String
     var icon: String
     
-    @EnvironmentObject var navigationRootController: NavigationRootController
+    @EnvironmentObject var navigationCoordinator: NavigationCoordinator
     
     var body: some View {
         HStack {
-            if navigationRootController.canPop {
+            if navigationCoordinator.canPop {
                 Button(action: {
-                    navigationRootController.pop()
+                    navigationCoordinator.pop()
                 }) {
                     Image(systemName: "chevron.left")
                 }
@@ -62,8 +62,8 @@ struct TopBarMinimized: View {
 }
 
 struct TopBarMinimized_Previews: PreviewProvider {
-    private static let navigationControllerCannotPop = NavigationRootController()
-    private static let navigationControllerCanPop = NavigationRootController(initialStack: [.postDetails(postItem: MockDataGenerator.generateRandomComment(maxLength: 1, depth: 1, indention: 1))])
+    private static let navigationCoordinatorCannotPop = NavigationCoordinator()
+    private static let navigationCoordinatorCanPop = NavigationCoordinator(initialStack: [.postDetails(postItem: MockDataGenerator.generateRandomComment(maxLength: 1, depth: 1, indention: 1))])
     
     @ViewBuilder static var createPreview: some View {
         ZStack {
@@ -75,9 +75,9 @@ struct TopBarMinimized_Previews: PreviewProvider {
             .edgesIgnoringSafeArea(.all)
             VStack {
                 TopBarMinimized(communityName: "lemmyworld@lemmy.world", icon: "globe")
-                    .environmentObject(navigationControllerCannotPop)
+                    .environmentObject(navigationCoordinatorCannotPop)
                 TopBarMinimized(communityName: "lemmyworld@lemmy.world", icon: "globe")
-                    .environmentObject(navigationControllerCanPop)
+                    .environmentObject(navigationCoordinatorCanPop)
             }
             .background(.regularMaterial)
             .environment(\.colorScheme, .dark)

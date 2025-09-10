@@ -1,0 +1,298 @@
+{
+  "" : {
+    "diagnostics" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/AlpacaList-master.dia",
+    "emit-module-dependencies" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/AlpacaList-master-emit-module.d",
+    "emit-module-diagnostics" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/AlpacaList-master-emit-module.dia",
+    "swift-dependencies" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/AlpacaList-master.swiftdeps"
+  },
+  "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/AlpacaList/Misc/Helpers.swift" : {
+    "const-values" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/Helpers.swiftconstvalues",
+    "dependencies" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/Helpers.d",
+    "diagnostics" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/Helpers.dia",
+    "index-unit-output-path" : "/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/Helpers.o",
+    "llvm-bc" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/Helpers.bc",
+    "object" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/Helpers.o",
+    "swift-dependencies" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/Helpers.swiftdeps",
+    "swiftmodule" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/Helpers~partial.swiftmodule"
+  },
+  "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/AlpacaList/Model/Data/FeedItem.swift" : {
+    "const-values" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/FeedItem.swiftconstvalues",
+    "dependencies" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/FeedItem.d",
+    "diagnostics" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/FeedItem.dia",
+    "index-unit-output-path" : "/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/FeedItem.o",
+    "llvm-bc" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/FeedItem.bc",
+    "object" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/FeedItem.o",
+    "swift-dependencies" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/FeedItem.swiftdeps",
+    "swiftmodule" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/FeedItem~partial.swiftmodule"
+  },
+  "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/AlpacaList/Model/Mock/MockDataGenerator.swift" : {
+    "const-values" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/MockDataGenerator.swiftconstvalues",
+    "dependencies" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/MockDataGenerator.d",
+    "diagnostics" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/MockDataGenerator.dia",
+    "index-unit-output-path" : "/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/MockDataGenerator.o",
+    "llvm-bc" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/MockDataGenerator.bc",
+    "object" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/MockDataGenerator.o",
+    "swift-dependencies" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/MockDataGenerator.swiftdeps",
+    "swiftmodule" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/MockDataGenerator~partial.swiftmodule"
+  },
+  "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/AlpacaList/Model/Mock/MockDataStrings.swift" : {
+    "const-values" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/MockDataStrings.swiftconstvalues",
+    "dependencies" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/MockDataStrings.d",
+    "diagnostics" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/MockDataStrings.dia",
+    "index-unit-output-path" : "/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/MockDataStrings.o",
+    "llvm-bc" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/MockDataStrings.bc",
+    "object" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/MockDataStrings.o",
+    "swift-dependencies" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/MockDataStrings.swiftdeps",
+    "swiftmodule" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/MockDataStrings~partial.swiftmodule"
+  },
+  "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/AlpacaList/Model/VM/CommentsListVM.swift" : {
+    "const-values" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/CommentsListVM.swiftconstvalues",
+    "dependencies" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/CommentsListVM.d",
+    "diagnostics" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/CommentsListVM.dia",
+    "index-unit-output-path" : "/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/CommentsListVM.o",
+    "llvm-bc" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/CommentsListVM.bc",
+    "object" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/CommentsListVM.o",
+    "swift-dependencies" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/CommentsListVM.swiftdeps",
+    "swiftmodule" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/CommentsListVM~partial.swiftmodule"
+  },
+  "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/AlpacaList/Model/VM/FeedItemVM.swift" : {
+    "const-values" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/FeedItemVM.swiftconstvalues",
+    "dependencies" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/FeedItemVM.d",
+    "diagnostics" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/FeedItemVM.dia",
+    "index-unit-output-path" : "/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/FeedItemVM.o",
+    "llvm-bc" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/FeedItemVM.bc",
+    "object" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/FeedItemVM.o",
+    "swift-dependencies" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/FeedItemVM.swiftdeps",
+    "swiftmodule" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/FeedItemVM~partial.swiftmodule"
+  },
+  "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/AlpacaList/Model/VM/PostsListVM.swift" : {
+    "const-values" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/PostsListVM.swiftconstvalues",
+    "dependencies" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/PostsListVM.d",
+    "diagnostics" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/PostsListVM.dia",
+    "index-unit-output-path" : "/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/PostsListVM.o",
+    "llvm-bc" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/PostsListVM.bc",
+    "object" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/PostsListVM.o",
+    "swift-dependencies" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/PostsListVM.swiftdeps",
+    "swiftmodule" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/PostsListVM~partial.swiftmodule"
+  },
+  "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/AlpacaList/Views/Feed/Components/Buttons.swift" : {
+    "const-values" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/Buttons.swiftconstvalues",
+    "dependencies" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/Buttons.d",
+    "diagnostics" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/Buttons.dia",
+    "index-unit-output-path" : "/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/Buttons.o",
+    "llvm-bc" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/Buttons.bc",
+    "object" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/Buttons.o",
+    "swift-dependencies" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/Buttons.swiftdeps",
+    "swiftmodule" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/Buttons~partial.swiftmodule"
+  },
+  "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/AlpacaList/Views/Feed/Components/CommentsButtons.swift" : {
+    "const-values" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/CommentsButtons.swiftconstvalues",
+    "dependencies" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/CommentsButtons.d",
+    "diagnostics" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/CommentsButtons.dia",
+    "index-unit-output-path" : "/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/CommentsButtons.o",
+    "llvm-bc" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/CommentsButtons.bc",
+    "object" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/CommentsButtons.o",
+    "swift-dependencies" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/CommentsButtons.swiftdeps",
+    "swiftmodule" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/CommentsButtons~partial.swiftmodule"
+  },
+  "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/AlpacaList/Views/Feed/Components/FeedViewBackground.swift" : {
+    "const-values" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/FeedViewBackground.swiftconstvalues",
+    "dependencies" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/FeedViewBackground.d",
+    "diagnostics" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/FeedViewBackground.dia",
+    "index-unit-output-path" : "/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/FeedViewBackground.o",
+    "llvm-bc" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/FeedViewBackground.bc",
+    "object" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/FeedViewBackground.o",
+    "swift-dependencies" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/FeedViewBackground.swiftdeps",
+    "swiftmodule" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/FeedViewBackground~partial.swiftmodule"
+  },
+  "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/AlpacaList/Views/Feed/Components/PostComponents.swift" : {
+    "const-values" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/PostComponents.swiftconstvalues",
+    "dependencies" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/PostComponents.d",
+    "diagnostics" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/PostComponents.dia",
+    "index-unit-output-path" : "/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/PostComponents.o",
+    "llvm-bc" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/PostComponents.bc",
+    "object" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/PostComponents.o",
+    "swift-dependencies" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/PostComponents.swiftdeps",
+    "swiftmodule" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/PostComponents~partial.swiftmodule"
+  },
+  "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/AlpacaList/Views/Feed/Components/PostItemButtons.swift" : {
+    "const-values" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/PostItemButtons.swiftconstvalues",
+    "dependencies" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/PostItemButtons.d",
+    "diagnostics" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/PostItemButtons.dia",
+    "index-unit-output-path" : "/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/PostItemButtons.o",
+    "llvm-bc" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/PostItemButtons.bc",
+    "object" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/PostItemButtons.o",
+    "swift-dependencies" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/PostItemButtons.swiftdeps",
+    "swiftmodule" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/PostItemButtons~partial.swiftmodule"
+  },
+  "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/AlpacaList/Views/Feed/Feeds/CommentsFeedView.swift" : {
+    "const-values" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/CommentsFeedView.swiftconstvalues",
+    "dependencies" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/CommentsFeedView.d",
+    "diagnostics" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/CommentsFeedView.dia",
+    "index-unit-output-path" : "/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/CommentsFeedView.o",
+    "llvm-bc" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/CommentsFeedView.bc",
+    "object" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/CommentsFeedView.o",
+    "swift-dependencies" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/CommentsFeedView.swiftdeps",
+    "swiftmodule" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/CommentsFeedView~partial.swiftmodule"
+  },
+  "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/AlpacaList/Views/Feed/Feeds/FeedItemView.swift" : {
+    "const-values" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/FeedItemView.swiftconstvalues",
+    "dependencies" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/FeedItemView.d",
+    "diagnostics" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/FeedItemView.dia",
+    "index-unit-output-path" : "/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/FeedItemView.o",
+    "llvm-bc" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/FeedItemView.bc",
+    "object" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/FeedItemView.o",
+    "swift-dependencies" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/FeedItemView.swiftdeps",
+    "swiftmodule" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/FeedItemView~partial.swiftmodule"
+  },
+  "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/AlpacaList/Views/Feed/Feeds/FeedListView.swift" : {
+    "const-values" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/FeedListView.swiftconstvalues",
+    "dependencies" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/FeedListView.d",
+    "diagnostics" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/FeedListView.dia",
+    "index-unit-output-path" : "/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/FeedListView.o",
+    "llvm-bc" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/FeedListView.bc",
+    "object" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/FeedListView.o",
+    "swift-dependencies" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/FeedListView.swiftdeps",
+    "swiftmodule" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/FeedListView~partial.swiftmodule"
+  },
+  "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/AlpacaList/Views/Feed/Feeds/PostsFeedView.swift" : {
+    "const-values" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/PostsFeedView.swiftconstvalues",
+    "dependencies" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/PostsFeedView.d",
+    "diagnostics" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/PostsFeedView.dia",
+    "index-unit-output-path" : "/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/PostsFeedView.o",
+    "llvm-bc" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/PostsFeedView.bc",
+    "object" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/PostsFeedView.o",
+    "swift-dependencies" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/PostsFeedView.swiftdeps",
+    "swiftmodule" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/PostsFeedView~partial.swiftmodule"
+  },
+  "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/AlpacaList/Views/Navigation/NavigationCoordinator.swift" : {
+    "const-values" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/NavigationCoordinator.swiftconstvalues",
+    "dependencies" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/NavigationCoordinator.d",
+    "diagnostics" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/NavigationCoordinator.dia",
+    "index-unit-output-path" : "/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/NavigationCoordinator.o",
+    "llvm-bc" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/NavigationCoordinator.bc",
+    "object" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/NavigationCoordinator.o",
+    "swift-dependencies" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/NavigationCoordinator.swiftdeps",
+    "swiftmodule" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/NavigationCoordinator~partial.swiftmodule"
+  },
+  "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/AlpacaList/Views/Navigation/NavigationRootView.swift" : {
+    "const-values" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/NavigationRootView.swiftconstvalues",
+    "dependencies" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/NavigationRootView.d",
+    "diagnostics" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/NavigationRootView.dia",
+    "index-unit-output-path" : "/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/NavigationRootView.o",
+    "llvm-bc" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/NavigationRootView.bc",
+    "object" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/NavigationRootView.o",
+    "swift-dependencies" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/NavigationRootView.swiftdeps",
+    "swiftmodule" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/NavigationRootView~partial.swiftmodule"
+  },
+  "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/AlpacaList/Views/Root/AlpacaListApp.swift" : {
+    "const-values" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/AlpacaListApp.swiftconstvalues",
+    "dependencies" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/AlpacaListApp.d",
+    "diagnostics" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/AlpacaListApp.dia",
+    "index-unit-output-path" : "/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/AlpacaListApp.o",
+    "llvm-bc" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/AlpacaListApp.bc",
+    "object" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/AlpacaListApp.o",
+    "swift-dependencies" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/AlpacaListApp.swiftdeps",
+    "swiftmodule" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/AlpacaListApp~partial.swiftmodule"
+  },
+  "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/AlpacaList/Views/Root/RootPreview.swift" : {
+    "const-values" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/RootPreview.swiftconstvalues",
+    "dependencies" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/RootPreview.d",
+    "diagnostics" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/RootPreview.dia",
+    "index-unit-output-path" : "/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/RootPreview.o",
+    "llvm-bc" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/RootPreview.bc",
+    "object" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/RootPreview.o",
+    "swift-dependencies" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/RootPreview.swiftdeps",
+    "swiftmodule" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/RootPreview~partial.swiftmodule"
+  },
+  "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/AlpacaList/Views/Settings/InstanceSettings.swift" : {
+    "const-values" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/InstanceSettings.swiftconstvalues",
+    "dependencies" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/InstanceSettings.d",
+    "diagnostics" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/InstanceSettings.dia",
+    "index-unit-output-path" : "/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/InstanceSettings.o",
+    "llvm-bc" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/InstanceSettings.bc",
+    "object" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/InstanceSettings.o",
+    "swift-dependencies" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/InstanceSettings.swiftdeps",
+    "swiftmodule" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/InstanceSettings~partial.swiftmodule"
+  },
+  "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/AlpacaList/Views/Settings/SettingsComponents.swift" : {
+    "const-values" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/SettingsComponents.swiftconstvalues",
+    "dependencies" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/SettingsComponents.d",
+    "diagnostics" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/SettingsComponents.dia",
+    "index-unit-output-path" : "/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/SettingsComponents.o",
+    "llvm-bc" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/SettingsComponents.bc",
+    "object" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/SettingsComponents.o",
+    "swift-dependencies" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/SettingsComponents.swiftdeps",
+    "swiftmodule" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/SettingsComponents~partial.swiftmodule"
+  },
+  "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/AlpacaList/Views/Settings/UserSettings.swift" : {
+    "const-values" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/UserSettings.swiftconstvalues",
+    "dependencies" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/UserSettings.d",
+    "diagnostics" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/UserSettings.dia",
+    "index-unit-output-path" : "/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/UserSettings.o",
+    "llvm-bc" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/UserSettings.bc",
+    "object" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/UserSettings.o",
+    "swift-dependencies" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/UserSettings.swiftdeps",
+    "swiftmodule" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/UserSettings~partial.swiftmodule"
+  },
+  "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/AlpacaList/Views/TopBar/TopBarContainer.swift" : {
+    "const-values" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/TopBarContainer.swiftconstvalues",
+    "dependencies" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/TopBarContainer.d",
+    "diagnostics" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/TopBarContainer.dia",
+    "index-unit-output-path" : "/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/TopBarContainer.o",
+    "llvm-bc" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/TopBarContainer.bc",
+    "object" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/TopBarContainer.o",
+    "swift-dependencies" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/TopBarContainer.swiftdeps",
+    "swiftmodule" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/TopBarContainer~partial.swiftmodule"
+  },
+  "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/AlpacaList/Views/TopBar/TopBarController.swift" : {
+    "const-values" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/TopBarController.swiftconstvalues",
+    "dependencies" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/TopBarController.d",
+    "diagnostics" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/TopBarController.dia",
+    "index-unit-output-path" : "/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/TopBarController.o",
+    "llvm-bc" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/TopBarController.bc",
+    "object" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/TopBarController.o",
+    "swift-dependencies" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/TopBarController.swiftdeps",
+    "swiftmodule" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/TopBarController~partial.swiftmodule"
+  },
+  "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/AlpacaList/Views/TopBar/TopBarExpanded.swift" : {
+    "const-values" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/TopBarExpanded.swiftconstvalues",
+    "dependencies" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/TopBarExpanded.d",
+    "diagnostics" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/TopBarExpanded.dia",
+    "index-unit-output-path" : "/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/TopBarExpanded.o",
+    "llvm-bc" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/TopBarExpanded.bc",
+    "object" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/TopBarExpanded.o",
+    "swift-dependencies" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/TopBarExpanded.swiftdeps",
+    "swiftmodule" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/TopBarExpanded~partial.swiftmodule"
+  },
+  "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/AlpacaList/Views/TopBar/TopBarMinimized.swift" : {
+    "const-values" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/TopBarMinimized.swiftconstvalues",
+    "dependencies" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/TopBarMinimized.d",
+    "diagnostics" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/TopBarMinimized.dia",
+    "index-unit-output-path" : "/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/TopBarMinimized.o",
+    "llvm-bc" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/TopBarMinimized.bc",
+    "object" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/TopBarMinimized.o",
+    "swift-dependencies" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/TopBarMinimized.swiftdeps",
+    "swiftmodule" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/TopBarMinimized~partial.swiftmodule"
+  },
+  "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/AlpacaList/Views/TopBar/TopBarModeSelector.swift" : {
+    "const-values" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/TopBarModeSelector.swiftconstvalues",
+    "dependencies" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/TopBarModeSelector.d",
+    "diagnostics" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/TopBarModeSelector.dia",
+    "index-unit-output-path" : "/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/TopBarModeSelector.o",
+    "llvm-bc" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/TopBarModeSelector.bc",
+    "object" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/TopBarModeSelector.o",
+    "swift-dependencies" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/TopBarModeSelector.swiftdeps",
+    "swiftmodule" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/TopBarModeSelector~partial.swiftmodule"
+  },
+  "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/DerivedSources/GeneratedAssetSymbols.swift" : {
+    "const-values" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/GeneratedAssetSymbols.swiftconstvalues",
+    "dependencies" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/GeneratedAssetSymbols.d",
+    "diagnostics" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/GeneratedAssetSymbols.dia",
+    "index-unit-output-path" : "/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/GeneratedAssetSymbols.o",
+    "llvm-bc" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/GeneratedAssetSymbols.bc",
+    "object" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/GeneratedAssetSymbols.o",
+    "swift-dependencies" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/GeneratedAssetSymbols.swiftdeps",
+    "swiftmodule" : "/Users/lucasnguyen/projects/alpacafeed/AlpacaList/build/AlpacaList.build/Debug-iphonesimulator/AlpacaList.build/Objects-normal/x86_64/GeneratedAssetSymbols~partial.swiftmodule"
+  }
+}
