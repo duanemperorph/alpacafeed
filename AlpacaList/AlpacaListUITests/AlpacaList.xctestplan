@@ -1,0 +1,37 @@
+{
+  "configurations" : [
+    {
+      "id" : "F59F81F2-F57A-42BA-BF75-C24EA1D51CAB",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:AlpacaList.xcodeproj",
+      "identifier" : "37CF46A62A50FAF700952075",
+      "name" : "AlpacaList"
+    }
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:AlpacaList.xcodeproj",
+        "identifier" : "37CF46B62A50FAF800952075",
+        "name" : "AlpacaListTests"
+      }
+    },
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:AlpacaList.xcodeproj",
+        "identifier" : "37CF46C02A50FAF800952075",
+        "name" : "AlpacaListUITests"
+      }
+    }
+  ],
+  "version" : 1
+}

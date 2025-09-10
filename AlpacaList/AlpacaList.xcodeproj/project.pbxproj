@@ -36,6 +36,7 @@
 		37CF46D82A50FC8A00952075 /* FeedItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37CF46D72A50FC8A00952075 /* FeedItem.swift */; };
 		37D9FED22A5BA31100E539A6 /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37D9FED12A5BA31100E539A6 /* UserSettings.swift */; };
 		37D9FED62A5BC46300E539A6 /* SettingsComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37D9FED52A5BC46300E539A6 /* SettingsComponents.swift */; };
+		37DB55292E722EB800736A52 /* CommentsListViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37DB55282E722EB800736A52 /* CommentsListViewModelTests.swift */; };
 		37DC2B852A9BD59300D6B879 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37DC2B842A9BD59300D6B879 /* Helpers.swift */; };
 		37DC94A92AB804F200E5BAC4 /* TopBarModeSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37DC94A82AB804F200E5BAC4 /* TopBarModeSelector.swift */; };
 		37E8CC852E58E474005C7C62 /* FeedListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37E8CC842E58E474005C7C62 /* FeedListView.swift */; };
@@ -92,6 +93,8 @@
 		37CF46D72A50FC8A00952075 /* FeedItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItem.swift; sourceTree = "<group>"; };
 		37D9FED12A5BA31100E539A6 /* UserSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettings.swift; sourceTree = "<group>"; };
 		37D9FED52A5BC46300E539A6 /* SettingsComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsComponents.swift; sourceTree = "<group>"; };
+		37DB55282E722EB800736A52 /* CommentsListViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsListViewModelTests.swift; sourceTree = "<group>"; };
+		37DB552A2E722FCF00736A52 /* AlpacaList.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; name = AlpacaList.xctestplan; path = AlpacaListUITests/AlpacaList.xctestplan; sourceTree = "<group>"; };
 		37DC2B842A9BD59300D6B879 /* Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
 		37DC94A82AB804F200E5BAC4 /* TopBarModeSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopBarModeSelector.swift; sourceTree = "<group>"; };
 		37E8CC842E58E474005C7C62 /* FeedListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedListView.swift; sourceTree = "<group>"; };
@@ -223,6 +226,7 @@
 		37CF469E2A50FAF700952075 = {
 			isa = PBXGroup;
 			children = (
+				37DB552A2E722FCF00736A52 /* AlpacaList.xctestplan */,
 				37CF46A92A50FAF700952075 /* AlpacaList */,
 				37CF46BA2A50FAF800952075 /* AlpacaListTests */,
 				37CF46C42A50FAF800952075 /* AlpacaListUITests */,
@@ -263,6 +267,7 @@
 		37CF46BA2A50FAF800952075 /* AlpacaListTests */ = {
 			isa = PBXGroup;
 			children = (
+				37DB55282E722EB800736A52 /* CommentsListViewModelTests.swift */,
 				37CF46BB2A50FAF800952075 /* AlpacaListTests.swift */,
 			);
 			path = AlpacaListTests;
@@ -474,6 +479,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				37DB55292E722EB800736A52 /* CommentsListViewModelTests.swift in Sources */,
 				37CF46BC2A50FAF800952075 /* AlpacaListTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
