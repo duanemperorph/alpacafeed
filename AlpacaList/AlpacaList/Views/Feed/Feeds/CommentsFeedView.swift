@@ -13,7 +13,7 @@ struct CommentsFeedView: View {
     var body: some View {
         let items = model.postWithComments
         
-        FeedListView(listItems: items) { item in
+        FeedListView(listItems: items, listAccessibilityIdentifier: "comments_list") { item in
             FeedItemView(
                 model: item,
                 isExpanded: item.style == .comment ? model.isExpanded(id: item.id) : nil,

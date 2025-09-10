@@ -30,6 +30,7 @@ struct CommentItemButtons: View {
             }
         }
         .tint(.primary)
+        .accessibilityElement(children: .contain)
     }
 }
 

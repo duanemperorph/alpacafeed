@@ -9,13 +9,15 @@ import SwiftUI
 
 struct FeedListView<ItemContent: View>: View {
     let listItems: [FeedItemViewModel]
+    let listAccessibilityIdentifier: String?
     @ViewBuilder var itemViewContent: (FeedItemViewModel) -> ItemContent
     
     @EnvironmentObject var navigationCoordinator: NavigationCoordinator
     @EnvironmentObject var topBarController: TopBarController
     
-    init(listItems: [FeedItemViewModel], itemViewContent: @escaping (FeedItemViewModel) -> ItemContent) {
+    init(listItems: [FeedItemViewModel], listAccessibilityIdentifier: String? = nil, itemViewContent: @escaping (FeedItemViewModel) -> ItemContent) {
         self.listItems = listItems
+        self.listAccessibilityIdentifier = listAccessibilityIdentifier
         self.itemViewContent = itemViewContent
     }
     
@@ -45,6 +47,7 @@ struct FeedListView<ItemContent: View>: View {
             .safeAreaInset(edge: .top) {
                 Spacer().frame(height: topBarController.topBarInset)
             }
+            .accessibilityIdentifier(listAccessibilityIdentifier ?? "")
         }
     }
 }

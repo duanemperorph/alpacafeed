@@ -84,6 +84,7 @@ struct FeedItemView: View {
                     PostItemButtons()
                 case .comment:
                     CommentItemButtons(isExpanded: isExpanded ?? false, toggleExpanded: toggleExpanded)
+                        .accessibilityIdentifier("comment_buttons_\(model.id.uuidString)")
                 }
             }
             .padding(15)
@@ -91,6 +92,7 @@ struct FeedItemView: View {
         }
         .buttonStyle(.plain)
         .frame(maxWidth: .infinity)
+        .accessibilityIdentifier("feed_cell_\(model.id.uuidString)")
     }
     
     func toggleExpanded() {

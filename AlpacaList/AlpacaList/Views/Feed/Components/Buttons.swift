@@ -49,6 +49,7 @@ struct ExpandCommentsButton: View {
                 .frame(maxWidth: .infinity)
                 .postItemButtonStyle(isActive: isActive)
         }.buttonStyle(.borderless)
+        .accessibilityIdentifier("comment_expand_button")
     }
 }
 

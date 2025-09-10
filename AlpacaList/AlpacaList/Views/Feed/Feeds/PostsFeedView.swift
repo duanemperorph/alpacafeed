@@ -23,7 +23,7 @@ struct PostsFeedView: View {
     }
     
     var body: some View {
-        FeedListView(listItems: model.posts) { item in
+        FeedListView(listItems: model.posts, listAccessibilityIdentifier: "feed_list") { item in
             FeedItemView(model: item, onClick: { clickedItem in
                 navigationCoordinator.push(.postDetails(postItem: clickedItem))
             })
