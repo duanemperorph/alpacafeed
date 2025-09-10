@@ -9,13 +9,11 @@ import Foundation
 
 class PostsListViewModel {
     let rootPostItems: [FeedItem]
+    let posts: [FeedItemViewModel]
  
     init(rootPosts: [FeedItem]) {
         self.rootPostItems = rootPosts
-    }
-    
-    var posts: [FeedItemViewModel] {
-        return rootPostItems.map { FeedItemViewModel(commentItem: $0, style: .post) }
+        self.posts = rootPosts.map { FeedItemViewModel(commentItem: $0, style: .post) }
     }
     
     func getCommentsViewModelForPost(withId: UUID) -> CommentsListViewModel? {
