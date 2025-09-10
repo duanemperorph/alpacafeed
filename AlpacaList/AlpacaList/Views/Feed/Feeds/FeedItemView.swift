@@ -16,10 +16,14 @@ struct FeedItemView: View {
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     
     let onClick: OnClick?
+    let isExpanded: Bool?
+    let onToggleExpanded: (() -> Void)?
     
-    init(model: FeedItemViewModel, onClick: OnClick? = nil) {
+    init(model: FeedItemViewModel, onClick: OnClick? = nil, isExpanded: Bool? = nil, onToggleExpanded: (() -> Void)? = nil) {
         self.model = model
         self.onClick = onClick
+        self.isExpanded = isExpanded
+        self.onToggleExpanded = onToggleExpanded
     }
     
     @ViewBuilder func mainBodyCompact(_ item: FeedItem) -> some View {
@@ -79,7 +83,7 @@ struct FeedItemView: View {
                 case .post:
                     PostItemButtons()
                 case .comment:
-                    CommentItemButtons(model: model, toggleExpanded: toggleExpanded)
+                    CommentItemButtons(isExpanded: isExpanded ?? false, toggleExpanded: toggleExpanded)
                 }
             }
             .padding(15)
@@ -90,8 +94,9 @@ struct FeedItemView: View {
     }
     
     func toggleExpanded() {
-        print("toggle expanded")
-        model.isExpanded.toggle()
+        if let onToggleExpanded = onToggleExpanded {
+            onToggleExpanded()
+        }
     }
 }
 

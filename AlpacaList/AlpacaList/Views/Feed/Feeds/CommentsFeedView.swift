@@ -14,8 +14,12 @@ struct CommentsFeedView: View {
         let items = model.postWithComments
         
         FeedListView(listItems: items) { item in
-            FeedItemView(model: item)
-                .padding(.leading, indentionForItem(item: item))
+            FeedItemView(
+                model: item,
+                isExpanded: item.style == .comment ? model.isExpanded(id: item.id) : nil,
+                onToggleExpanded: item.style == .comment ? { model.toggleExpanded(id: item.id) } : nil
+            )
+            .padding(.leading, indentionForItem(item: item))
         }
     }
     
