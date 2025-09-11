@@ -6,19 +6,39 @@
 //
 
 import Foundation
+import Combine
 
 class CommentsListViewModel: ObservableObject {
     let postItem: FeedItem
     let postViewModel: FeedItemViewModel
     var comments: [FeedItemViewModel] = []
-    @Published var visibleComments: [FeedItemViewModel] = []
+    @Published var visibleComments: [FeedItemViewModel] = [] {
+        didSet {
+            print("updated visible comments with \(visibleComments.count)")
+        }
+    }
     @Published private(set) var expandedIds: Set<UUID> = []
+    
+    private var cancellables = Set<AnyCancellable>()
     
     init(post: FeedItem) {
         self.postItem = post
         self.postViewModel = FeedItemViewModel(commentItem: post, style: .post)
         self.comments = post.children.map { FeedItemViewModel(commentItem: $0, style: .comment) }
-        updateVisibleComments()
+        
+        // Set up reactive visible comments calculation
+        setupReactiveVisibleComments()
+    }
+    
+    private func setupReactiveVisibleComments() {
+        $expandedIds
+            .map { [weak self] newIds in
+                guard let self = self else { return [] }
+                let newItems =  self.flatten(items: self.comments, expandedIds: newIds)
+                print("calculated new flatteded items: \(newItems.count)")
+                return newItems
+            }
+            .assign(to: &$visibleComments)
     }
     
     // returns feed item for the current post item with all of the comments
@@ -31,11 +51,6 @@ class CommentsListViewModel: ObservableObject {
         return CommentsListViewModel(post: mockData[0])
     }
     
-    func updateVisibleComments() {
-        print("update visible comments")
-        visibleComments = flatten(items: comments)
-    }
-
     func isExpanded(id: UUID) -> Bool {
         return expandedIds.contains(id)
     }
@@ -46,15 +61,15 @@ class CommentsListViewModel: ObservableObject {
         } else {
             expandedIds.insert(id)
         }
-        updateVisibleComments()
+        // No need to call updateVisibleComments() - it's now reactive!
     }
 
-    private func flatten(items: [FeedItemViewModel]) -> [FeedItemViewModel] {
+    private func flatten(items: [FeedItemViewModel], expandedIds: Set<UUID>) -> [FeedItemViewModel] {
         var result: [FeedItemViewModel] = []
         for item in items {
             result.append(item)
             if expandedIds.contains(item.id) {
-                result.append(contentsOf: flatten(items: item.children))
+                result.append(contentsOf: flatten(items: item.children, expandedIds: expandedIds))
             }
         }
         return result
