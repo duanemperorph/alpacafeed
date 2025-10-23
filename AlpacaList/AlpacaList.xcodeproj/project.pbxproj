@@ -26,6 +26,23 @@
 		376BB76E2A80846200AE9FB0 /* CommentsButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 376BB76D2A80846200AE9FB0 /* CommentsButtons.swift */; };
 		376BB7702A80B40B00AE9FB0 /* PostComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 376BB76F2A80B40B00AE9FB0 /* PostComponents.swift */; };
 		376BB7722A80B7F000AE9FB0 /* CommentsFeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 376BB7712A80B7F000AE9FB0 /* CommentsFeedView.swift */; };
+		37B0A0962EAAA31200DBB593 /* Facet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B0A0922EAAA31200DBB593 /* Facet.swift */; };
+		37B0A0972EAAA31200DBB593 /* ReplyRef.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B0A0942EAAA31200DBB593 /* ReplyRef.swift */; };
+		37B0A0982EAAA31200DBB593 /* Embed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B0A0912EAAA31200DBB593 /* Embed.swift */; };
+		37B0A0992EAAA31200DBB593 /* Timeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B0A0952EAAA31200DBB593 /* Timeline.swift */; };
+		37B0A09A2EAAA31200DBB593 /* Author.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B0A0902EAAA31200DBB593 /* Author.swift */; };
+		37B0A09B2EAAA31200DBB593 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B0A0932EAAA31200DBB593 /* Post.swift */; };
+		37B0A09F2EAAA32000DBB593 /* ThreadViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B0A09D2EAAA32000DBB593 /* ThreadViewModel.swift */; };
+		37B0A0A02EAAA32000DBB593 /* PostViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B0A09C2EAAA32000DBB593 /* PostViewModel.swift */; };
+		37B0A0A12EAAA32000DBB593 /* TimelineViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B0A09E2EAAA32000DBB593 /* TimelineViewModel.swift */; };
+		37B0A0A72EAAA33300DBB593 /* RichTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B0A0A62EAAA33300DBB593 /* RichTextView.swift */; };
+		37B0A0A82EAAA33300DBB593 /* PostEmbed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B0A0A52EAAA33300DBB593 /* PostEmbed.swift */; };
+		37B0A0A92EAAA33300DBB593 /* EngagementBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B0A0A32EAAA33300DBB593 /* EngagementBar.swift */; };
+		37B0A0AA2EAAA33300DBB593 /* PostCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B0A0A42EAAA33300DBB593 /* PostCard.swift */; };
+		37B0A0AB2EAAA33300DBB593 /* AuthorHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B0A0A22EAAA33300DBB593 /* AuthorHeader.swift */; };
+		37B0A0AE2EAAA34200DBB593 /* ThreadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B0A0AC2EAAA34200DBB593 /* ThreadView.swift */; };
+		37B0A0AF2EAAA34200DBB593 /* TimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B0A0AD2EAAA34200DBB593 /* TimelineView.swift */; };
+		37B0A0B12EAAA35400DBB593 /* BlueskySettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B0A0B02EAAA35400DBB593 /* BlueskySettings.swift */; };
 		37CF46AB2A50FAF700952075 /* AlpacaListApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37CF46AA2A50FAF700952075 /* AlpacaListApp.swift */; };
 		37CF46AD2A50FAF700952075 /* PostsFeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37CF46AC2A50FAF700952075 /* PostsFeedView.swift */; };
 		37CF46AF2A50FAF800952075 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 37CF46AE2A50FAF800952075 /* Assets.xcassets */; };
@@ -81,6 +98,23 @@
 		376BB76D2A80846200AE9FB0 /* CommentsButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsButtons.swift; sourceTree = "<group>"; };
 		376BB76F2A80B40B00AE9FB0 /* PostComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostComponents.swift; sourceTree = "<group>"; };
 		376BB7712A80B7F000AE9FB0 /* CommentsFeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsFeedView.swift; sourceTree = "<group>"; };
+		37B0A0902EAAA31200DBB593 /* Author.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Author.swift; sourceTree = "<group>"; };
+		37B0A0912EAAA31200DBB593 /* Embed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Embed.swift; sourceTree = "<group>"; };
+		37B0A0922EAAA31200DBB593 /* Facet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Facet.swift; sourceTree = "<group>"; };
+		37B0A0932EAAA31200DBB593 /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
+		37B0A0942EAAA31200DBB593 /* ReplyRef.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReplyRef.swift; sourceTree = "<group>"; };
+		37B0A0952EAAA31200DBB593 /* Timeline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Timeline.swift; sourceTree = "<group>"; };
+		37B0A09C2EAAA32000DBB593 /* PostViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostViewModel.swift; sourceTree = "<group>"; };
+		37B0A09D2EAAA32000DBB593 /* ThreadViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreadViewModel.swift; sourceTree = "<group>"; };
+		37B0A09E2EAAA32000DBB593 /* TimelineViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineViewModel.swift; sourceTree = "<group>"; };
+		37B0A0A22EAAA33300DBB593 /* AuthorHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthorHeader.swift; sourceTree = "<group>"; };
+		37B0A0A32EAAA33300DBB593 /* EngagementBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EngagementBar.swift; sourceTree = "<group>"; };
+		37B0A0A42EAAA33300DBB593 /* PostCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostCard.swift; sourceTree = "<group>"; };
+		37B0A0A52EAAA33300DBB593 /* PostEmbed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostEmbed.swift; sourceTree = "<group>"; };
+		37B0A0A62EAAA33300DBB593 /* RichTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RichTextView.swift; sourceTree = "<group>"; };
+		37B0A0AC2EAAA34200DBB593 /* ThreadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreadView.swift; sourceTree = "<group>"; };
+		37B0A0AD2EAAA34200DBB593 /* TimelineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineView.swift; sourceTree = "<group>"; };
+		37B0A0B02EAAA35400DBB593 /* BlueskySettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlueskySettings.swift; sourceTree = "<group>"; };
 		37CF46A72A50FAF700952075 /* AlpacaList.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AlpacaList.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		37CF46AA2A50FAF700952075 /* AlpacaListApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlpacaListApp.swift; sourceTree = "<group>"; };
 		37CF46AC2A50FAF700952075 /* PostsFeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostsFeedView.swift; sourceTree = "<group>"; };
@@ -140,6 +174,8 @@
 		372C4C582A807843008AC69A /* Feeds */ = {
 			isa = PBXGroup;
 			children = (
+				37B0A0AC2EAAA34200DBB593 /* ThreadView.swift */,
+				37B0A0AD2EAAA34200DBB593 /* TimelineView.swift */,
 				37F6894F2A510D82004E27DF /* FeedItemView.swift */,
 				37E8CC842E58E474005C7C62 /* FeedListView.swift */,
 				37CF46AC2A50FAF700952075 /* PostsFeedView.swift */,
@@ -169,6 +205,9 @@
 		3742DB9B2AA699BE00B7E83F /* VM */ = {
 			isa = PBXGroup;
 			children = (
+				37B0A09C2EAAA32000DBB593 /* PostViewModel.swift */,
+				37B0A09D2EAAA32000DBB593 /* ThreadViewModel.swift */,
+				37B0A09E2EAAA32000DBB593 /* TimelineViewModel.swift */,
 				372DC5982A8982FD00843D14 /* PostsListVM.swift */,
 				3742DBA12AA69C2500B7E83F /* CommentsListVM.swift */,
 				3742DB9F2AA69A4200B7E83F /* FeedItemVM.swift */,
@@ -179,6 +218,12 @@
 		3742DB9C2AA699C700B7E83F /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				37B0A0902EAAA31200DBB593 /* Author.swift */,
+				37B0A0912EAAA31200DBB593 /* Embed.swift */,
+				37B0A0922EAAA31200DBB593 /* Facet.swift */,
+				37B0A0932EAAA31200DBB593 /* Post.swift */,
+				37B0A0942EAAA31200DBB593 /* ReplyRef.swift */,
+				37B0A0952EAAA31200DBB593 /* Timeline.swift */,
 				37CF46D72A50FC8A00952075 /* FeedItem.swift */,
 			);
 			path = Data;
@@ -216,6 +261,11 @@
 		376BB7692A80809E00AE9FB0 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				37B0A0A22EAAA33300DBB593 /* AuthorHeader.swift */,
+				37B0A0A32EAAA33300DBB593 /* EngagementBar.swift */,
+				37B0A0A42EAAA33300DBB593 /* PostCard.swift */,
+				37B0A0A52EAAA33300DBB593 /* PostEmbed.swift */,
+				37B0A0A62EAAA33300DBB593 /* RichTextView.swift */,
 				37350F202A6DF4E000DD239B /* FeedViewBackground.swift */,
 				376BB76D2A80846200AE9FB0 /* CommentsButtons.swift */,
 				37350F1E2A6DF2DC00DD239B /* PostItemButtons.swift */,
@@ -310,6 +360,7 @@
 		37D9FED02A5BA2E900E539A6 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
+				37B0A0B02EAAA35400DBB593 /* BlueskySettings.swift */,
 				37D9FED52A5BC46300E539A6 /* SettingsComponents.swift */,
 				37D9FED12A5BA31100E539A6 /* UserSettings.swift */,
 				372A0DED2A64B40C002F851F /* InstanceSettings.swift */,
@@ -448,6 +499,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				376BB76B2A8080BA00AE9FB0 /* Buttons.swift in Sources */,
+				37B0A0AE2EAAA34200DBB593 /* ThreadView.swift in Sources */,
+				37B0A0AF2EAAA34200DBB593 /* TimelineView.swift in Sources */,
 				37346BD32A520AB800CB346A /* TopBarExpanded.swift in Sources */,
 				3742DBA02AA69A4200B7E83F /* FeedItemVM.swift in Sources */,
 				370A25B62A54FA400076D378 /* TopBarContainer.swift in Sources */,
@@ -473,7 +526,22 @@
 				373DABB92A75E8F100DF17EB /* MockDataStrings.swift in Sources */,
 				37D9FED22A5BA31100E539A6 /* UserSettings.swift in Sources */,
 				37428E9B2AA9568B00E59607 /* TopBarController.swift in Sources */,
+				37B0A0A72EAAA33300DBB593 /* RichTextView.swift in Sources */,
+				37B0A0A82EAAA33300DBB593 /* PostEmbed.swift in Sources */,
+				37B0A0A92EAAA33300DBB593 /* EngagementBar.swift in Sources */,
+				37B0A0AA2EAAA33300DBB593 /* PostCard.swift in Sources */,
+				37B0A0AB2EAAA33300DBB593 /* AuthorHeader.swift in Sources */,
 				37428E962AA91CE800E59607 /* RootPreview.swift in Sources */,
+				37B0A0962EAAA31200DBB593 /* Facet.swift in Sources */,
+				37B0A09F2EAAA32000DBB593 /* ThreadViewModel.swift in Sources */,
+				37B0A0A02EAAA32000DBB593 /* PostViewModel.swift in Sources */,
+				37B0A0A12EAAA32000DBB593 /* TimelineViewModel.swift in Sources */,
+				37B0A0B12EAAA35400DBB593 /* BlueskySettings.swift in Sources */,
+				37B0A0972EAAA31200DBB593 /* ReplyRef.swift in Sources */,
+				37B0A0982EAAA31200DBB593 /* Embed.swift in Sources */,
+				37B0A0992EAAA31200DBB593 /* Timeline.swift in Sources */,
+				37B0A09A2EAAA31200DBB593 /* Author.swift in Sources */,
+				37B0A09B2EAAA31200DBB593 /* Post.swift in Sources */,
 				372DC5992A8982FD00843D14 /* PostsListVM.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
