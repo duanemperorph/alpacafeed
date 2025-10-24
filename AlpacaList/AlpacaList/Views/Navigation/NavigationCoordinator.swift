@@ -129,7 +129,8 @@ class NavigationCoordinator: ObservableObject {
             TimelineView(viewModel: viewModel)
             
         case .thread(let uri):
-            let viewModel = ThreadViewModel(postUri: uri)
+            // TODO: Replace with actual API call using uri
+            let viewModel = ThreadViewModel.withMockData()
             ThreadView(viewModel: viewModel)
             
         case .profile(let handle):
