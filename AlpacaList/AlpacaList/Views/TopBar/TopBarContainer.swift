@@ -9,10 +9,7 @@ import SwiftUI
 
 struct TopBarContainer: View {
     @Environment(\.colorScheme) var envColorScheme
-    
-    @State var communityName = "lemmyworld@lemmy.world"
-    @State var userName = "imacat@kbin.social"
-    
+    @State var userName = "alice.bsky.social"
     @EnvironmentObject var topBarController: TopBarController
     
     var backgroundColorScheme: ColorScheme {
@@ -30,14 +27,12 @@ struct TopBarContainer: View {
     var body: some View {
         VStack {
             if (topBarController.isExpanded) {
-                TopBarExpanded(
-                    communityName: $communityName,
-                    userName: $userName
-                )
+                TopBarExpanded(userName: $userName)
             }
             else {
-                TopBarMinimized(communityName: "lemmyworld@lemmy.world", icon: "globe")
-                .gesture(topBarTap)
+                TopBarMinimized(userName: $userName)
+                    .contentShape(Rectangle())
+                    .gesture(topBarTap)
             }
         }
         .background(.regularMaterial)

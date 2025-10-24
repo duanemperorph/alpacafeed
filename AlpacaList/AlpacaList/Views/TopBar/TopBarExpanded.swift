@@ -36,6 +36,7 @@ struct ButtonSubBarView: View {
     var body: some View {
         let isBackButtonDisabled = !navigationCoordinator.canPop
         HStack {
+            // Back button
             Button(action: {
                 navigationCoordinator.pop()
             }) {
@@ -43,24 +44,37 @@ struct ButtonSubBarView: View {
             }
             .disabled(isBackButtonDisabled)
             .opacity(isBackButtonDisabled ? 0.5 : 1)
+            
             Spacer()
+            
+            // Refresh button
             Button(action: {
-                // Action for gear button
+                NotificationCenter.default.post(name: .refreshTimeline, object: nil)
             }) {
                 Image(systemName: "arrow.clockwise")
             }
+            
             Spacer()
-            TopBarModeSelector()
+            
+            // Feed selector
+            BlueskyFeedSelector()
                 .frame(width: 150)
+            
             Spacer()
+            
+            // Search button
             Button(action: {
-                // Add your button action here
+                // TODO: Navigate to search
+                print("Search")
             }) {
-                Image(systemName: "chevron.up.chevron.down")
+                Image(systemName: "magnifyingglass")
             }
+            
             Spacer()
+            
+            // Compose button
             Button(action: {
-                // Action for plus button
+                navigationCoordinator.push(.compose(replyTo: nil))
             }) {
                 Image(systemName: "plus")
             }
@@ -71,18 +85,16 @@ struct ButtonSubBarView: View {
     }
 }
 
+// MARK: - Notification Names
+
+extension Notification.Name {
+    static let refreshTimeline = Notification.Name("refreshTimeline")
+}
+
 struct TopBarExpanded: View {
-    @Binding var communityName: String
     @Binding var userName: String
     @EnvironmentObject var navigationCoordinator: NavigationCoordinator
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
-    
-    @ViewBuilder var instanceSettingsButton: some View {
-        ImageTextFieldPairView(imageName: "globe", text: $communityName) {
-            navigationCoordinator.push(.instanceSettings)
-        }
-        .frame(maxWidth: .infinity)
-    }
     
     @ViewBuilder var userSettingsButton: some View {
         ImageTextFieldPairView(imageName: "person.circle", text: $userName) {
@@ -93,16 +105,7 @@ struct TopBarExpanded: View {
     
     var body: some View {
         VStack {
-            if horizontalSizeClass == .compact {
-                instanceSettingsButton
-                userSettingsButton
-            }
-            else {
-                HStack {
-                    instanceSettingsButton
-                    userSettingsButton
-                }
-            }
+            userSettingsButton
                 
             Spacer().frame(height: 15)
             ButtonSubBarView()
@@ -126,8 +129,7 @@ struct TopBarViewExpanded_Previews: PreviewProvider {
             .edgesIgnoringSafeArea(.all)
             VStack {
                 TopBarExpanded(
-                    communityName: .constant("lemmyworld@lemmy.world"),
-                    userName: .constant("dog@kbin.social")
+                    userName: .constant("alice.bsky.social")
                 )
                 .environmentObject(navigationCoordinator)
             }

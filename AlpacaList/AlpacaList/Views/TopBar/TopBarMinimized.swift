@@ -35,10 +35,8 @@ struct TopBarButtonMinimized: View {
 }
 
 struct TopBarMinimized: View {
-    var communityName: String
-    var icon: String
-    
     @EnvironmentObject var navigationCoordinator: NavigationCoordinator
+    @Binding var userName: String
     
     var body: some View {
         HStack {
@@ -52,7 +50,7 @@ struct TopBarMinimized: View {
                 .font(.system(size: 22)).fontWeight(.semibold)
                 Spacer().frame(width: 15)
             }
-            TopBarButtonMinimized(imageName: icon, text: communityName)
+            TopBarButtonMinimized(imageName: "person.circle", text: userName)
         }
         .font(.system(size: 18))
         .frame(maxWidth: .infinity, maxHeight: 20)
@@ -63,7 +61,7 @@ struct TopBarMinimized: View {
 
 struct TopBarMinimized_Previews: PreviewProvider {
     private static let navigationCoordinatorCannotPop = NavigationCoordinator()
-    private static let navigationCoordinatorCanPop = NavigationCoordinator(initialStack: [.postDetails(postItem: MockDataGenerator.generateRandomComment(maxLength: 1, depth: 1, indention: 1))])
+    private static let navigationCoordinatorCanPop = NavigationCoordinator(initialStack: [.timeline(type: .home)])
     
     @ViewBuilder static var createPreview: some View {
         ZStack {
@@ -74,9 +72,9 @@ struct TopBarMinimized_Previews: PreviewProvider {
             )
             .edgesIgnoringSafeArea(.all)
             VStack {
-                TopBarMinimized(communityName: "lemmyworld@lemmy.world", icon: "globe")
+                TopBarMinimized(userName: .constant("alice.bsky.social"))
                     .environmentObject(navigationCoordinatorCannotPop)
-                TopBarMinimized(communityName: "lemmyworld@lemmy.world", icon: "globe")
+                TopBarMinimized(userName: .constant("alice.bsky.social"))
                     .environmentObject(navigationCoordinatorCanPop)
             }
             .background(.regularMaterial)

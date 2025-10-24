@@ -107,7 +107,8 @@ struct InstanceSettings_Previews: PreviewProvider {
                 .frame(width: .infinity, height: .infinity)
             .safeAreaInset(edge: .top) {
                 VStack {
-                    TopBarMinimized(communityName: "imacat@alpaca.world", icon: "gear")
+                    TopBarMinimized(userName: .constant("alice.bsky.social"))
+                        .environmentObject(NavigationCoordinator())
                     
                 }
                 .background(.ultraThickMaterial)
