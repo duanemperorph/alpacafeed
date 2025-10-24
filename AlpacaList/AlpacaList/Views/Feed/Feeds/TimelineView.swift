@@ -20,7 +20,7 @@ struct TimelineView: View {
             isLoadingMore: viewModel.isLoadingMore,
             spacing: 0,
             showBackground: false,
-            showTopBarInset: false,
+            showTopBarInset: true,
             listAccessibilityIdentifier: "timeline_list",
             onRefresh: {
                 await viewModel.refresh()

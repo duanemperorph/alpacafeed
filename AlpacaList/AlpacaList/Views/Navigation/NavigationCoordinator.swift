@@ -127,29 +127,23 @@ class NavigationCoordinator: ObservableObject {
         case .timeline(let type):
             let viewModel = TimelineViewModel(timelineType: timelineTypeFromDestination(type))
             TimelineView(viewModel: viewModel)
-                .navigationTitle(titleForTimelineType(type))
             
         case .thread(let uri):
             let viewModel = ThreadViewModel(postUri: uri)
             ThreadView(viewModel: viewModel)
-                .navigationTitle("Thread")
-                .navigationBarTitleDisplayMode(.inline)
             
         case .profile(let handle):
             // TODO: Create ProfileView
             let viewModel = TimelineViewModel(timelineType: .authorFeed(handle: handle))
             TimelineView(viewModel: viewModel)
-                .navigationTitle("@\(handle)")
             
         case .compose(let replyTo):
             // TODO: Create ComposeView
             Text("Compose new post")
-                .navigationTitle(replyTo == nil ? "New Post" : "Reply")
             
         case .quotePost(let post):
             // TODO: Create QuotePostView
             Text("Quote post: \(post.text)")
-                .navigationTitle("Quote Post")
             
         // Settings
         case .instanceSettings:

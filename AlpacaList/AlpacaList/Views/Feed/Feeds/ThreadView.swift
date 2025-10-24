@@ -21,7 +21,7 @@ struct ThreadView: View {
             isLoadingMore: viewModel.isLoadingMoreReplies,
             spacing: 0,
             showBackground: false,
-            showTopBarInset: false,
+            showTopBarInset: true,
             listAccessibilityIdentifier: "thread_list",
             onRefresh: {
                 await viewModel.refresh()

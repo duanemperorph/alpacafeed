@@ -92,7 +92,7 @@ struct PostListView<Item: Identifiable, Content: View, EmptyContent: View, Loadi
                 }
             }
             .padding(0)
-            .gesture(listDrag)
+            .simultaneousGesture(listDrag)
             .if(showTopBarInset) { view in
                 view.safeAreaInset(edge: .top) {
                     Spacer().frame(height: topBarController.topBarInset)

@@ -15,7 +15,6 @@ struct NavigationRootView: View {
     var body: some View {
         NavigationStack(path: $navigationCoordinator.navigationStack) {
             TimelineView(viewModel: timelineViewModel)
-                .navigationTitle("Home")
                 .navigationDestination(for: NavigationDestination.self) { destination in
                     navigationCoordinator.viewForDestination(destination: destination)
                         .toolbar(.hidden)
