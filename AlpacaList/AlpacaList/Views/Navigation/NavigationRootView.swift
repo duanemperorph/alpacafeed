@@ -17,7 +17,6 @@ struct NavigationRootView: View {
             TimelineView(viewModel: timelineViewModel)
                 .navigationDestination(for: NavigationDestination.self) { destination in
                     navigationCoordinator.viewForDestination(destination: destination)
-                        .toolbar(.hidden)
                 }
         }
         .safeAreaInset(edge: .top) {
