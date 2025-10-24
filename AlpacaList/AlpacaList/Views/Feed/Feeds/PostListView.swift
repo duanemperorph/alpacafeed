@@ -57,6 +57,9 @@ struct PostListView<Item: Identifiable, Content: View, EmptyContent: View, Loadi
         self.content = content
         self.emptyStateView = emptyStateView
         self.loadingView = loadingView
+        
+//        let itemIds = items.map({i in i.id})
+//        print("loaded items: \(itemIds)")
     }
     
     var listDrag: some Gesture {
@@ -85,7 +88,7 @@ struct PostListView<Item: Identifiable, Content: View, EmptyContent: View, Loadi
                         content(item)
                         
                         // Load more trigger at last item
-                        if onLoadMore != nil, item.id as? String == items.last?.id as? String {
+                        if onLoadMore != nil, item.id == items.last?.id {
                             loadMoreView
                         }
                     }
