@@ -28,8 +28,7 @@ struct RootPreviews: View {
     }
     
     var body: some View {
-        let model = PostsListViewModel(rootPosts: mockFeedItems)
-        NavigationRootView(rootModel: model)
+        NavigationRootView()
             .environmentObject(navigationCoordinator)
             .environmentObject(topBarController)
     }

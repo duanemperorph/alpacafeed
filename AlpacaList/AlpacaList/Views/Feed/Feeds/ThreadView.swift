@@ -15,8 +15,21 @@ struct ThreadView: View {
     @State private var replyToUri: String?
     
     var body: some View {
-        ScrollView {
-            LazyVStack(spacing: 0) {
+        PostListView(
+            items: viewModel.replies,
+            isLoading: viewModel.isLoading,
+            isLoadingMore: viewModel.isLoadingMoreReplies,
+            spacing: 0,
+            showBackground: false,
+            showTopBarInset: false,
+            listAccessibilityIdentifier: "thread_list",
+            onRefresh: {
+                await viewModel.refresh()
+            },
+            onLoadMore: {
+                viewModel.fetchMoreReplies()
+            },
+            headerContent: {
                 // Parent context (if this is a reply)
                 if !viewModel.parentPosts.isEmpty {
                     ForEach(viewModel.parentPosts) { parentPost in
@@ -78,49 +91,37 @@ struct ThreadView: View {
                         .padding(.bottom, 8)
                     }
                 }
-                
-                // Replies (flat list)
-                ForEach(viewModel.replies) { reply in
-                    PostCard(
-                        post: reply,
-                        onPostTap: { tappedPost in
-                            navigationCoordinator.push(.thread(uri: tappedPost.uri))
-                        },
-                        onLike: { uri in
-                            viewModel.likePost(uri: uri)
-                        },
-                        onRepost: { uri in
-                            viewModel.repost(uri: uri)
-                        },
-                        onReply: { uri in
-                            replyToUri = uri
-                            showingReplyComposer = true
-                        },
-                        onQuotePostTap: { uri in
-                            navigationCoordinator.push(.thread(uri: uri))
-                        }
-                    )
-                    .padding(.horizontal)
-                    .padding(.vertical, 8)
-                    
-                    Divider()
-                        .padding(.horizontal)
-                    
-                    // Load more replies trigger
-                    if reply.id == viewModel.replies.last?.id {
-                        loadMoreRepliesView
+            },
+            content: { reply in
+                PostCard(
+                    post: reply,
+                    onPostTap: { tappedPost in
+                        navigationCoordinator.push(.thread(uri: tappedPost.uri))
+                    },
+                    onLike: { uri in
+                        viewModel.likePost(uri: uri)
+                    },
+                    onRepost: { uri in
+                        viewModel.repost(uri: uri)
+                    },
+                    onReply: { uri in
+                        replyToUri = uri
+                        showingReplyComposer = true
+                    },
+                    onQuotePostTap: { uri in
+                        navigationCoordinator.push(.thread(uri: uri))
                     }
-                }
-            }
-        }
-        .refreshable {
-            await viewModel.refresh()
-        }
-        .overlay {
-            if viewModel.isLoading {
+                )
+                .padding(.horizontal)
+                .padding(.vertical, 8)
+                
+                Divider()
+                    .padding(.horizontal)
+            },
+            loadingView: {
                 ProgressView("Loading thread...")
             }
-        }
+        )
         .sheet(isPresented: $showingReplyComposer) {
             // TODO: Reply composer
             if let uri = replyToUri {
@@ -140,25 +141,6 @@ struct ThreadView: View {
             .frame(width: 2, height: 20)
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.leading, 32) // Align with avatar
-    }
-    
-    private var loadMoreRepliesView: some View {
-        Group {
-            if viewModel.isLoadingMoreReplies {
-                HStack {
-                    Spacer()
-                    ProgressView()
-                    Spacer()
-                }
-                .padding()
-            } else {
-                Color.clear
-                    .frame(height: 1)
-                    .onAppear {
-                        viewModel.fetchMoreReplies()
-                    }
-            }
-        }
     }
 }
 

@@ -14,53 +14,64 @@ struct TimelineView: View {
     @State private var showingComposer = false
     
     var body: some View {
-        ScrollView {
-            LazyVStack(spacing: 0) {
-                ForEach(viewModel.posts) { post in
-                    PostCard(
-                        post: post,
-                        onPostTap: { tappedPost in
-                            navigationCoordinator.push(.thread(uri: tappedPost.uri))
-                        },
-                        onLike: { uri in
-                            viewModel.likePost(uri: uri)
-                        },
-                        onRepost: { uri in
-                            viewModel.repost(uri: uri)
-                        },
-                        onReply: { uri in
-                            showingComposer = true
-                        },
-                        onQuotePostTap: { uri in
-                            navigationCoordinator.push(.thread(uri: uri))
-                        }
-                    )
-                    .padding(.horizontal)
-                    .padding(.vertical, 8)
-                    
-                    Divider()
-                        .padding(.horizontal)
-                    
-                    // Load more trigger
-                    if post.id == viewModel.posts.last?.id {
-                        loadMoreView
+        PostListView(
+            items: viewModel.posts,
+            isLoading: viewModel.isLoading,
+            isLoadingMore: viewModel.isLoadingMore,
+            spacing: 0,
+            showBackground: false,
+            showTopBarInset: false,
+            listAccessibilityIdentifier: "timeline_list",
+            onRefresh: {
+                await viewModel.refresh()
+            },
+            onLoadMore: {
+                viewModel.loadMore()
+            },
+            content: { post in
+                PostCard(
+                    post: post,
+                    onPostTap: { tappedPost in
+                        navigationCoordinator.push(.thread(uri: tappedPost.uri))
+                    },
+                    onLike: { uri in
+                        viewModel.likePost(uri: uri)
+                    },
+                    onRepost: { uri in
+                        viewModel.repost(uri: uri)
+                    },
+                    onReply: { uri in
+                        showingComposer = true
+                    },
+                    onQuotePostTap: { uri in
+                        navigationCoordinator.push(.thread(uri: uri))
                     }
+                )
+                .padding(.horizontal)
+                .padding(.vertical, 8)
+                
+                Divider()
+                    .padding(.horizontal)
+            },
+            emptyStateView: {
+                VStack(spacing: 16) {
+                    Image(systemName: "tray")
+                        .font(.system(size: 60))
+                        .foregroundColor(.secondary)
+                    
+                    Text("No posts yet")
+                        .font(.headline)
+                    
+                    Text("Pull to refresh or check back later")
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
                 }
-            }
-        }
-        .refreshable {
-            await viewModel.refresh()
-        }
-        .overlay {
-            if viewModel.isLoading && viewModel.posts.isEmpty {
+                .padding()
+            },
+            loadingView: {
                 ProgressView("Loading timeline...")
             }
-        }
-        .overlay {
-            if viewModel.posts.isEmpty && !viewModel.isLoading {
-                emptyStateView
-            }
-        }
+        )
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 Button(action: {
@@ -74,41 +85,6 @@ struct TimelineView: View {
             // TODO: Compose view
             Text("Compose new post")
         }
-    }
-    
-    private var loadMoreView: some View {
-        Group {
-            if viewModel.isLoadingMore {
-                HStack {
-                    Spacer()
-                    ProgressView()
-                    Spacer()
-                }
-                .padding()
-            } else {
-                Color.clear
-                    .frame(height: 1)
-                    .onAppear {
-                        viewModel.loadMore()
-                    }
-            }
-        }
-    }
-    
-    private var emptyStateView: some View {
-        VStack(spacing: 16) {
-            Image(systemName: "tray")
-                .font(.system(size: 60))
-                .foregroundColor(.secondary)
-            
-            Text("No posts yet")
-                .font(.headline)
-            
-            Text("Pull to refresh or check back later")
-                .font(.subheadline)
-                .foregroundColor(.secondary)
-        }
-        .padding()
     }
 }
 

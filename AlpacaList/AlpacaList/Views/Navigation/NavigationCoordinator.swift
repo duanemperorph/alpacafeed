@@ -11,9 +11,6 @@ import SwiftUI
 
 /// Navigation destinations for the app
 enum NavigationDestination {
-    // Legacy (keep for backwards compatibility during migration)
-    case postDetails(postItem: FeedItem)
-    
     // Bluesky navigation
     case timeline(type: TimelineType)        // Home, profile, custom feed
     case thread(uri: String)                 // Post thread
@@ -40,10 +37,6 @@ enum NavigationDestination {
 extension NavigationDestination: Hashable {
     static func == (lhs: NavigationDestination, rhs: NavigationDestination) -> Bool {
         switch (lhs, rhs) {
-        // Legacy
-        case (.postDetails(let item1), .postDetails(let item2)):
-            return item1.id == item2.id
-            
         // Bluesky
         case (.timeline(let type1), .timeline(let type2)):
             return type1 == type2
@@ -71,11 +64,6 @@ extension NavigationDestination: Hashable {
     
     func hash(into hasher: inout Hasher) {
         switch self {
-        // Legacy
-        case .postDetails(let item):
-            hasher.combine("postDetails")
-            hasher.combine(item.id)
-            
         // Bluesky
         case .timeline(let type):
             hasher.combine("timeline")
@@ -135,11 +123,6 @@ class NavigationCoordinator: ObservableObject {
 
     @ViewBuilder func viewForDestination(destination: NavigationDestination) -> some View {
         switch destination {
-        // Legacy navigation (keep for backwards compatibility)
-        case .postDetails(let postItem):
-            let model = CommentsListViewModel(post: postItem)
-            CommentsFeedView(model: model)
-            
         // Bluesky navigation
         case .timeline(let type):
             let viewModel = TimelineViewModel(timelineType: timelineTypeFromDestination(type))

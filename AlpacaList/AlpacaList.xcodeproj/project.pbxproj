@@ -25,7 +25,6 @@
 		376BB76B2A8080BA00AE9FB0 /* Buttons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 376BB76A2A8080B900AE9FB0 /* Buttons.swift */; };
 		376BB76E2A80846200AE9FB0 /* CommentsButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 376BB76D2A80846200AE9FB0 /* CommentsButtons.swift */; };
 		376BB7702A80B40B00AE9FB0 /* PostComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 376BB76F2A80B40B00AE9FB0 /* PostComponents.swift */; };
-		376BB7722A80B7F000AE9FB0 /* CommentsFeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 376BB7712A80B7F000AE9FB0 /* CommentsFeedView.swift */; };
 		37B0A0962EAAA31200DBB593 /* Facet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B0A0922EAAA31200DBB593 /* Facet.swift */; };
 		37B0A0972EAAA31200DBB593 /* ReplyRef.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B0A0942EAAA31200DBB593 /* ReplyRef.swift */; };
 		37B0A0982EAAA31200DBB593 /* Embed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B0A0912EAAA31200DBB593 /* Embed.swift */; };
@@ -44,7 +43,6 @@
 		37B0A0AF2EAAA34200DBB593 /* TimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B0A0AD2EAAA34200DBB593 /* TimelineView.swift */; };
 		37B0A0B12EAAA35400DBB593 /* BlueskySettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B0A0B02EAAA35400DBB593 /* BlueskySettings.swift */; };
 		37CF46AB2A50FAF700952075 /* AlpacaListApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37CF46AA2A50FAF700952075 /* AlpacaListApp.swift */; };
-		37CF46AD2A50FAF700952075 /* PostsFeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37CF46AC2A50FAF700952075 /* PostsFeedView.swift */; };
 		37CF46AF2A50FAF800952075 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 37CF46AE2A50FAF800952075 /* Assets.xcassets */; };
 		37CF46B22A50FAF800952075 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 37CF46B12A50FAF800952075 /* Preview Assets.xcassets */; };
 		37CF46BC2A50FAF800952075 /* AlpacaListTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37CF46BB2A50FAF800952075 /* AlpacaListTests.swift */; };
@@ -56,9 +54,9 @@
 		37DB55292E722EB800736A52 /* CommentsListViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37DB55282E722EB800736A52 /* CommentsListViewModelTests.swift */; };
 		37DB552C2E72331200736A52 /* BasicFlowUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37DB552B2E72331200736A52 /* BasicFlowUITests.swift */; };
 		37DC2B852A9BD59300D6B879 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37DC2B842A9BD59300D6B879 /* Helpers.swift */; };
-		75FA6A039CAD498AB3E99969E38A5DD9 /* BlueskyFeedSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97D03336943F43AFABCE34A2167CEDA0 /* BlueskyFeedSelector.swift */; };
-		37E8CC852E58E474005C7C62 /* FeedListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37E8CC842E58E474005C7C62 /* FeedListView.swift */; };
+		37E8CC862E58E475005C7C63 /* PostListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37E8CC872E58E475005C7C63 /* PostListView.swift */; };
 		37F689502A510D82004E27DF /* FeedItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F6894F2A510D82004E27DF /* FeedItemView.swift */; };
+		75FA6A039CAD498AB3E99969E38A5DD9 /* BlueskyFeedSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97D03336943F43AFABCE34A2167CEDA0 /* BlueskyFeedSelector.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -97,7 +95,6 @@
 		376BB76A2A8080B900AE9FB0 /* Buttons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Buttons.swift; sourceTree = "<group>"; };
 		376BB76D2A80846200AE9FB0 /* CommentsButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsButtons.swift; sourceTree = "<group>"; };
 		376BB76F2A80B40B00AE9FB0 /* PostComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostComponents.swift; sourceTree = "<group>"; };
-		376BB7712A80B7F000AE9FB0 /* CommentsFeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsFeedView.swift; sourceTree = "<group>"; };
 		37B0A0902EAAA31200DBB593 /* Author.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Author.swift; sourceTree = "<group>"; };
 		37B0A0912EAAA31200DBB593 /* Embed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Embed.swift; sourceTree = "<group>"; };
 		37B0A0922EAAA31200DBB593 /* Facet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Facet.swift; sourceTree = "<group>"; };
@@ -117,7 +114,6 @@
 		37B0A0B02EAAA35400DBB593 /* BlueskySettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlueskySettings.swift; sourceTree = "<group>"; };
 		37CF46A72A50FAF700952075 /* AlpacaList.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AlpacaList.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		37CF46AA2A50FAF700952075 /* AlpacaListApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlpacaListApp.swift; sourceTree = "<group>"; };
-		37CF46AC2A50FAF700952075 /* PostsFeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostsFeedView.swift; sourceTree = "<group>"; };
 		37CF46AE2A50FAF800952075 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		37CF46B12A50FAF800952075 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		37CF46B72A50FAF800952075 /* AlpacaListTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AlpacaListTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -132,9 +128,9 @@
 		37DB552A2E722FCF00736A52 /* AlpacaList.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; name = AlpacaList.xctestplan; path = AlpacaListUITests/AlpacaList.xctestplan; sourceTree = "<group>"; };
 		37DB552B2E72331200736A52 /* BasicFlowUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicFlowUITests.swift; sourceTree = "<group>"; };
 		37DC2B842A9BD59300D6B879 /* Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
-		97D03336943F43AFABCE34A2167CEDA0 /* BlueskyFeedSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlueskyFeedSelector.swift; sourceTree = "<group>"; };
-		37E8CC842E58E474005C7C62 /* FeedListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedListView.swift; sourceTree = "<group>"; };
+		37E8CC872E58E475005C7C63 /* PostListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostListView.swift; sourceTree = "<group>"; };
 		37F6894F2A510D82004E27DF /* FeedItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemView.swift; sourceTree = "<group>"; };
+		97D03336943F43AFABCE34A2167CEDA0 /* BlueskyFeedSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlueskyFeedSelector.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -177,9 +173,7 @@
 				37B0A0AC2EAAA34200DBB593 /* ThreadView.swift */,
 				37B0A0AD2EAAA34200DBB593 /* TimelineView.swift */,
 				37F6894F2A510D82004E27DF /* FeedItemView.swift */,
-				37E8CC842E58E474005C7C62 /* FeedListView.swift */,
-				37CF46AC2A50FAF700952075 /* PostsFeedView.swift */,
-				376BB7712A80B7F000AE9FB0 /* CommentsFeedView.swift */,
+				37E8CC872E58E475005C7C63 /* PostListView.swift */,
 			);
 			path = Feeds;
 			sourceTree = "<group>";
@@ -504,13 +498,11 @@
 				37346BD32A520AB800CB346A /* TopBarExpanded.swift in Sources */,
 				3742DBA02AA69A4200B7E83F /* FeedItemVM.swift in Sources */,
 				370A25B62A54FA400076D378 /* TopBarContainer.swift in Sources */,
-				37E8CC852E58E474005C7C62 /* FeedListView.swift in Sources */,
+				37E8CC862E58E475005C7C63 /* PostListView.swift in Sources */,
 				37DC2B852A9BD59300D6B879 /* Helpers.swift in Sources */,
-				37CF46AD2A50FAF700952075 /* PostsFeedView.swift in Sources */,
 				37CF46AB2A50FAF700952075 /* AlpacaListApp.swift in Sources */,
 				37428E992AA9561900E59607 /* NavigationCoordinator.swift in Sources */,
 				376BB76E2A80846200AE9FB0 /* CommentsButtons.swift in Sources */,
-				376BB7722A80B7F000AE9FB0 /* CommentsFeedView.swift in Sources */,
 				3742DBA22AA69C2500B7E83F /* CommentsListVM.swift in Sources */,
 				37350F1F2A6DF2DC00DD239B /* PostItemButtons.swift in Sources */,
 				37CF46D82A50FC8A00952075 /* FeedItem.swift in Sources */,
@@ -631,7 +623,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -685,7 +677,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -796,6 +788,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = alpacavision.AlpacaListUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -813,6 +806,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = alpacavision.AlpacaListUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
