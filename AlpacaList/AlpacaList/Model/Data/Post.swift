@@ -185,5 +185,30 @@ extension Post {
             reply: replyRef
         )
     }
+    
+    /// Create a video post for testing/preview
+    static func createVideoPost(
+        author: Author,
+        text: String,
+        thumbnailImage: String,
+        videoUrl: String,
+        altText: String? = nil,
+        aspectRatio: Embed.AspectRatio = Embed.AspectRatio(width: 16, height: 9),
+        createdAt: Date = Date()
+    ) -> Post {
+        Post(
+            uri: "at://\(author.did)/app.bsky.feed.post/\(UUID().uuidString)",
+            cid: "bafyrei\(UUID().uuidString.prefix(16))",
+            author: author,
+            createdAt: createdAt,
+            text: text,
+            embed: .video(Embed.VideoEmbed(
+                thumbnail: thumbnailImage,
+                playlist: videoUrl,
+                alt: altText,
+                aspectRatio: aspectRatio
+            ))
+        )
+    }
 }
 

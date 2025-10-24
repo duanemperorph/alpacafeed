@@ -191,7 +191,7 @@ extension MockDataGenerator {
             // Mix different post types
             let post: Post
             
-            switch i % 5 {
+            switch i % 6 {
             case 0:
                 // Text only post
                 post = Post.createTextPost(
@@ -236,6 +236,25 @@ extension MockDataGenerator {
                 )
                 
             case 3:
+                // Post with video
+                post = Post(
+                    uri: "at://\(author.did)/app.bsky.feed.post/\(UUID().uuidString)",
+                    cid: "bafyrei\(UUID().uuidString.prefix(16))",
+                    author: author,
+                    createdAt: date,
+                    text: mockVideoTexts[i % mockVideoTexts.count],
+                    embed: .video(Embed.VideoEmbed(
+                        thumbnail: "alpaca\((i % 8) + 1)",
+                        playlist: "https://www.pexels.com/download/video/29351281/?fps=59.94&h=360&w=640",
+                        alt: "Colorful alpacas in scenic Peruvian landscape",
+                        aspectRatio: Embed.AspectRatio(width: 16, height: 9)
+                    )),
+                    likeCount: Int.random(in: 50...500),
+                    repostCount: Int.random(in: 20...200),
+                    replyCount: Int.random(in: 10...100)
+                )
+                
+            case 4:
                 // Post with repost attribution
                 let repostedBy = authors[(i + 1) % authors.count]
                 post = Post(
@@ -302,6 +321,26 @@ extension MockDataGenerator {
             "The best things in life are free",
             "Remember to stay hydrated! 💧",
             "Good morning everyone! Hope you have a great day 🌅"
+        ]
+    }
+    
+    static var mockVideoTexts: [String] {
+        [
+            "Watch these colorful alpacas in Peru! 🦙🏔️",
+            "This video made my day 😄",
+            "You have to see this to believe it! 📹",
+            "Just captured this amazing moment on video",
+            "Alpacas being absolutely adorable 🎥",
+            "Check out what happened today! 🎬",
+            "I can't stop watching this 🔁",
+            "This is why alpacas are the best ❤️",
+            "Behind the scenes at the alpaca farm",
+            "Wait for it... 👀",
+            "Nature is amazing 🌿",
+            "Caught this on camera just in time!",
+            "Pure wholesome content right here 💙",
+            "Video tour of the Peruvian highlands 🗺️",
+            "These alpacas know how to pose for the camera! 📸"
         ]
     }
 }

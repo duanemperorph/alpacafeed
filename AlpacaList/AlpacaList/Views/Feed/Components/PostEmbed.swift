@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import AVKit
+import Combine
 
 /// Renders embedded content (images, videos, links, quotes)
 struct PostEmbed: View {
@@ -117,29 +119,144 @@ struct VideoEmbed: View {
     let video: Embed.VideoEmbed
     
     var body: some View {
+        InlineVideoPlayer(
+            videoUrl: video.playlist,
+            thumbnail: video.thumbnail,
+            altText: video.alt,
+            aspectRatio: video.aspectRatio
+        )
+    }
+}
+
+// MARK: - Inline Video Player
+
+struct InlineVideoPlayer: View {
+    let videoUrl: String
+    let thumbnail: String?
+    let altText: String?
+    let aspectRatio: Embed.AspectRatio?
+    
+    @State private var player: AVPlayer?
+    @State private var isPlaying = false
+    @State private var showThumbnail = true
+    @State private var isLoading = false
+    
+    var body: some View {
         ZStack {
-            // Thumbnail
-            if let thumbnail = video.thumbnail {
-                Image(thumbnail)
-                    .resizable()
-                    .scaledToFit()
+            // Video player
+            if let player = player, !showThumbnail {
+                VideoPlayer(player: player)
+                    .aspectRatio(contentMode: .fit)
                     .frame(maxHeight: 300)
+                    .disabled(true) // Disable VideoPlayer's built-in controls
             } else {
-                Rectangle()
-                    .fill(Color.gray.opacity(0.3))
-                    .frame(maxHeight: 300)
+                // Thumbnail
+                if let thumbnail = thumbnail {
+                    Image(thumbnail)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(maxHeight: 300)
+                } else {
+                    Rectangle()
+                        .fill(Color.gray.opacity(0.3))
+                        .frame(maxHeight: 300)
+                }
             }
             
-            // Play button overlay
-            Image(systemName: "play.circle.fill")
-                .font(.system(size: 60))
-                .foregroundColor(.white)
-                .shadow(radius: 10)
+            // Loading indicator
+            if isLoading {
+                ProgressView()
+                    .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                    .scaleEffect(1.5)
+                    .shadow(radius: 5)
+            }
+            
+            // Play/Pause button overlay
+            if !isLoading {
+                Button(action: togglePlayback) {
+                    Image(systemName: isPlaying ? "pause.circle.fill" : "play.circle.fill")
+                        .font(.system(size: 60))
+                        .foregroundColor(.white)
+                        .shadow(radius: 10)
+                }
+                .opacity(showThumbnail || !isPlaying ? 1 : 0.3)
+                .animation(.easeInOut(duration: 0.2), value: isPlaying)
+            }
         }
         .frame(maxWidth: .infinity)
         .clipShape(RoundedRectangle(cornerRadius: 12))
-        .accessibilityLabel(video.alt ?? "Video")
+        .accessibilityLabel(altText ?? "Video")
+        .accessibilityAddTraits(.isButton)
+        .accessibilityHint(isPlaying ? "Pause video" : "Play video")
+        .onAppear {
+            setupPlayer()
+        }
+        .onDisappear {
+            cleanupPlayer()
+        }
     }
+    
+    private func setupPlayer() {
+        guard let url = URL(string: videoUrl) else { return }
+        print("setup player with url: \(url)")
+        player = AVPlayer(url: url)
+        
+        // Observe when video finishes playing
+        NotificationCenter.default.addObserver(
+            forName: .AVPlayerItemDidPlayToEndTime,
+            object: player?.currentItem,
+            queue: .main
+        ) { [self] _ in
+            isPlaying = false
+            showThumbnail = true
+            player?.seek(to: .zero)
+        }
+        
+        // Observe player status
+        player?.currentItem?.publisher(for: \.status)
+            .sink { status in
+                if status == .readyToPlay {
+                    isLoading = false
+                }
+            }
+            .store(in: &cancellables)
+    }
+    
+    private func togglePlayback() {
+        guard let player = player else { return }
+        
+        if isPlaying {
+            // Pause
+            player.pause()
+            isPlaying = false
+        } else {
+            // Play
+            if showThumbnail {
+                isLoading = true
+                showThumbnail = false
+                
+                // Small delay to ensure player is ready
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                    player.play()
+                    isPlaying = true
+                    isLoading = false
+                }
+            } else {
+                player.play()
+                isPlaying = true
+            }
+        }
+    }
+    
+    private func cleanupPlayer() {
+        player?.pause()
+        player = nil
+        isPlaying = false
+        showThumbnail = true
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    @State private var cancellables = Set<AnyCancellable>()
 }
 
 // MARK: - External Link Embed

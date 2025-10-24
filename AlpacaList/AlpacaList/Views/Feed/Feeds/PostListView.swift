@@ -57,9 +57,6 @@ struct PostListView<Item: Identifiable, Content: View, EmptyContent: View, Loadi
         self.content = content
         self.emptyStateView = emptyStateView
         self.loadingView = loadingView
-        
-//        let itemIds = items.map({i in i.id})
-//        print("loaded items: \(itemIds)")
     }
     
     var listDrag: some Gesture {
