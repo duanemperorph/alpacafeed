@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import PhotosUI
 
 struct ComposeView: View {
     // MARK: - Properties
@@ -17,8 +18,15 @@ struct ComposeView: View {
     @State private var postText: String = ""
     @State private var showingDraftAlert = false
     
+    // Image attachment state
+    @State private var selectedImages: [UIImage] = []
+    @State private var imageAltTexts: [String] = [] // Alt text for each image
+    @State private var selectedPhotoItems: [PhotosPickerItem] = []
+    @State private var showingImagePicker = false
+    
     // Character limit for Bluesky posts
     private let characterLimit = 300
+    private let maxImages = 4
     
     // MARK: - Computed Properties
     
@@ -31,7 +39,13 @@ struct ComposeView: View {
     }
     
     private var canPost: Bool {
-        !postText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty && !isOverLimit
+        let hasText = !postText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        let hasImages = !selectedImages.isEmpty
+        return (hasText || hasImages) && !isOverLimit
+    }
+    
+    private var canAddImages: Bool {
+        selectedImages.count < maxImages
     }
     
     private var placeholderText: String {
@@ -71,29 +85,38 @@ struct ComposeView: View {
                     }
                 }
                 
+                // Image preview grid
+                if !selectedImages.isEmpty {
+                    imagePreviewGrid
+                }
+                
                 // Bottom toolbar (dark with white buttons)
                 VStack(spacing: 0) {
                     Divider()
                         .background(Color.white.opacity(0.2))
                     
-                    HStack(spacing: 16) {
-                        // Media attachment buttons (placeholders)
-                        HStack(spacing: 12) {
-                            attachmentButton(icon: "photo", label: "Photos") {
-                                // TODO: Implement image picker
-                            }
-                            
-                            attachmentButton(icon: "video", label: "Video") {
-                                // TODO: Implement video picker
-                            }
-                            
-                            attachmentButton(icon: "link", label: "Link") {
-                                // TODO: Implement link preview
-                            }
-                            
-                            attachmentButton(icon: "quote.bubble", label: "Quote") {
-                                // TODO: Implement quote post
-                            }
+                    HStack(spacing: 0) {
+                        // Media attachment buttons - evenly spaced
+                        attachmentButton(icon: "photo", label: "Photos", isEnabled: canAddImages) {
+                            showingImagePicker = true
+                        }
+                        
+                        Spacer()
+                        
+                        attachmentButton(icon: "video", label: "Video", isEnabled: false) {
+                            // TODO: Implement video picker
+                        }
+                        
+                        Spacer()
+                        
+                        attachmentButton(icon: "link", label: "Link", isEnabled: false) {
+                            // TODO: Implement link preview
+                        }
+                        
+                        Spacer()
+                        
+                        attachmentButton(icon: "quote.bubble", label: "Quote", isEnabled: false) {
+                            // TODO: Implement quote post
                         }
                         
                         Spacer()
@@ -145,6 +168,17 @@ struct ComposeView: View {
             } message: {
                 Text("Do you want to save this as a draft?")
             }
+            .photosPicker(
+                isPresented: $showingImagePicker,
+                selection: $selectedPhotoItems,
+                maxSelectionCount: maxImages - selectedImages.count,
+                matching: .images
+            )
+            .onChange(of: selectedPhotoItems) { newItems in
+                Task {
+                    await loadImages(from: newItems)
+                }
+            }
         }
     }
     
@@ -176,15 +210,66 @@ struct ComposeView: View {
             .background(Color.gray.opacity(0.3))
     }
     
-    private func attachmentButton(icon: String, label: String, action: @escaping () -> Void) -> some View {
+    private var imagePreviewGrid: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 12) {
+                    ForEach(Array(selectedImages.enumerated()), id: \.offset) { index, image in
+                        imagePreviewCard(image: image, index: index)
+                    }
+                }
+                .padding(.horizontal)
+            }
+            
+            // Image count indicator
+            HStack {
+                Image(systemName: "photo.stack")
+                    .foregroundColor(.secondary)
+                Text("\(selectedImages.count) of \(maxImages) images")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+            .padding(.horizontal)
+        }
+        .padding(.vertical, 8)
+        .background(Color(.systemGray6))
+    }
+    
+    private func imagePreviewCard(image: UIImage, index: Int) -> some View {
+        ZStack(alignment: .topTrailing) {
+            Image(uiImage: image)
+                .resizable()
+                .scaledToFill()
+                .frame(width: 120, height: 120)
+                .clipShape(RoundedRectangle(cornerRadius: 8))
+            
+            // Remove button
+            Button {
+                removeImage(at: index)
+            } label: {
+                Image(systemName: "xmark.circle.fill")
+                    .font(.system(size: 24))
+                    .foregroundColor(.white)
+                    .background(
+                        Circle()
+                            .fill(Color.black.opacity(0.6))
+                            .frame(width: 24, height: 24)
+                    )
+            }
+            .padding(6)
+        }
+        .frame(width: 120, height: 120)
+    }
+    
+    private func attachmentButton(icon: String, label: String, isEnabled: Bool, action: @escaping () -> Void) -> some View {
         Button(action: action) {
             Image(systemName: icon)
                 .font(.system(size: 20))
                 .foregroundColor(.white)
         }
         .accessibilityLabel(label)
-        .disabled(true) // Disabled until implemented
-        .opacity(0.5) // Visual indicator that it's not yet available
+        .disabled(!isEnabled)
+        .opacity(isEnabled ? 1.0 : 0.5)
     }
     
     // MARK: - Actions
@@ -195,7 +280,44 @@ struct ComposeView: View {
         if let replyTo = replyTo {
             print("Reply to: \(replyTo.uri)")
         }
+        
+        if !selectedImages.isEmpty {
+            print("With \(selectedImages.count) images")
+            // TODO: Upload images and create Embed.images
+            // For now, this would create:
+            // let imageEmbeds = selectedImages.enumerated().map { index, image in
+            //     Embed.ImageEmbed(
+            //         thumb: "uploaded_thumb_url",
+            //         fullsize: "uploaded_fullsize_url",
+            //         alt: imageAltTexts[index],
+            //         aspectRatio: Embed.AspectRatio(width: Int(image.size.width), height: Int(image.size.height))
+            //     )
+            // }
+            // embed = .images(imageEmbeds)
+        }
+        
         dismiss()
+    }
+    
+    private func loadImages(from items: [PhotosPickerItem]) async {
+        for item in items {
+            if let data = try? await item.loadTransferable(type: Data.self),
+               let image = UIImage(data: data) {
+                await MainActor.run {
+                    selectedImages.append(image)
+                    imageAltTexts.append("") // Default empty alt text
+                }
+            }
+        }
+        // Clear selection after loading
+        await MainActor.run {
+            selectedPhotoItems = []
+        }
+    }
+    
+    private func removeImage(at index: Int) {
+        selectedImages.remove(at: index)
+        imageAltTexts.remove(at: index)
     }
 }
 
