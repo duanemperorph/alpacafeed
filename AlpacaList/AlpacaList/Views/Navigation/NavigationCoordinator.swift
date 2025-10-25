@@ -13,7 +13,7 @@ import SwiftUI
 enum NavigationDestination {
     // Bluesky navigation
     case timeline(type: TimelineType)        // Home, profile, custom feed
-    case thread(uri: String)                 // Post thread
+    case thread(post: Post)                  // Post thread (semantic: which post we're viewing)
     case profile(handle: String)             // User profile
     case compose(replyTo: Post?)             // New post/reply
     case quotePost(post: Post)               // Quote post composer
@@ -38,8 +38,8 @@ extension NavigationDestination: Hashable {
         // Bluesky
         case (.timeline(let type1), .timeline(let type2)):
             return type1 == type2
-        case (.thread(let uri1), .thread(let uri2)):
-            return uri1 == uri2
+        case (.thread(let post1), .thread(let post2)):
+            return post1.uri == post2.uri
         case (.profile(let handle1), .profile(let handle2)):
             return handle1 == handle2
         case (.compose(let post1), .compose(let post2)):
@@ -58,9 +58,9 @@ extension NavigationDestination: Hashable {
         case .timeline(let type):
             hasher.combine("timeline")
             hasher.combine(type)
-        case .thread(let uri):
+        case .thread(let post):
             hasher.combine("thread")
-            hasher.combine(uri)
+            hasher.combine(post.uri)
         case .profile(let handle):
             hasher.combine("profile")
             hasher.combine(handle)
@@ -85,9 +85,6 @@ class NavigationCoordinator: ObservableObject {
     // Compose sheet state (for modal presentation)
     @Published var showingComposeSheet: Bool = false
     @Published var composeReplyTo: Post? = nil
-    
-    // Current thread context (for context-aware compose)
-    @Published var currentThreadRootPost: Post? = nil
     
     init() {
         navigationStack = []
@@ -121,7 +118,12 @@ class NavigationCoordinator: ObservableObject {
     func presentComposeContextAware() {
         // If we're in a thread view, reply to the thread's root post
         // Otherwise, create a new post
-        composeReplyTo = currentThreadRootPost
+        // Read semantic state from navigation stack
+        if case .thread(let post) = navigationStack.last {
+            composeReplyTo = post
+        } else {
+            composeReplyTo = nil
+        }
         showingComposeSheet = true
     }
 
@@ -132,9 +134,9 @@ class NavigationCoordinator: ObservableObject {
             let viewModel = TimelineViewModel(timelineType: timelineTypeFromDestination(type))
             TimelineView(viewModel: viewModel)
             
-        case .thread(let uri):
-            // TODO: Replace with actual API call using uri
-            let viewModel = ThreadViewModel.withMockData()
+        case .thread(let post):
+            // Initialize with the post we're viewing (semantic state!)
+            let viewModel = ThreadViewModel(post: post)
             ThreadView(viewModel: viewModel)
             
         case .profile(let handle):

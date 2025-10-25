@@ -33,7 +33,7 @@ struct ThreadView: View {
                             PostCardCompact(
                                 post: parentPost,
                                 onPostTap: { tappedPost in
-                                    navigationCoordinator.push(.thread(uri: tappedPost.uri))
+                                    navigationCoordinator.push(.thread(post: tappedPost))
                                 }
                             )
                             .padding(.horizontal)
@@ -91,7 +91,7 @@ struct ThreadView: View {
                 PostCard(
                     post: reply,
                     onPostTap: { tappedPost in
-                        navigationCoordinator.push(.thread(uri: tappedPost.uri))
+                        navigationCoordinator.push(.thread(post: tappedPost))
                     },
                     onLike: { uri in
                         viewModel.likePost(uri: uri)
@@ -106,7 +106,10 @@ struct ThreadView: View {
                         }
                     },
                     onQuotePostTap: { uri in
-                        navigationCoordinator.push(.thread(uri: uri))
+                        // Find the quoted post to navigate with full context
+                        if let quotedPost = viewModel.replies.first(where: { $0.uri == uri }) {
+                            navigationCoordinator.push(.thread(post: quotedPost))
+                        }
                     }
                 )
                 .padding(.horizontal)
@@ -123,12 +126,7 @@ struct ThreadView: View {
             if viewModel.rootPost == nil {
                 viewModel.fetchThread()
             }
-            // Set current thread context for context-aware compose
-            navigationCoordinator.currentThreadRootPost = viewModel.rootPost
-        }
-        .onDisappear {
-            // Clear thread context when leaving thread view
-            navigationCoordinator.currentThreadRootPost = nil
+            // No manual state syncing needed - coordinator reads semantic state from navigation stack!
         }
     }
     

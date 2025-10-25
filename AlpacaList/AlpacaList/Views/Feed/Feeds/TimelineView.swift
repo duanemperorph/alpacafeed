@@ -29,7 +29,7 @@ struct TimelineView: View {
                 PostCard(
                     post: post,
                     onPostTap: { tappedPost in
-                        navigationCoordinator.push(.thread(uri: tappedPost.uri))
+                        navigationCoordinator.push(.thread(post: tappedPost))
                     },
                     onLike: { uri in
                         viewModel.likePost(uri: uri)
@@ -44,7 +44,10 @@ struct TimelineView: View {
                         }
                     },
                     onQuotePostTap: { uri in
-                        navigationCoordinator.push(.thread(uri: uri))
+                        // Find the quoted post to navigate with full context
+                        if let quotedPost = viewModel.posts.first(where: { $0.uri == uri }) {
+                            navigationCoordinator.push(.thread(post: quotedPost))
+                        }
                     }
                 )
                 .padding(.horizontal)
@@ -81,10 +84,7 @@ struct TimelineView: View {
                 }
             }
         }
-        .onAppear {
-            // Clear thread context when viewing timeline
-            navigationCoordinator.currentThreadRootPost = nil
-        }
+        // No manual state syncing needed - coordinator reads semantic state from navigation stack!
     }
 }
 
