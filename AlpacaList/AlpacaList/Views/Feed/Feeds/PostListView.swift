@@ -12,8 +12,6 @@ struct PostListView<Item: Identifiable, Content: View, EmptyContent: View, Loadi
     let isLoading: Bool
     let isLoadingMore: Bool
     let spacing: CGFloat
-    let showBackground: Bool
-    let showTopBarInset: Bool
     let listAccessibilityIdentifier: String?
     
     let onRefresh: (() async -> Void)?
@@ -32,8 +30,6 @@ struct PostListView<Item: Identifiable, Content: View, EmptyContent: View, Loadi
         isLoading: Bool = false,
         isLoadingMore: Bool = false,
         spacing: CGFloat = 0,
-        showBackground: Bool = true,
-        showTopBarInset: Bool = false,
         listAccessibilityIdentifier: String? = nil,
         onRefresh: (() async -> Void)? = nil,
         onLoadMore: (() -> Void)? = nil,
@@ -48,8 +44,6 @@ struct PostListView<Item: Identifiable, Content: View, EmptyContent: View, Loadi
         self.isLoading = isLoading
         self.isLoadingMore = isLoadingMore
         self.spacing = spacing
-        self.showBackground = showBackground
-        self.showTopBarInset = showTopBarInset
         self.listAccessibilityIdentifier = listAccessibilityIdentifier
         self.onRefresh = onRefresh
         self.onLoadMore = onLoadMore
@@ -61,7 +55,7 @@ struct PostListView<Item: Identifiable, Content: View, EmptyContent: View, Loadi
     
     var listDrag: some Gesture {
         DragGesture(coordinateSpace: .local).onChanged { data in
-            if showTopBarInset && topBarController.isExpanded && data.translation.height < 0 {
+            if topBarController.isExpanded && data.translation.height < 0 {
                 withAnimation(.easeInOut(duration: 0.3)) {
                     topBarController.collapse()
                 }
@@ -71,10 +65,6 @@ struct PostListView<Item: Identifiable, Content: View, EmptyContent: View, Loadi
     
     var body: some View {
         ZStack {
-            if showBackground {
-                FeedViewBackground()
-            }
-            
             ScrollView {
                 LazyVStack(spacing: spacing) {
                     // Optional header content
@@ -93,10 +83,8 @@ struct PostListView<Item: Identifiable, Content: View, EmptyContent: View, Loadi
             }
             .padding(0)
             .simultaneousGesture(listDrag)
-            .if(showTopBarInset) { view in
-                view.safeAreaInset(edge: .top) {
-                    Spacer().frame(height: topBarController.topBarInset)
-                }
+            .safeAreaInset(edge: .top) {
+                Spacer().frame(height: topBarController.topBarInset)
             }
             .if(onRefresh != nil) { view in
                 view.refreshable {

@@ -19,8 +19,6 @@ struct TimelineView: View {
             isLoading: viewModel.isLoading,
             isLoadingMore: viewModel.isLoadingMore,
             spacing: 0,
-            showBackground: false,
-            showTopBarInset: true,
             listAccessibilityIdentifier: "timeline_list",
             onRefresh: {
                 await viewModel.refresh()

@@ -19,9 +19,7 @@ enum NavigationDestination {
     case quotePost(post: Post)               // Quote post composer
     
     // Settings
-    case instanceSettings
     case userSettings
-    case blueskySettings
     
     // Timeline types
     enum TimelineType: Hashable {
@@ -49,14 +47,6 @@ extension NavigationDestination: Hashable {
         case (.quotePost(let post1), .quotePost(let post2)):
             return post1.id == post2.id
             
-        // Settings
-        case (.instanceSettings, .instanceSettings):
-            return true
-        case (.userSettings, .userSettings):
-            return true
-        case (.blueskySettings, .blueskySettings):
-            return true
-            
         default:
             return false
         }
@@ -81,13 +71,8 @@ extension NavigationDestination: Hashable {
             hasher.combine("quotePost")
             hasher.combine(post.id)
             
-        // Settings
-        case .instanceSettings:
-            hasher.combine("instanceSettings")
         case .userSettings:
             hasher.combine("userSettings")
-        case .blueskySettings:
-            hasher.combine("blueskySettings")
         }
     }
 }
@@ -146,15 +131,8 @@ class NavigationCoordinator: ObservableObject {
             // TODO: Create QuotePostView
             Text("Quote post: \(post.text)")
             
-        // Settings
-        case .instanceSettings:
-            InstanceSettings()
-            
         case .userSettings:
             UserSettings()
-            
-        case .blueskySettings:
-            BlueskySettings()
         }
     }
     

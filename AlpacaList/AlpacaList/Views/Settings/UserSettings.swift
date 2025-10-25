@@ -39,30 +39,10 @@ struct UserSettingsAddUserButton: View {
 struct UserSettings: View {
     @State var selectedUser: String?
     @EnvironmentObject var navigationCoordinator: NavigationCoordinator
+    @EnvironmentObject var topBarController: TopBarController
     
     var body: some View {
         SettingsList {
-            // Bluesky Section
-            SettingsSection(title: "Bluesky") {
-                SettingsButton(action: {
-                    navigationCoordinator.push(.blueskySettings)
-                }) {
-                    HStack {
-                        Image(systemName: "cloud")
-                            .font(.system(size: 20))
-                            .fontWeight(.bold)
-                            .frame(width: 20)
-                        Spacer().frame(width: 20)
-                        Text("Bluesky Accounts")
-                            .settingsItemFont()
-                        Spacer()
-                        Image(systemName: "chevron.right")
-                            .foregroundColor(.secondary)
-                    }
-                    .padding(5)
-                }
-            }
-            
             // Legacy Users Section
             SettingsSection(title: "Active User") {
                 ForEach(fakeUsers, id: \.self) { user in
@@ -84,6 +64,9 @@ struct UserSettings: View {
                 )
                 UserSettingsAddUserButton(action: { print("meow")})
             }
+        }
+        .safeAreaInset(edge: .top) {
+            Spacer().frame(height: topBarController.topBarInset)
         }
     }
 }

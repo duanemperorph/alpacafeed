@@ -20,8 +20,6 @@ struct ThreadView: View {
             isLoading: viewModel.isLoading,
             isLoadingMore: viewModel.isLoadingMoreReplies,
             spacing: 0,
-            showBackground: false,
-            showTopBarInset: true,
             listAccessibilityIdentifier: "thread_list",
             onRefresh: {
                 await viewModel.refresh()
