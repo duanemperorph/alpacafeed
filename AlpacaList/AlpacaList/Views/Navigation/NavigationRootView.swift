@@ -22,6 +22,10 @@ struct NavigationRootView: View {
         .safeAreaInset(edge: .top) {
             TopBarContainer()
         }
+        .sheet(isPresented: $navigationCoordinator.showingComposeSheet) {
+            ComposeView(replyTo: navigationCoordinator.composeReplyTo)
+                .environmentObject(navigationCoordinator)
+        }
     }
 }
 

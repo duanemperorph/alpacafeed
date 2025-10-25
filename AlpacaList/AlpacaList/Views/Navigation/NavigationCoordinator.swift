@@ -82,6 +82,13 @@ extension NavigationDestination: Hashable {
 class NavigationCoordinator: ObservableObject {
     @Published var navigationStack: [NavigationDestination]
     
+    // Compose sheet state (for modal presentation)
+    @Published var showingComposeSheet: Bool = false
+    @Published var composeReplyTo: Post? = nil
+    
+    // Current thread context (for context-aware compose)
+    @Published var currentThreadRootPost: Post? = nil
+    
     init() {
         navigationStack = []
     }
@@ -105,6 +112,18 @@ class NavigationCoordinator: ObservableObject {
     func popToRoot() {
         navigationStack.removeAll()
     }
+    
+    func presentCompose(replyTo: Post? = nil) {
+        composeReplyTo = replyTo
+        showingComposeSheet = true
+    }
+    
+    func presentComposeContextAware() {
+        // If we're in a thread view, reply to the thread's root post
+        // Otherwise, create a new post
+        composeReplyTo = currentThreadRootPost
+        showingComposeSheet = true
+    }
 
     @ViewBuilder func viewForDestination(destination: NavigationDestination) -> some View {
         switch destination {
@@ -124,8 +143,7 @@ class NavigationCoordinator: ObservableObject {
             TimelineView(viewModel: viewModel)
             
         case .compose(let replyTo):
-            // TODO: Create ComposeView
-            Text("Compose new post")
+            ComposeView(replyTo: replyTo)
             
         case .quotePost(let post):
             // TODO: Create QuotePostView

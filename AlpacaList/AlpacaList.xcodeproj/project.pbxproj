@@ -37,6 +37,7 @@
 		37B0A0AB2EAAA33300DBB593 /* AuthorHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B0A0A22EAAA33300DBB593 /* AuthorHeader.swift */; };
 		37B0A0AE2EAAA34200DBB593 /* ThreadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B0A0AC2EAAA34200DBB593 /* ThreadView.swift */; };
 		37B0A0AF2EAAA34200DBB593 /* TimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B0A0AD2EAAA34200DBB593 /* TimelineView.swift */; };
+		37B0A0B02EAAA35300DBB593 /* ComposeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B0A0B12EAAA35300DBB593 /* ComposeView.swift */; };
 		37CF46AB2A50FAF700952075 /* AlpacaListApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37CF46AA2A50FAF700952075 /* AlpacaListApp.swift */; };
 		37CF46AF2A50FAF800952075 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 37CF46AE2A50FAF800952075 /* Assets.xcassets */; };
 		37CF46B22A50FAF800952075 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 37CF46B12A50FAF800952075 /* Preview Assets.xcassets */; };
@@ -101,6 +102,7 @@
 		37B0A0A62EAAA33300DBB593 /* RichTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RichTextView.swift; sourceTree = "<group>"; };
 		37B0A0AC2EAAA34200DBB593 /* ThreadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreadView.swift; sourceTree = "<group>"; };
 		37B0A0AD2EAAA34200DBB593 /* TimelineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineView.swift; sourceTree = "<group>"; };
+		37B0A0B12EAAA35300DBB593 /* ComposeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComposeView.swift; sourceTree = "<group>"; };
 		37CF46A72A50FAF700952075 /* AlpacaList.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AlpacaList.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		37CF46AA2A50FAF700952075 /* AlpacaListApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlpacaListApp.swift; sourceTree = "<group>"; };
 		37CF46AE2A50FAF800952075 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -160,6 +162,7 @@
 			children = (
 				37B0A0AC2EAAA34200DBB593 /* ThreadView.swift */,
 				37B0A0AD2EAAA34200DBB593 /* TimelineView.swift */,
+				37B0A0B12EAAA35300DBB593 /* ComposeView.swift */,
 				37E8CC872E58E475005C7C63 /* PostListView.swift */,
 			);
 			path = Feeds;
@@ -477,6 +480,7 @@
 				376BB76B2A8080BA00AE9FB0 /* Buttons.swift in Sources */,
 				37B0A0AE2EAAA34200DBB593 /* ThreadView.swift in Sources */,
 				37B0A0AF2EAAA34200DBB593 /* TimelineView.swift in Sources */,
+				37B0A0B02EAAA35300DBB593 /* ComposeView.swift in Sources */,
 				37346BD32A520AB800CB346A /* TopBarExpanded.swift in Sources */,
 				370A25B62A54FA400076D378 /* TopBarContainer.swift in Sources */,
 				37E8CC862E58E475005C7C63 /* PostListView.swift in Sources */,

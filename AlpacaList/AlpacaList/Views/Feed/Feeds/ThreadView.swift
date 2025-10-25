@@ -11,8 +11,6 @@ import SwiftUI
 struct ThreadView: View {
     @ObservedObject var viewModel: ThreadViewModel
     @EnvironmentObject var navigationCoordinator: NavigationCoordinator
-    @State private var showingReplyComposer = false
-    @State private var replyToUri: String?
     
     var body: some View {
         PostListView(
@@ -61,8 +59,7 @@ struct ThreadView: View {
                             viewModel.repost(uri: uri)
                         },
                         onReply: { uri in
-                            replyToUri = uri
-                            showingReplyComposer = true
+                            navigationCoordinator.presentCompose(replyTo: viewModel.rootPost)
                         },
                         onQuotePostTap: { uri in
                             // TODO: Navigate to quoted post
@@ -103,8 +100,10 @@ struct ThreadView: View {
                         viewModel.repost(uri: uri)
                     },
                     onReply: { uri in
-                        replyToUri = uri
-                        showingReplyComposer = true
+                        // Find the post being replied to
+                        if let post = viewModel.replies.first(where: { $0.uri == uri }) {
+                            navigationCoordinator.presentCompose(replyTo: post)
+                        }
                     },
                     onQuotePostTap: { uri in
                         navigationCoordinator.push(.thread(uri: uri))
@@ -120,16 +119,16 @@ struct ThreadView: View {
                 ProgressView("Loading thread...")
             }
         )
-        .sheet(isPresented: $showingReplyComposer) {
-            // TODO: Reply composer
-            if let uri = replyToUri {
-                Text("Reply to: \(uri)")
-            }
-        }
         .onAppear {
             if viewModel.rootPost == nil {
                 viewModel.fetchThread()
             }
+            // Set current thread context for context-aware compose
+            navigationCoordinator.currentThreadRootPost = viewModel.rootPost
+        }
+        .onDisappear {
+            // Clear thread context when leaving thread view
+            navigationCoordinator.currentThreadRootPost = nil
         }
     }
     

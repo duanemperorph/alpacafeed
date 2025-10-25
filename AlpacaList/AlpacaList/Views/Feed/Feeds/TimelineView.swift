@@ -11,7 +11,6 @@ import SwiftUI
 struct TimelineView: View {
     @ObservedObject var viewModel: TimelineViewModel
     @EnvironmentObject var navigationCoordinator: NavigationCoordinator
-    @State private var showingComposer = false
     
     var body: some View {
         PostListView(
@@ -39,7 +38,10 @@ struct TimelineView: View {
                         viewModel.repost(uri: uri)
                     },
                     onReply: { uri in
-                        showingComposer = true
+                        // Find the post being replied to
+                        if let post = viewModel.posts.first(where: { $0.uri == uri }) {
+                            navigationCoordinator.presentCompose(replyTo: post)
+                        }
                     },
                     onQuotePostTap: { uri in
                         navigationCoordinator.push(.thread(uri: uri))
@@ -73,15 +75,15 @@ struct TimelineView: View {
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 Button(action: {
-                    showingComposer = true
+                    navigationCoordinator.presentCompose()
                 }) {
                     Image(systemName: "square.and.pencil")
                 }
             }
         }
-        .sheet(isPresented: $showingComposer) {
-            // TODO: Compose view
-            Text("Compose new post")
+        .onAppear {
+            // Clear thread context when viewing timeline
+            navigationCoordinator.currentThreadRootPost = nil
         }
     }
 }

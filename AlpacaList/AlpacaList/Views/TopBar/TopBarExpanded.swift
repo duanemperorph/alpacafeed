@@ -74,7 +74,7 @@ struct ButtonSubBarView: View {
             
             // Compose button
             Button(action: {
-                navigationCoordinator.push(.compose(replyTo: nil))
+                navigationCoordinator.presentComposeContextAware()
             }) {
                 Image(systemName: "plus")
             }
