@@ -35,7 +35,6 @@
 		37B0A0A92EAAA33300DBB593 /* EngagementBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B0A0A32EAAA33300DBB593 /* EngagementBar.swift */; };
 		37B0A0AA2EAAA33300DBB593 /* PostCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B0A0A42EAAA33300DBB593 /* PostCard.swift */; };
 		37B0A0AB2EAAA33300DBB593 /* AuthorHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B0A0A22EAAA33300DBB593 /* AuthorHeader.swift */; };
-		37EMBED0000000000000001 /* EmbedPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37EMBED0000000000000002 /* EmbedPreview.swift */; };
 		37B0A0AE2EAAA34200DBB593 /* ThreadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B0A0AC2EAAA34200DBB593 /* ThreadView.swift */; };
 		37B0A0AF2EAAA34200DBB593 /* TimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B0A0AD2EAAA34200DBB593 /* TimelineView.swift */; };
 		37B0A0B02EAAA35300DBB593 /* ComposeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B0A0B12EAAA35300DBB593 /* ComposeView.swift */; };
@@ -52,6 +51,8 @@
 		37DB552C2E72331200736A52 /* BasicFlowUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37DB552B2E72331200736A52 /* BasicFlowUITests.swift */; };
 		37DC2B852A9BD59300D6B879 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37DC2B842A9BD59300D6B879 /* Helpers.swift */; };
 		37E8CC862E58E475005C7C63 /* PostListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37E8CC872E58E475005C7C63 /* PostListView.swift */; };
+		37EMBED0000000000000001 /* EmbedPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37EMBED0000000000000002 /* EmbedPreview.swift */; };
+		37F1983D2EAD8A6700AD8A67 /* ComposeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F1983C2EAD8A6700AD8A67 /* ComposeViewModel.swift */; };
 		75FA6A039CAD498AB3E99969E38A5DD9 /* BlueskyFeedSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97D03336943F43AFABCE34A2167CEDA0 /* BlueskyFeedSelector.swift */; };
 /* End PBXBuildFile section */
 
@@ -97,7 +98,6 @@
 		37B0A09D2EAAA32000DBB593 /* ThreadViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreadViewModel.swift; sourceTree = "<group>"; };
 		37B0A09E2EAAA32000DBB593 /* TimelineViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineViewModel.swift; sourceTree = "<group>"; };
 		37B0A0A22EAAA33300DBB593 /* AuthorHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthorHeader.swift; sourceTree = "<group>"; };
-		37EMBED0000000000000002 /* EmbedPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmbedPreview.swift; sourceTree = "<group>"; };
 		37B0A0A32EAAA33300DBB593 /* EngagementBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EngagementBar.swift; sourceTree = "<group>"; };
 		37B0A0A42EAAA33300DBB593 /* PostCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostCard.swift; sourceTree = "<group>"; };
 		37B0A0A52EAAA33300DBB593 /* PostEmbed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostEmbed.swift; sourceTree = "<group>"; };
@@ -122,6 +122,8 @@
 		37DB552B2E72331200736A52 /* BasicFlowUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicFlowUITests.swift; sourceTree = "<group>"; };
 		37DC2B842A9BD59300D6B879 /* Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
 		37E8CC872E58E475005C7C63 /* PostListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostListView.swift; sourceTree = "<group>"; };
+		37EMBED0000000000000002 /* EmbedPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmbedPreview.swift; sourceTree = "<group>"; };
+		37F1983C2EAD8A6700AD8A67 /* ComposeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComposeViewModel.swift; sourceTree = "<group>"; };
 		97D03336943F43AFABCE34A2167CEDA0 /* BlueskyFeedSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlueskyFeedSelector.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -191,6 +193,7 @@
 		3742DB9B2AA699BE00B7E83F /* VM */ = {
 			isa = PBXGroup;
 			children = (
+				37F1983C2EAD8A6700AD8A67 /* ComposeViewModel.swift */,
 				37B0A09C2EAAA32000DBB593 /* PostViewModel.swift */,
 				37B0A09D2EAAA32000DBB593 /* ThreadViewModel.swift */,
 				37B0A09E2EAAA32000DBB593 /* TimelineViewModel.swift */,
@@ -515,6 +518,7 @@
 				37B0A0A02EAAA32000DBB593 /* PostViewModel.swift in Sources */,
 				37B0A0A12EAAA32000DBB593 /* TimelineViewModel.swift in Sources */,
 				37B0A0972EAAA31200DBB593 /* ReplyRef.swift in Sources */,
+				37F1983D2EAD8A6700AD8A67 /* ComposeViewModel.swift in Sources */,
 				37B0A0982EAAA31200DBB593 /* Embed.swift in Sources */,
 				37B0A0992EAAA31200DBB593 /* Timeline.swift in Sources */,
 				37B0A09A2EAAA31200DBB593 /* Author.swift in Sources */,

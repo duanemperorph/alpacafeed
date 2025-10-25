@@ -11,61 +11,19 @@ import PhotosUI
 struct ComposeView: View {
     // MARK: - Properties
     
-    let replyTo: Post?
+    @StateObject private var viewModel: ComposeViewModel
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject var navigationCoordinator: NavigationCoordinator
     
-    @State private var postText: String = ""
+    // UI-only state
     @State private var showingDraftAlert = false
-    
-    // Generalized embed tracking (only ONE embed allowed per post)
-    @State private var currentEmbed: PendingEmbed? = nil
     @State private var selectedPhotoItems: [PhotosPickerItem] = []
     @State private var showingImagePicker = false
     
-    // Character limit for Bluesky posts
-    private let characterLimit = 300
-    private let maxImages = 4
+    // MARK: - Initialization
     
-    // MARK: - Computed Properties
-    
-    private var characterCount: Int {
-        postText.count
-    }
-    
-    private var isOverLimit: Bool {
-        characterCount > characterLimit
-    }
-    
-    private var canPost: Bool {
-        let hasText = !postText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-        let hasEmbed = currentEmbed != nil
-        return (hasText || hasEmbed) && !isOverLimit
-    }
-    
-    private var canAddImages: Bool {
-        guard let embed = currentEmbed else { return true }
-        return embed.hasImages && embed.imageCount < maxImages
-    }
-    
-    private var imageEmbedCount: Int {
-        currentEmbed?.imageCount ?? 0
-    }
-    
-    private var hasQuotePost: Bool {
-        currentEmbed?.isQuotePost ?? false
-    }
-    
-    private var hasImages: Bool {
-        currentEmbed?.hasImages ?? false
-    }
-    
-    private var placeholderText: String {
-        if let replyTo = replyTo {
-            return "Reply to @\(replyTo.author.handle)..."
-        } else {
-            return "What's on your mind?"
-        }
+    init(replyTo: Post? = nil) {
+        _viewModel = StateObject(wrappedValue: ComposeViewModel(replyTo: replyTo))
     }
     
     // MARK: - Body
@@ -74,7 +32,7 @@ struct ComposeView: View {
         NavigationView {
             VStack(spacing: 0) {
                 // Reply context header
-                if let replyTo = replyTo {
+                if let replyTo = viewModel.replyTo {
                     replyContextHeader(for: replyTo)
                 }
                 
@@ -82,14 +40,14 @@ struct ComposeView: View {
                 ZStack(alignment: .topLeading) {
                     Color.white
                     
-                    TextEditor(text: $postText)
+                    TextEditor(text: $viewModel.postText)
                         .font(.body)
                         .padding(8)
                         .scrollContentBackground(.hidden)
                         .background(Color.clear)
                     
-                    if postText.isEmpty {
-                        Text(placeholderText)
+                    if viewModel.postText.isEmpty {
+                        Text(viewModel.placeholderText)
                             .foregroundColor(.secondary)
                             .padding(.horizontal, 12)
                             .padding(.vertical, 16)
@@ -98,15 +56,15 @@ struct ComposeView: View {
                 }
                 
                 // Embed preview (images, video, link, quote)
-                if let embed = currentEmbed {
+                if let embed = viewModel.currentEmbed {
                     EmbedPreview(
                         embed: embed,
-                        maxImages: maxImages,
+                        maxImages: viewModel.maxImages,
                         onRemoveEmbed: {
-                            currentEmbed = nil
+                            viewModel.removeEmbed()
                         },
                         onRemoveImage: { index in
-                            removeImage(at: index)
+                            viewModel.removeImage(at: index)
                         }
                     )
                 }
@@ -118,7 +76,7 @@ struct ComposeView: View {
                     
                     HStack(spacing: 0) {
                         // Media attachment buttons - evenly spaced
-                        attachmentButton(icon: "photo", label: "Photos", isEnabled: canAddImages) {
+                        attachmentButton(icon: "photo", label: "Photos", isEnabled: viewModel.canAddImages) {
                             showingImagePicker = true
                         }
                         
@@ -143,16 +101,16 @@ struct ComposeView: View {
                         Spacer()
                         
                         // Character counter
-                        Text("\(characterCount)/\(characterLimit)")
+                        Text("\(viewModel.characterCount)/\(viewModel.characterLimit)")
                             .font(.caption)
-                            .foregroundColor(isOverLimit ? .red : (characterCount > characterLimit - 50 ? .orange : .white.opacity(0.75)))
+                            .foregroundColor(viewModel.isOverLimit ? .red : (viewModel.characterCount > viewModel.characterLimit - 50 ? .orange : .white.opacity(0.75)))
                     }
                     .padding()
                     .background(.regularMaterial)
                     .environment(\.colorScheme, .dark)
                 }
             }
-            .navigationTitle(replyTo == nil ? "New Post" : "Reply")
+            .navigationTitle(viewModel.replyTo == nil ? "New Post" : "Reply")
             .navigationBarTitleDisplayMode(.inline)
             .toolbarBackground(.regularMaterial, for: .navigationBar)
             .toolbarBackground(.visible, for: .navigationBar)
@@ -160,7 +118,7 @@ struct ComposeView: View {
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") {
-                        if !postText.isEmpty {
+                        if viewModel.hasDraft {
                             showingDraftAlert = true
                         } else {
                             dismiss()
@@ -173,14 +131,14 @@ struct ComposeView: View {
                     Button("Post") {
                         postAction()
                     }
-                    .disabled(!canPost)
+                    .disabled(!viewModel.canPost)
                     .fontWeight(.bold)
-                    .foregroundColor(canPost ? .white : .white.opacity(0.5))
+                    .foregroundColor(viewModel.canPost ? .white : .white.opacity(0.5))
                 }
             }
             .alert("Discard Post?", isPresented: $showingDraftAlert) {
                 Button("Save Draft", role: .cancel) {
-                    // TODO: Implement draft saving
+                    viewModel.saveDraft()
                     dismiss()
                 }
                 Button("Discard", role: .destructive) {
@@ -192,12 +150,13 @@ struct ComposeView: View {
             .photosPicker(
                 isPresented: $showingImagePicker,
                 selection: $selectedPhotoItems,
-                maxSelectionCount: maxImages - imageEmbedCount,
+                maxSelectionCount: viewModel.maxImages - viewModel.imageEmbedCount,
                 matching: .images
             )
             .onChange(of: selectedPhotoItems) { oldItems, newItems in
                 Task {
-                    await loadImages(from: newItems)
+                    await viewModel.loadImages(from: newItems)
+                    selectedPhotoItems = []
                 }
             }
         }
@@ -245,84 +204,14 @@ struct ComposeView: View {
     // MARK: - Actions
     
     private func postAction() {
-        // TODO: Implement actual post creation with API
-        print("Posting: \(postText)")
-        if let replyTo = replyTo {
-            print("Reply to: \(replyTo.uri)")
-        }
-        
-        if let embed = currentEmbed {
-            switch embed {
-            case .images(let images):
-                print("With \(images.count) images")
-                // TODO: Upload images and create Embed.images
-                // let imageEmbeds = images.map { pendingImage in
-                //     Embed.ImageEmbed(
-                //         thumb: "uploaded_thumb_url",
-                //         fullsize: "uploaded_fullsize_url",
-                //         alt: pendingImage.altText,
-                //         aspectRatio: Embed.AspectRatio(
-                //             width: Int(pendingImage.image.size.width),
-                //             height: Int(pendingImage.image.size.height)
-                //         )
-                //     )
-                // }
-                // embed = .images(imageEmbeds)
-                
-            case .video(_, let duration):
-                print("With video (duration: \(duration)s)")
-                // TODO: Upload video and create Embed.video
-                
-            case .external(let url, _, _, _):
-                print("With external link: \(url)")
-                // TODO: Create Embed.external
-                
-            case .record(let uri, _):
-                print("Quote post: \(uri)")
-                // TODO: Create Embed.record
-                
-            case .recordWithImages(let uri, _, let images):
-                print("Quote post with \(images.count) images: \(uri)")
-                // TODO: Create Embed.recordWithMedia
+        Task {
+            do {
+                try await viewModel.createPost()
+                dismiss()
+            } catch {
+                // TODO: Show error alert to user
+                print("Error posting: \(error)")
             }
-        }
-        
-        dismiss()
-    }
-    
-    private func loadImages(from items: [PhotosPickerItem]) async {
-        var newImages: [PendingImage] = []
-        
-        for item in items {
-            if let data = try? await item.loadTransferable(type: Data.self),
-               let image = UIImage(data: data) {
-                newImages.append(PendingImage(image: image))
-            }
-        }
-        
-        await MainActor.run {
-            // Add to existing images or create new embed
-            if case .images(let existingImages) = currentEmbed {
-                var updatedImages = existingImages
-                updatedImages.append(contentsOf: newImages)
-                currentEmbed = .images(updatedImages)
-            } else {
-                // Create new image embed
-                currentEmbed = .images(newImages)
-            }
-            
-            selectedPhotoItems = []
-        }
-    }
-    
-    private func removeImage(at index: Int) {
-        guard case .images(var images) = currentEmbed else { return }
-        images.remove(at: index)
-        
-        if images.isEmpty {
-            currentEmbed = nil
-        } else {
-            currentEmbed = .images(images)
         }
     }
 }
