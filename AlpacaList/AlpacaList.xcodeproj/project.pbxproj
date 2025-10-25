@@ -35,6 +35,7 @@
 		37B0A0A92EAAA33300DBB593 /* EngagementBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B0A0A32EAAA33300DBB593 /* EngagementBar.swift */; };
 		37B0A0AA2EAAA33300DBB593 /* PostCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B0A0A42EAAA33300DBB593 /* PostCard.swift */; };
 		37B0A0AB2EAAA33300DBB593 /* AuthorHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B0A0A22EAAA33300DBB593 /* AuthorHeader.swift */; };
+		37EMBED0000000000000001 /* EmbedPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37EMBED0000000000000002 /* EmbedPreview.swift */; };
 		37B0A0AE2EAAA34200DBB593 /* ThreadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B0A0AC2EAAA34200DBB593 /* ThreadView.swift */; };
 		37B0A0AF2EAAA34200DBB593 /* TimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B0A0AD2EAAA34200DBB593 /* TimelineView.swift */; };
 		37B0A0B02EAAA35300DBB593 /* ComposeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B0A0B12EAAA35300DBB593 /* ComposeView.swift */; };
@@ -96,6 +97,7 @@
 		37B0A09D2EAAA32000DBB593 /* ThreadViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreadViewModel.swift; sourceTree = "<group>"; };
 		37B0A09E2EAAA32000DBB593 /* TimelineViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineViewModel.swift; sourceTree = "<group>"; };
 		37B0A0A22EAAA33300DBB593 /* AuthorHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthorHeader.swift; sourceTree = "<group>"; };
+		37EMBED0000000000000002 /* EmbedPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmbedPreview.swift; sourceTree = "<group>"; };
 		37B0A0A32EAAA33300DBB593 /* EngagementBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EngagementBar.swift; sourceTree = "<group>"; };
 		37B0A0A42EAAA33300DBB593 /* PostCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostCard.swift; sourceTree = "<group>"; };
 		37B0A0A52EAAA33300DBB593 /* PostEmbed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostEmbed.swift; sourceTree = "<group>"; };
@@ -243,6 +245,7 @@
 			isa = PBXGroup;
 			children = (
 				37B0A0A22EAAA33300DBB593 /* AuthorHeader.swift */,
+				37EMBED0000000000000002 /* EmbedPreview.swift */,
 				37B0A0A32EAAA33300DBB593 /* EngagementBar.swift */,
 				37B0A0A42EAAA33300DBB593 /* PostCard.swift */,
 				37B0A0A52EAAA33300DBB593 /* PostEmbed.swift */,
@@ -505,6 +508,7 @@
 				37B0A0A92EAAA33300DBB593 /* EngagementBar.swift in Sources */,
 				37B0A0AA2EAAA33300DBB593 /* PostCard.swift in Sources */,
 				37B0A0AB2EAAA33300DBB593 /* AuthorHeader.swift in Sources */,
+				37EMBED0000000000000001 /* EmbedPreview.swift in Sources */,
 				37428E962AA91CE800E59607 /* RootPreview.swift in Sources */,
 				37B0A0962EAAA31200DBB593 /* Facet.swift in Sources */,
 				37B0A09F2EAAA32000DBB593 /* ThreadViewModel.swift in Sources */,

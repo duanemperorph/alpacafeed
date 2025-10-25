@@ -18,9 +18,8 @@ struct ComposeView: View {
     @State private var postText: String = ""
     @State private var showingDraftAlert = false
     
-    // Image attachment state
-    @State private var selectedImages: [UIImage] = []
-    @State private var imageAltTexts: [String] = [] // Alt text for each image
+    // Generalized embed tracking (only ONE embed allowed per post)
+    @State private var currentEmbed: PendingEmbed? = nil
     @State private var selectedPhotoItems: [PhotosPickerItem] = []
     @State private var showingImagePicker = false
     
@@ -40,12 +39,25 @@ struct ComposeView: View {
     
     private var canPost: Bool {
         let hasText = !postText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-        let hasImages = !selectedImages.isEmpty
-        return (hasText || hasImages) && !isOverLimit
+        let hasEmbed = currentEmbed != nil
+        return (hasText || hasEmbed) && !isOverLimit
     }
     
     private var canAddImages: Bool {
-        selectedImages.count < maxImages
+        guard let embed = currentEmbed else { return true }
+        return embed.hasImages && embed.imageCount < maxImages
+    }
+    
+    private var imageEmbedCount: Int {
+        currentEmbed?.imageCount ?? 0
+    }
+    
+    private var hasQuotePost: Bool {
+        currentEmbed?.isQuotePost ?? false
+    }
+    
+    private var hasImages: Bool {
+        currentEmbed?.hasImages ?? false
     }
     
     private var placeholderText: String {
@@ -85,9 +97,18 @@ struct ComposeView: View {
                     }
                 }
                 
-                // Image preview grid
-                if !selectedImages.isEmpty {
-                    imagePreviewGrid
+                // Embed preview (images, video, link, quote)
+                if let embed = currentEmbed {
+                    EmbedPreview(
+                        embed: embed,
+                        maxImages: maxImages,
+                        onRemoveEmbed: {
+                            currentEmbed = nil
+                        },
+                        onRemoveImage: { index in
+                            removeImage(at: index)
+                        }
+                    )
                 }
                 
                 // Bottom toolbar (dark with white buttons)
@@ -171,10 +192,10 @@ struct ComposeView: View {
             .photosPicker(
                 isPresented: $showingImagePicker,
                 selection: $selectedPhotoItems,
-                maxSelectionCount: maxImages - selectedImages.count,
+                maxSelectionCount: maxImages - imageEmbedCount,
                 matching: .images
             )
-            .onChange(of: selectedPhotoItems) { newItems in
+            .onChange(of: selectedPhotoItems) { oldItems, newItems in
                 Task {
                     await loadImages(from: newItems)
                 }
@@ -210,57 +231,6 @@ struct ComposeView: View {
             .background(Color.gray.opacity(0.3))
     }
     
-    private var imagePreviewGrid: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 12) {
-                    ForEach(Array(selectedImages.enumerated()), id: \.offset) { index, image in
-                        imagePreviewCard(image: image, index: index)
-                    }
-                }
-                .padding(.horizontal)
-            }
-            
-            // Image count indicator
-            HStack {
-                Image(systemName: "photo.stack")
-                    .foregroundColor(.secondary)
-                Text("\(selectedImages.count) of \(maxImages) images")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-            }
-            .padding(.horizontal)
-        }
-        .padding(.vertical, 8)
-        .background(Color(.systemGray6))
-    }
-    
-    private func imagePreviewCard(image: UIImage, index: Int) -> some View {
-        ZStack(alignment: .topTrailing) {
-            Image(uiImage: image)
-                .resizable()
-                .scaledToFill()
-                .frame(width: 120, height: 120)
-                .clipShape(RoundedRectangle(cornerRadius: 8))
-            
-            // Remove button
-            Button {
-                removeImage(at: index)
-            } label: {
-                Image(systemName: "xmark.circle.fill")
-                    .font(.system(size: 24))
-                    .foregroundColor(.white)
-                    .background(
-                        Circle()
-                            .fill(Color.black.opacity(0.6))
-                            .frame(width: 24, height: 24)
-                    )
-            }
-            .padding(6)
-        }
-        .frame(width: 120, height: 120)
-    }
-    
     private func attachmentButton(icon: String, label: String, isEnabled: Bool, action: @escaping () -> Void) -> some View {
         Button(action: action) {
             Image(systemName: icon)
@@ -281,43 +251,79 @@ struct ComposeView: View {
             print("Reply to: \(replyTo.uri)")
         }
         
-        if !selectedImages.isEmpty {
-            print("With \(selectedImages.count) images")
-            // TODO: Upload images and create Embed.images
-            // For now, this would create:
-            // let imageEmbeds = selectedImages.enumerated().map { index, image in
-            //     Embed.ImageEmbed(
-            //         thumb: "uploaded_thumb_url",
-            //         fullsize: "uploaded_fullsize_url",
-            //         alt: imageAltTexts[index],
-            //         aspectRatio: Embed.AspectRatio(width: Int(image.size.width), height: Int(image.size.height))
-            //     )
-            // }
-            // embed = .images(imageEmbeds)
+        if let embed = currentEmbed {
+            switch embed {
+            case .images(let images):
+                print("With \(images.count) images")
+                // TODO: Upload images and create Embed.images
+                // let imageEmbeds = images.map { pendingImage in
+                //     Embed.ImageEmbed(
+                //         thumb: "uploaded_thumb_url",
+                //         fullsize: "uploaded_fullsize_url",
+                //         alt: pendingImage.altText,
+                //         aspectRatio: Embed.AspectRatio(
+                //             width: Int(pendingImage.image.size.width),
+                //             height: Int(pendingImage.image.size.height)
+                //         )
+                //     )
+                // }
+                // embed = .images(imageEmbeds)
+                
+            case .video(_, let duration):
+                print("With video (duration: \(duration)s)")
+                // TODO: Upload video and create Embed.video
+                
+            case .external(let url, _, _, _):
+                print("With external link: \(url)")
+                // TODO: Create Embed.external
+                
+            case .record(let uri, _):
+                print("Quote post: \(uri)")
+                // TODO: Create Embed.record
+                
+            case .recordWithImages(let uri, _, let images):
+                print("Quote post with \(images.count) images: \(uri)")
+                // TODO: Create Embed.recordWithMedia
+            }
         }
         
         dismiss()
     }
     
     private func loadImages(from items: [PhotosPickerItem]) async {
+        var newImages: [PendingImage] = []
+        
         for item in items {
             if let data = try? await item.loadTransferable(type: Data.self),
                let image = UIImage(data: data) {
-                await MainActor.run {
-                    selectedImages.append(image)
-                    imageAltTexts.append("") // Default empty alt text
-                }
+                newImages.append(PendingImage(image: image))
             }
         }
-        // Clear selection after loading
+        
         await MainActor.run {
+            // Add to existing images or create new embed
+            if case .images(let existingImages) = currentEmbed {
+                var updatedImages = existingImages
+                updatedImages.append(contentsOf: newImages)
+                currentEmbed = .images(updatedImages)
+            } else {
+                // Create new image embed
+                currentEmbed = .images(newImages)
+            }
+            
             selectedPhotoItems = []
         }
     }
     
     private func removeImage(at index: Int) {
-        selectedImages.remove(at: index)
-        imageAltTexts.remove(at: index)
+        guard case .images(var images) = currentEmbed else { return }
+        images.remove(at: index)
+        
+        if images.isEmpty {
+            currentEmbed = nil
+        } else {
+            currentEmbed = .images(images)
+        }
     }
 }
 
