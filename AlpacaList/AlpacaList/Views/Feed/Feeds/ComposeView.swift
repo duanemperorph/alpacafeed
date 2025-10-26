@@ -107,9 +107,7 @@ struct ComposeView: View {
             }
             .navigationTitle(viewModel.replyTo == nil ? "New Post" : "Reply")
             .navigationBarTitleDisplayMode(.inline)
-            .toolbarBackground(.regularMaterial, for: .navigationBar)
-            .toolbarBackground(.visible, for: .navigationBar)
-            .toolbarColorScheme(.dark, for: .navigationBar)
+            .alpacaListNavigationBar()
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") {

@@ -38,12 +38,14 @@ struct LinkInputSheet: View {
             }
             .navigationTitle("Add Link")
             .navigationBarTitleDisplayMode(.inline)
+            .alpacaListNavigationBar()
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") {
                         urlInput = ""
                         isPresented = false
                     }
+                    .foregroundColor(.white)
                 }
                 
                 ToolbarItem(placement: .confirmationAction) {
@@ -55,6 +57,7 @@ struct LinkInputSheet: View {
                         }
                     }
                     .disabled(urlInput.trimmingCharacters(in: .whitespaces).isEmpty || isLoading)
+                    .foregroundColor(urlInput.trimmingCharacters(in: .whitespaces).isEmpty || isLoading ? .white.opacity(0.5) : .white)
                 }
             }
         }
