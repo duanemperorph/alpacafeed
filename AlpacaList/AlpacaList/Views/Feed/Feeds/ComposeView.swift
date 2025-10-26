@@ -138,30 +138,21 @@ struct ComposeView: View {
             } message: {
                 Text("Do you want to save this as a draft?")
             }
-            .photosPicker(
+            .managedPhotoPicker(
                 isPresented: $viewModel.showingImagePicker,
-                selection: $viewModel.selectedPhotoItems,
                 maxSelectionCount: viewModel.maxImages - viewModel.imageEmbedCount,
-                matching: .images
-            )
-            .onChange(of: viewModel.selectedPhotoItems) { oldItems, newItems in
-                Task {
-                    await viewModel.handlePhotoItemsChange()
+                onPhotosSelected: { items in
+                    await viewModel.loadImages(from: items)
                 }
-            }
-            .photosPicker(
+            )
+            .managedVideoPicker(
                 isPresented: $viewModel.showingVideoPicker,
-                selection: $viewModel.selectedVideoItem,
-                matching: .videos
-            )
-            .onChange(of: viewModel.selectedVideoItem) { oldItem, newItem in
-                Task {
-                    await viewModel.handleVideoItemChange()
+                onVideoSelected: { item in
+                    await viewModel.loadVideo(from: item)
                 }
-            }
+            )
             .sheet(isPresented: $viewModel.showingLinkInput) {
                 LinkInputSheet(
-                    urlInput: $viewModel.linkURLInput,
                     isPresented: $viewModel.showingLinkInput,
                     isLoading: viewModel.isLoadingLink,
                     onAdd: { urlString in

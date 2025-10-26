@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1BF257CD0B321BD64C896E60 /* MediaPickerComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 865F76C1326788398C35F4EF /* MediaPickerComponents.swift */; };
 		370A25AF2A54B9F70076D378 /* TopBarMinimized.swift in Sources */ = {isa = PBXBuildFile; fileRef = 370A25AE2A54B9F70076D378 /* TopBarMinimized.swift */; };
 		370A25B62A54FA400076D378 /* TopBarContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 370A25B52A54FA400076D378 /* TopBarContainer.swift */; };
 		37346BD32A520AB800CB346A /* TopBarExpanded.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37346BD22A520AB800CB346A /* TopBarExpanded.swift */; };
@@ -52,8 +53,8 @@
 		37DC2B852A9BD59300D6B879 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37DC2B842A9BD59300D6B879 /* Helpers.swift */; };
 		37E8CC862E58E475005C7C63 /* PostListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37E8CC872E58E475005C7C63 /* PostListView.swift */; };
 		37EMBED0000000000000001 /* EmbedPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37EMBED0000000000000002 /* EmbedPreview.swift */; };
-		37LINKIN0000000000000001 /* LinkInputSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37LINKIN0000000000000002 /* LinkInputSheet.swift */; };
 		37F1983D2EAD8A6700AD8A67 /* ComposeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F1983C2EAD8A6700AD8A67 /* ComposeViewModel.swift */; };
+		37LINKIN0000000000000001 /* LinkInputSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37LINKIN0000000000000002 /* LinkInputSheet.swift */; };
 		75FA6A039CAD498AB3E99969E38A5DD9 /* BlueskyFeedSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97D03336943F43AFABCE34A2167CEDA0 /* BlueskyFeedSelector.swift */; };
 /* End PBXBuildFile section */
 
@@ -124,8 +125,9 @@
 		37DC2B842A9BD59300D6B879 /* Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
 		37E8CC872E58E475005C7C63 /* PostListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostListView.swift; sourceTree = "<group>"; };
 		37EMBED0000000000000002 /* EmbedPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmbedPreview.swift; sourceTree = "<group>"; };
-		37LINKIN0000000000000002 /* LinkInputSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkInputSheet.swift; sourceTree = "<group>"; };
 		37F1983C2EAD8A6700AD8A67 /* ComposeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComposeViewModel.swift; sourceTree = "<group>"; };
+		37LINKIN0000000000000002 /* LinkInputSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkInputSheet.swift; sourceTree = "<group>"; };
+		865F76C1326788398C35F4EF /* MediaPickerComponents.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MediaPickerComponents.swift; sourceTree = "<group>"; };
 		97D03336943F43AFABCE34A2167CEDA0 /* BlueskyFeedSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlueskyFeedSelector.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -261,6 +263,7 @@
 				37350F1E2A6DF2DC00DD239B /* PostItemButtons.swift */,
 				376BB76A2A8080B900AE9FB0 /* Buttons.swift */,
 				376BB76F2A80B40B00AE9FB0 /* PostComponents.swift */,
+				865F76C1326788398C35F4EF /* MediaPickerComponents.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -527,6 +530,7 @@
 				37B0A0992EAAA31200DBB593 /* Timeline.swift in Sources */,
 				37B0A09A2EAAA31200DBB593 /* Author.swift in Sources */,
 				37B0A09B2EAAA31200DBB593 /* Post.swift in Sources */,
+				1BF257CD0B321BD64C896E60 /* MediaPickerComponents.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

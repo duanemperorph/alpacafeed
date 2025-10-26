@@ -25,9 +25,6 @@ class ComposeViewModel: ObservableObject {
     @Published var showingImagePicker: Bool = false
     @Published var showingVideoPicker: Bool = false
     @Published var showingLinkInput: Bool = false
-    @Published var linkURLInput: String = ""
-    @Published var selectedPhotoItems: [PhotosPickerItem] = []
-    @Published var selectedVideoItem: PhotosPickerItem? = nil
     
     // MARK: - Properties
     
@@ -130,16 +127,7 @@ class ComposeViewModel: ObservableObject {
                 // Create new image embed
                 currentEmbed = .images(newImages)
             }
-            
-            // Clear the picker items after processing
-            selectedPhotoItems = []
         }
-    }
-    
-    /// Handle photo item selection changes
-    func handlePhotoItemsChange() async {
-        guard !selectedPhotoItems.isEmpty else { return }
-        await loadImages(from: selectedPhotoItems)
     }
     
     /// Load video from PhotosPicker item
@@ -184,18 +172,11 @@ class ComposeViewModel: ObservableObject {
             // Update the embed on main thread
             await MainActor.run {
                 currentEmbed = .video(thumbnail: thumbnail, duration: durationInSeconds)
-                selectedVideoItem = nil
             }
             
         } catch {
             print("Error loading video: \(error)")
         }
-    }
-    
-    /// Handle video item selection changes
-    func handleVideoItemChange() async {
-        guard let item = selectedVideoItem else { return }
-        await loadVideo(from: item)
     }
     
     /// Add external link with metadata fetching
@@ -220,7 +201,6 @@ class ComposeViewModel: ObservableObject {
         defer {
             Task { @MainActor in
                 isLoadingLink = false
-                linkURLInput = ""
                 showingLinkInput = false
             }
         }

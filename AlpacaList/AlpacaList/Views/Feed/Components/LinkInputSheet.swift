@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct LinkInputSheet: View {
-    @Binding var urlInput: String
+    @State private var urlInput: String = ""
     @Binding var isPresented: Bool
     
     let isLoading: Bool
@@ -70,7 +70,6 @@ struct LinkInputSheet: View {
 struct LinkInputSheet_Previews: PreviewProvider {
     static var previews: some View {
         LinkInputSheet(
-            urlInput: .constant(""),
             isPresented: .constant(true),
             isLoading: false,
             onAdd: { _ in }
