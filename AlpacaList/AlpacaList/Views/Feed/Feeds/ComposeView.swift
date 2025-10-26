@@ -19,6 +19,8 @@ struct ComposeView: View {
     @State private var showingDraftAlert = false
     @State private var selectedPhotoItems: [PhotosPickerItem] = []
     @State private var showingImagePicker = false
+    @State private var selectedVideoItem: PhotosPickerItem?
+    @State private var showingVideoPicker = false
     
     // MARK: - Initialization
     
@@ -82,8 +84,8 @@ struct ComposeView: View {
                         
                         Spacer()
                         
-                        attachmentButton(icon: "video", label: "Video", isEnabled: false) {
-                            // TODO: Implement video picker
+                        attachmentButton(icon: "video", label: "Video", isEnabled: viewModel.canAddVideo) {
+                            showingVideoPicker = true
                         }
                         
                         Spacer()
@@ -157,6 +159,19 @@ struct ComposeView: View {
                 Task {
                     await viewModel.loadImages(from: newItems)
                     selectedPhotoItems = []
+                }
+            }
+            .photosPicker(
+                isPresented: $showingVideoPicker,
+                selection: $selectedVideoItem,
+                matching: .videos
+            )
+            .onChange(of: selectedVideoItem) { oldItem, newItem in
+                if let newItem = newItem {
+                    Task {
+                        await viewModel.loadVideo(from: newItem)
+                        selectedVideoItem = nil
+                    }
                 }
             }
         }

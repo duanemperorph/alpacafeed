@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 import PhotosUI
+import AVFoundation
 
 /// View model for composing new posts and replies
 class ComposeViewModel: ObservableObject {
@@ -46,6 +47,15 @@ class ComposeViewModel: ObservableObject {
     var canAddImages: Bool {
         guard let embed = currentEmbed else { return true }
         return embed.hasImages && embed.imageCount < maxImages
+    }
+    
+    var canAddVideo: Bool {
+        // Can only add video if there's no embed, or if we already have a video
+        guard let embed = currentEmbed else { return true }
+        if case .video = embed {
+            return false // Already have a video
+        }
+        return false // Has some other embed
     }
     
     var imageEmbedCount: Int {
@@ -101,6 +111,55 @@ class ComposeViewModel: ObservableObject {
                 // Create new image embed
                 currentEmbed = .images(newImages)
             }
+        }
+    }
+    
+    /// Load video from PhotosPicker item
+    func loadVideo(from item: PhotosPickerItem) async {
+        guard canAddVideo else { return }
+        
+        do {
+            // Load the video file as Data
+            guard let data = try await item.loadTransferable(type: Data.self) else {
+                print("Failed to load video data")
+                return
+            }
+            
+            // Save to temporary file to extract metadata
+            let tempURL = FileManager.default.temporaryDirectory
+                .appendingPathComponent(UUID().uuidString)
+                .appendingPathExtension("mov")
+            
+            try data.write(to: tempURL)
+            
+            // Extract video metadata
+            let asset = AVAsset(url: tempURL)
+            let duration = try await asset.load(.duration)
+            let durationInSeconds = CMTimeGetSeconds(duration)
+            
+            // Generate thumbnail
+            let imageGenerator = AVAssetImageGenerator(asset: asset)
+            imageGenerator.appliesPreferredTrackTransform = true
+            
+            var thumbnail: UIImage?
+            do {
+                let time = CMTime(seconds: 0, preferredTimescale: 600)
+                let cgImage = try imageGenerator.copyCGImage(at: time, actualTime: nil)
+                thumbnail = UIImage(cgImage: cgImage)
+            } catch {
+                print("Failed to generate thumbnail: \(error)")
+            }
+            
+            // Clean up temporary file
+            try? FileManager.default.removeItem(at: tempURL)
+            
+            // Update the embed on main thread
+            await MainActor.run {
+                currentEmbed = .video(thumbnail: thumbnail, duration: durationInSeconds)
+            }
+            
+        } catch {
+            print("Error loading video: \(error)")
         }
     }
     
