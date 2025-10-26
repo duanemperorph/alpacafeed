@@ -136,7 +136,7 @@ class NavigationCoordinator: ObservableObject {
             
         case .thread(let post):
             // Initialize with the post we're viewing (semantic state!)
-            let viewModel = ThreadViewModel(post: post)
+            let viewModel = ThreadViewModel.withMockData(for: post)
             ThreadView(viewModel: viewModel)
             
         case .profile(let handle):

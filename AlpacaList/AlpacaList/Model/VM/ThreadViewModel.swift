@@ -211,11 +211,11 @@ class ThreadViewModel: ObservableObject {
     
     // MARK: - Mock Data (for testing)
     
-    static func withMockData() -> ThreadViewModel {
+    static func withMockData(for post: Post? = nil) -> ThreadViewModel {
         let mockAuthors = MockDataGenerator.mockAuthors
         
         // Create main post
-        let mainPost = Post.createTextPost(
+        let mainPost = post ?? Post.createTextPost(
             author: mockAuthors[0],
             text: "This is the main post in the thread. What do you all think?",
             createdAt: Date().addingTimeInterval(-3600)
