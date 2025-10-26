@@ -28,27 +28,19 @@ enum PendingEmbed: Equatable {
     case images([PendingImage])  // Up to 4 images
     case video(thumbnail: UIImage?, duration: Double)
     case external(url: URL, title: String?, description: String?, thumbnail: UIImage?)
-    case record(uri: String, cid: String)  // Quote post
-    case recordWithImages(uri: String, cid: String, images: [PendingImage])  // Quote + images
-    
-    var isQuotePost: Bool {
-        switch self {
-        case .record, .recordWithImages: return true
-        default: return false
-        }
-    }
     
     var hasImages: Bool {
         switch self {
-        case .images, .recordWithImages: return true
+        case .images:
+            return true
         default: return false
         }
     }
     
     var imageCount: Int {
         switch self {
-        case .images(let images): return images.count
-        case .recordWithImages(_, _, let images): return images.count
+        case .images(let images):
+            return images.count
         default: return 0
         }
     }
@@ -73,12 +65,7 @@ struct EmbedPreview: View {
                 
             case .external(let url, let title, let description, let thumbnail):
                 externalLinkPreview(url: url, title: title, description: description, thumbnail: thumbnail)
-                
-            case .record(let uri, _):
-                quotePostPreview(uri: uri, images: nil)
-                
-            case .recordWithImages(let uri, _, let images):
-                quotePostPreview(uri: uri, images: images)
+
             }
         }
         .padding(.vertical, 8)
@@ -305,14 +292,6 @@ struct EmbedPreview_Previews: PreviewProvider {
                     description: "This is an example link preview",
                     thumbnail: nil
                 ),
-                maxImages: 4,
-                onRemoveEmbed: {},
-                onRemoveImage: { _ in }
-            )
-            
-            // Quote post preview
-            EmbedPreview(
-                embed: .record(uri: "at://did:plc:123/app.bsky.feed.post/abc", cid: "bafyreiabc"),
                 maxImages: 4,
                 onRemoveEmbed: {},
                 onRemoveImage: { _ in }

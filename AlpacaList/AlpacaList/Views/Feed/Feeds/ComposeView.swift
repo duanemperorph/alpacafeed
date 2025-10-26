@@ -89,12 +89,6 @@ struct ComposeView: View {
                         
                         Spacer()
                         
-                        attachmentButton(icon: "quote.bubble", label: "Quote", isEnabled: false) {
-                            // TODO: Implement quote post
-                        }
-                        
-                        Spacer()
-                        
                         // Character counter
                         Text("\(viewModel.characterCount)/\(viewModel.characterLimit)")
                             .font(.caption)

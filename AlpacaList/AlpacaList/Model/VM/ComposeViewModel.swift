@@ -78,10 +78,6 @@ class ComposeViewModel: ObservableObject {
         currentEmbed?.imageCount ?? 0
     }
     
-    var hasQuotePost: Bool {
-        currentEmbed?.isQuotePost ?? false
-    }
-    
     var hasImages: Bool {
         currentEmbed?.hasImages ?? false
     }
@@ -108,14 +104,16 @@ class ComposeViewModel: ObservableObject {
     
     /// Load images from PhotosPicker items
     func loadImages(from items: [PhotosPickerItem]) async {
-        var newImages: [PendingImage] = []
+        var pendingImages: [PendingImage] = []
         
         for item in items {
             if let data = try? await item.loadTransferable(type: Data.self),
                let image = UIImage(data: data) {
-                newImages.append(PendingImage(image: image))
+                pendingImages.append(PendingImage(image: image))
             }
         }
+        
+        let newImages = pendingImages
         
         await MainActor.run {
             // Add to existing images or create new embed
@@ -148,6 +146,11 @@ class ComposeViewModel: ObservableObject {
             
             try data.write(to: tempURL)
             
+            // Ensure cleanup happens when function scope ends
+            defer {
+                try? FileManager.default.removeItem(at: tempURL)
+            }
+            
             // Extract video metadata
             let asset = AVAsset(url: tempURL)
             let duration = try await asset.load(.duration)
@@ -157,21 +160,19 @@ class ComposeViewModel: ObservableObject {
             let imageGenerator = AVAssetImageGenerator(asset: asset)
             imageGenerator.appliesPreferredTrackTransform = true
             
-            var thumbnail: UIImage?
+            let thumbnail: UIImage
+            
             do {
                 let time = CMTime(seconds: 0, preferredTimescale: 600)
                 let cgImage = try imageGenerator.copyCGImage(at: time, actualTime: nil)
                 thumbnail = UIImage(cgImage: cgImage)
+                
+                // Update the embed on main thread
+                await MainActor.run {
+                    currentEmbed = .video(thumbnail: thumbnail, duration: durationInSeconds)
+                }
             } catch {
                 print("Failed to generate thumbnail: \(error)")
-            }
-            
-            // Clean up temporary file
-            try? FileManager.default.removeItem(at: tempURL)
-            
-            // Update the embed on main thread
-            await MainActor.run {
-                currentEmbed = .video(thumbnail: thumbnail, duration: durationInSeconds)
             }
             
         } catch {
@@ -439,30 +440,7 @@ class ComposeViewModel: ObservableObject {
             print("With external link: \(url)")
             // TODO: Create Embed.external
             
-        case .record(let uri, _):
-            print("Quote post: \(uri)")
-            // TODO: Create Embed.record
-            
-        case .recordWithImages(let uri, _, let images):
-            print("Quote post with \(images.count) images: \(uri)")
-            // TODO: Create Embed.recordWithMedia
         }
-    }
-}
-
-// MARK: - Future Enhancements
-
-extension ComposeViewModel {
-    /// Add a quote post embed
-    func addQuotePost(uri: String, cid: String) {
-        guard currentEmbed == nil else { return }
-        currentEmbed = .record(uri: uri, cid: cid)
-    }
-    
-    /// Add images to an existing quote post
-    func addImagesToQuotePost(images: [PendingImage]) {
-        guard case .record(let uri, let cid) = currentEmbed else { return }
-        currentEmbed = .recordWithImages(uri: uri, cid: cid, images: images)
     }
 }
 
