@@ -18,6 +18,7 @@ class ComposeViewModel: ObservableObject {
     @Published var currentEmbed: PendingEmbed? = nil
     @Published var isPosting: Bool = false
     @Published var postError: Error? = nil
+    @Published var isLoadingLink: Bool = false
     
     // MARK: - Properties
     
@@ -54,6 +55,15 @@ class ComposeViewModel: ObservableObject {
         guard let embed = currentEmbed else { return true }
         if case .video = embed {
             return false // Already have a video
+        }
+        return false // Has some other embed
+    }
+    
+    var canAddLink: Bool {
+        // Can only add link if there's no embed
+        guard let embed = currentEmbed else { return true }
+        if case .external = embed {
+            return false // Already have a link
         }
         return false // Has some other embed
     }
@@ -163,6 +173,144 @@ class ComposeViewModel: ObservableObject {
         }
     }
     
+    /// Add external link with metadata fetching
+    func addExternalLink(urlString: String) async {
+        guard canAddLink else { return }
+        
+        // Validate and normalize URL
+        var urlStr = urlString.trimmingCharacters(in: .whitespaces)
+        if !urlStr.hasPrefix("http://") && !urlStr.hasPrefix("https://") {
+            urlStr = "https://" + urlStr
+        }
+        
+        guard let url = URL(string: urlStr) else {
+            print("Invalid URL: \(urlString)")
+            return
+        }
+        
+        await MainActor.run {
+            isLoadingLink = true
+        }
+        
+        defer {
+            Task { @MainActor in
+                isLoadingLink = false
+            }
+        }
+        
+        do {
+            // Fetch URL content
+            let (data, _) = try await URLSession.shared.data(from: url)
+            guard let html = String(data: data, encoding: .utf8) else {
+                print("Failed to decode HTML")
+                await setFallbackLink(url: url)
+                return
+            }
+            
+            // Parse metadata
+            let metadata = parseHTMLMetadata(html: html, url: url)
+            
+            // Download thumbnail if available
+            var thumbnailImage: UIImage?
+            if let thumbnailURLString = metadata.thumbnailURL,
+               let thumbnailURL = URL(string: thumbnailURLString) {
+                thumbnailImage = await downloadImage(from: thumbnailURL)
+            }
+            
+            // Update embed
+            await MainActor.run {
+                currentEmbed = .external(
+                    url: url,
+                    title: metadata.title,
+                    description: metadata.description,
+                    thumbnail: thumbnailImage
+                )
+            }
+            
+        } catch {
+            print("Error fetching link metadata: \(error)")
+            await setFallbackLink(url: url)
+        }
+    }
+    
+    // MARK: - Private Helpers for Link Metadata
+    
+    private func parseHTMLMetadata(html: String, url: URL) -> (title: String?, description: String?, thumbnailURL: String?) {
+        var title: String?
+        var description: String?
+        var thumbnailURL: String?
+        
+        // Extract Open Graph title
+        if let ogTitleRange = html.range(of: #"<meta\s+property="og:title"\s+content="([^"]+)""#, options: .regularExpression) {
+            let match = String(html[ogTitleRange])
+            if let contentRange = match.range(of: #"content="([^"]+)""#, options: .regularExpression) {
+                let content = String(match[contentRange])
+                title = content.replacingOccurrences(of: #"content=""#, with: "").replacingOccurrences(of: "\"", with: "")
+            }
+        }
+        
+        // Fallback to <title> tag
+        if title == nil, let titleRange = html.range(of: #"<title>([^<]+)</title>"#, options: .regularExpression) {
+            let match = String(html[titleRange])
+            title = match.replacingOccurrences(of: "<title>", with: "").replacingOccurrences(of: "</title>", with: "")
+        }
+        
+        // Extract Open Graph description
+        if let ogDescRange = html.range(of: #"<meta\s+property="og:description"\s+content="([^"]+)""#, options: .regularExpression) {
+            let match = String(html[ogDescRange])
+            if let contentRange = match.range(of: #"content="([^"]+)""#, options: .regularExpression) {
+                let content = String(match[contentRange])
+                description = content.replacingOccurrences(of: #"content=""#, with: "").replacingOccurrences(of: "\"", with: "")
+            }
+        }
+        
+        // Fallback to meta description
+        if description == nil, let metaDescRange = html.range(of: #"<meta\s+name="description"\s+content="([^"]+)""#, options: .regularExpression) {
+            let match = String(html[metaDescRange])
+            if let contentRange = match.range(of: #"content="([^"]+)""#, options: .regularExpression) {
+                let content = String(match[contentRange])
+                description = content.replacingOccurrences(of: #"content=""#, with: "").replacingOccurrences(of: "\"", with: "")
+            }
+        }
+        
+        // Extract Open Graph image
+        if let ogImageRange = html.range(of: #"<meta\s+property="og:image"\s+content="([^"]+)""#, options: .regularExpression) {
+            let match = String(html[ogImageRange])
+            if let contentRange = match.range(of: #"content="([^"]+)""#, options: .regularExpression) {
+                let content = String(match[contentRange])
+                thumbnailURL = content.replacingOccurrences(of: #"content=""#, with: "").replacingOccurrences(of: "\"", with: "")
+            }
+        }
+        
+        // Use domain as fallback title
+        if title == nil {
+            title = url.host ?? url.absoluteString
+        }
+        
+        return (title, description, thumbnailURL)
+    }
+    
+    private func downloadImage(from url: URL) async -> UIImage? {
+        do {
+            let (data, _) = try await URLSession.shared.data(from: url)
+            return UIImage(data: data)
+        } catch {
+            print("Failed to download thumbnail: \(error)")
+            return nil
+        }
+    }
+    
+    private func setFallbackLink(url: URL) async {
+        await MainActor.run {
+            currentEmbed = .external(
+                url: url,
+                title: url.host ?? url.absoluteString,
+                description: nil,
+                thumbnail: nil
+            )
+        }
+    }
+    
     /// Remove a specific image at index
     func removeImage(at index: Int) {
         guard case .images(var images) = currentEmbed else { return }
@@ -269,18 +417,6 @@ class ComposeViewModel: ObservableObject {
 // MARK: - Future Enhancements
 
 extension ComposeViewModel {
-    /// Add a video embed
-    func addVideo(thumbnail: UIImage?, duration: Double) {
-        guard currentEmbed == nil else { return }
-        currentEmbed = .video(thumbnail: thumbnail, duration: duration)
-    }
-    
-    /// Add an external link embed
-    func addExternalLink(url: URL, title: String?, description: String?, thumbnail: UIImage?) {
-        guard currentEmbed == nil else { return }
-        currentEmbed = .external(url: url, title: title, description: description, thumbnail: thumbnail)
-    }
-    
     /// Add a quote post embed
     func addQuotePost(uri: String, cid: String) {
         guard currentEmbed == nil else { return }

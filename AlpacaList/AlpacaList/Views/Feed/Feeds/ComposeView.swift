@@ -21,6 +21,8 @@ struct ComposeView: View {
     @State private var showingImagePicker = false
     @State private var selectedVideoItem: PhotosPickerItem?
     @State private var showingVideoPicker = false
+    @State private var showingLinkInput = false
+    @State private var linkURLInput = ""
     
     // MARK: - Initialization
     
@@ -90,8 +92,8 @@ struct ComposeView: View {
                         
                         Spacer()
                         
-                        attachmentButton(icon: "link", label: "Link", isEnabled: false) {
-                            // TODO: Implement link preview
+                        attachmentButton(icon: "link", label: "Link", isEnabled: viewModel.canAddLink) {
+                            showingLinkInput = true
                         }
                         
                         Spacer()
@@ -173,6 +175,16 @@ struct ComposeView: View {
                         selectedVideoItem = nil
                     }
                 }
+            }
+            .sheet(isPresented: $showingLinkInput) {
+                LinkInputSheet(
+                    urlInput: $linkURLInput,
+                    isPresented: $showingLinkInput,
+                    isLoading: viewModel.isLoadingLink,
+                    onAdd: { urlString in
+                        await viewModel.addExternalLink(urlString: urlString)
+                    }
+                )
             }
         }
     }
