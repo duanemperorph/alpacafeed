@@ -20,6 +20,15 @@ class ComposeViewModel: ObservableObject {
     @Published var postError: Error? = nil
     @Published var isLoadingLink: Bool = false
     
+    // UI presentation state
+    @Published var showingDraftAlert: Bool = false
+    @Published var showingImagePicker: Bool = false
+    @Published var showingVideoPicker: Bool = false
+    @Published var showingLinkInput: Bool = false
+    @Published var linkURLInput: String = ""
+    @Published var selectedPhotoItems: [PhotosPickerItem] = []
+    @Published var selectedVideoItem: PhotosPickerItem? = nil
+    
     // MARK: - Properties
     
     let replyTo: Post?
@@ -121,7 +130,16 @@ class ComposeViewModel: ObservableObject {
                 // Create new image embed
                 currentEmbed = .images(newImages)
             }
+            
+            // Clear the picker items after processing
+            selectedPhotoItems = []
         }
+    }
+    
+    /// Handle photo item selection changes
+    func handlePhotoItemsChange() async {
+        guard !selectedPhotoItems.isEmpty else { return }
+        await loadImages(from: selectedPhotoItems)
     }
     
     /// Load video from PhotosPicker item
@@ -166,11 +184,18 @@ class ComposeViewModel: ObservableObject {
             // Update the embed on main thread
             await MainActor.run {
                 currentEmbed = .video(thumbnail: thumbnail, duration: durationInSeconds)
+                selectedVideoItem = nil
             }
             
         } catch {
             print("Error loading video: \(error)")
         }
+    }
+    
+    /// Handle video item selection changes
+    func handleVideoItemChange() async {
+        guard let item = selectedVideoItem else { return }
+        await loadVideo(from: item)
     }
     
     /// Add external link with metadata fetching
@@ -195,6 +220,8 @@ class ComposeViewModel: ObservableObject {
         defer {
             Task { @MainActor in
                 isLoadingLink = false
+                linkURLInput = ""
+                showingLinkInput = false
             }
         }
         
@@ -367,6 +394,35 @@ class ComposeViewModel: ObservableObject {
     func loadDraft() {
         // TODO: Implement draft loading from UserDefaults or local storage
         print("Loading draft...")
+    }
+    
+    // MARK: - UI Presentation Helpers
+    
+    /// Show the image picker
+    func showImagePicker() {
+        guard canAddImages else { return }
+        showingImagePicker = true
+    }
+    
+    /// Show the video picker
+    func showVideoPicker() {
+        guard canAddVideo else { return }
+        showingVideoPicker = true
+    }
+    
+    /// Show the link input sheet
+    func showLinkInput() {
+        guard canAddLink else { return }
+        showingLinkInput = true
+    }
+    
+    /// Handle cancel action (check for draft)
+    func handleCancel() -> Bool {
+        if hasDraft {
+            showingDraftAlert = true
+            return false // Don't dismiss yet
+        }
+        return true // OK to dismiss
     }
     
     // MARK: - Private Helpers

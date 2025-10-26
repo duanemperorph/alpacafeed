@@ -15,15 +15,6 @@ struct ComposeView: View {
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject var navigationCoordinator: NavigationCoordinator
     
-    // UI-only state
-    @State private var showingDraftAlert = false
-    @State private var selectedPhotoItems: [PhotosPickerItem] = []
-    @State private var showingImagePicker = false
-    @State private var selectedVideoItem: PhotosPickerItem?
-    @State private var showingVideoPicker = false
-    @State private var showingLinkInput = false
-    @State private var linkURLInput = ""
-    
     // MARK: - Initialization
     
     init(replyTo: Post? = nil) {
@@ -81,19 +72,19 @@ struct ComposeView: View {
                     HStack(spacing: 0) {
                         // Media attachment buttons - evenly spaced
                         attachmentButton(icon: "photo", label: "Photos", isEnabled: viewModel.canAddImages) {
-                            showingImagePicker = true
+                            viewModel.showImagePicker()
                         }
                         
                         Spacer()
                         
                         attachmentButton(icon: "video", label: "Video", isEnabled: viewModel.canAddVideo) {
-                            showingVideoPicker = true
+                            viewModel.showVideoPicker()
                         }
                         
                         Spacer()
                         
                         attachmentButton(icon: "link", label: "Link", isEnabled: viewModel.canAddLink) {
-                            showingLinkInput = true
+                            viewModel.showLinkInput()
                         }
                         
                         Spacer()
@@ -122,9 +113,7 @@ struct ComposeView: View {
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") {
-                        if viewModel.hasDraft {
-                            showingDraftAlert = true
-                        } else {
+                        if viewModel.handleCancel() {
                             dismiss()
                         }
                     }
@@ -140,7 +129,7 @@ struct ComposeView: View {
                     .foregroundColor(viewModel.canPost ? .white : .white.opacity(0.5))
                 }
             }
-            .alert("Discard Post?", isPresented: $showingDraftAlert) {
+            .alert("Discard Post?", isPresented: $viewModel.showingDraftAlert) {
                 Button("Save Draft", role: .cancel) {
                     viewModel.saveDraft()
                     dismiss()
@@ -152,34 +141,30 @@ struct ComposeView: View {
                 Text("Do you want to save this as a draft?")
             }
             .photosPicker(
-                isPresented: $showingImagePicker,
-                selection: $selectedPhotoItems,
+                isPresented: $viewModel.showingImagePicker,
+                selection: $viewModel.selectedPhotoItems,
                 maxSelectionCount: viewModel.maxImages - viewModel.imageEmbedCount,
                 matching: .images
             )
-            .onChange(of: selectedPhotoItems) { oldItems, newItems in
+            .onChange(of: viewModel.selectedPhotoItems) { oldItems, newItems in
                 Task {
-                    await viewModel.loadImages(from: newItems)
-                    selectedPhotoItems = []
+                    await viewModel.handlePhotoItemsChange()
                 }
             }
             .photosPicker(
-                isPresented: $showingVideoPicker,
-                selection: $selectedVideoItem,
+                isPresented: $viewModel.showingVideoPicker,
+                selection: $viewModel.selectedVideoItem,
                 matching: .videos
             )
-            .onChange(of: selectedVideoItem) { oldItem, newItem in
-                if let newItem = newItem {
-                    Task {
-                        await viewModel.loadVideo(from: newItem)
-                        selectedVideoItem = nil
-                    }
+            .onChange(of: viewModel.selectedVideoItem) { oldItem, newItem in
+                Task {
+                    await viewModel.handleVideoItemChange()
                 }
             }
-            .sheet(isPresented: $showingLinkInput) {
+            .sheet(isPresented: $viewModel.showingLinkInput) {
                 LinkInputSheet(
-                    urlInput: $linkURLInput,
-                    isPresented: $showingLinkInput,
+                    urlInput: $viewModel.linkURLInput,
+                    isPresented: $viewModel.showingLinkInput,
                     isLoading: viewModel.isLoadingLink,
                     onAdd: { urlString in
                         await viewModel.addExternalLink(urlString: urlString)
