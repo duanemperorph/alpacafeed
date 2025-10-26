@@ -165,12 +165,21 @@
 			path = Feed;
 			sourceTree = "<group>";
 		};
+		371BCB312EAECC3F00FB88D1 /* Compose */ = {
+			isa = PBXGroup;
+			children = (
+				37EMBED0000000000000002 /* EmbedPreview.swift */,
+				865F76C1326788398C35F4EF /* MediaPickerComponents.swift */,
+				37B0A0B12EAAA35300DBB593 /* ComposeView.swift */,
+			);
+			path = Compose;
+			sourceTree = "<group>";
+		};
 		372C4C582A807843008AC69A /* Feeds */ = {
 			isa = PBXGroup;
 			children = (
 				37B0A0AC2EAAA34200DBB593 /* ThreadView.swift */,
 				37B0A0AD2EAAA34200DBB593 /* TimelineView.swift */,
-				37B0A0B12EAAA35300DBB593 /* ComposeView.swift */,
 				37E8CC872E58E475005C7C63 /* PostListView.swift */,
 			);
 			path = Feeds;
@@ -198,6 +207,7 @@
 			isa = PBXGroup;
 			children = (
 				37F1983C2EAD8A6700AD8A67 /* ComposeViewModel.swift */,
+				37B0A0A52EAAA33300DBB593 /* PostEmbed.swift */,
 				37B0A09C2EAAA32000DBB593 /* PostViewModel.swift */,
 				37B0A09D2EAAA32000DBB593 /* ThreadViewModel.swift */,
 				37B0A09E2EAAA32000DBB593 /* TimelineViewModel.swift */,
@@ -252,18 +262,15 @@
 			isa = PBXGroup;
 			children = (
 				37B0A0A22EAAA33300DBB593 /* AuthorHeader.swift */,
-				37EMBED0000000000000002 /* EmbedPreview.swift */,
 				37LINKIN0000000000000002 /* LinkInputSheet.swift */,
 				37B0A0A32EAAA33300DBB593 /* EngagementBar.swift */,
 				37B0A0A42EAAA33300DBB593 /* PostCard.swift */,
-				37B0A0A52EAAA33300DBB593 /* PostEmbed.swift */,
 				37B0A0A62EAAA33300DBB593 /* RichTextView.swift */,
 				37350F202A6DF4E000DD239B /* FeedViewBackground.swift */,
 				376BB76D2A80846200AE9FB0 /* CommentsButtons.swift */,
 				37350F1E2A6DF2DC00DD239B /* PostItemButtons.swift */,
 				376BB76A2A8080B900AE9FB0 /* Buttons.swift */,
 				376BB76F2A80B40B00AE9FB0 /* PostComponents.swift */,
-				865F76C1326788398C35F4EF /* MediaPickerComponents.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -331,6 +338,7 @@
 		37CF46D42A50FC3B00952075 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				371BCB312EAECC3F00FB88D1 /* Compose */,
 				3742DB982AA6636600B7E83F /* Root */,
 				37428E9E2AA9573600E59607 /* Navigation */,
 				37D9FED02A5BA2E900E539A6 /* Settings */,
