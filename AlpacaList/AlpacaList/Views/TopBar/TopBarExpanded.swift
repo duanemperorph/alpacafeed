@@ -35,7 +35,7 @@ struct ButtonSubBarView: View {
     
     var body: some View {
         let isBackButtonDisabled = !navigationCoordinator.canPop
-        HStack {
+        HStack(spacing: 24) {
             // Back button
             Button(action: {
                 navigationCoordinator.pop()
@@ -45,32 +45,9 @@ struct ButtonSubBarView: View {
             .disabled(isBackButtonDisabled)
             .opacity(isBackButtonDisabled ? 0.5 : 1)
             
-            Spacer()
-            
-            // Refresh button
-            Button(action: {
-                NotificationCenter.default.post(name: .refreshTimeline, object: nil)
-            }) {
-                Image(systemName: "arrow.clockwise")
-            }
-            
-            Spacer()
-            
             // Feed selector
             BlueskyFeedSelector()
-                .frame(width: 150)
-            
-            Spacer()
-            
-            // Search button
-            Button(action: {
-                // TODO: Navigate to search
-                print("Search")
-            }) {
-                Image(systemName: "magnifyingglass")
-            }
-            
-            Spacer()
+                .frame(maxWidth: .infinity)
             
             // Compose button
             Button(action: {
