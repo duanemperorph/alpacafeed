@@ -7,6 +7,33 @@
 
 import SwiftUI
 
+// MARK: - Feed Selector Pill Style
+
+struct FeedSelectorPillStyle: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .frame(maxWidth: .infinity, minHeight: 30, maxHeight: 30)
+            .padding(.horizontal, 15)
+            .foregroundColor(.white)
+            .font(.system(size: 16))
+            .fontWeight(.semibold)
+            .background(Color.white.opacity(0.1))
+            .cornerRadius(15)
+            .overlay(
+                RoundedRectangle(cornerRadius: 15)
+                    .stroke(Color.white.opacity(0.5), lineWidth: 1)
+            )
+    }
+}
+
+extension View {
+    func feedSelectorPillStyle() -> some View {
+        modifier(FeedSelectorPillStyle())
+    }
+}
+
+// MARK: - Feed Selector
+
 struct BlueskyFeedSelector: View {
     @State private var selectedFeed: FeedType = .following
     
@@ -35,17 +62,7 @@ struct BlueskyFeedSelector: View {
                     cycleFeed(backwards: false)
                 }
         }
-        .frame(maxWidth: .infinity, minHeight: 30, maxHeight: 30)
-        .padding(.horizontal, 15)
-        .foregroundColor(.white)
-        .font(.system(size: 16))
-        .fontWeight(.semibold)
-        .background(Color.white.opacity(0.1))
-        .cornerRadius(15)
-        .overlay(
-            RoundedRectangle(cornerRadius: 15)
-                .stroke(Color.white.opacity(0.5), lineWidth: 1)
-        )
+        .feedSelectorPillStyle()
     }
     
     private func cycleFeed(backwards: Bool) {

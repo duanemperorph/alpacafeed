@@ -33,6 +33,18 @@ struct ImageTextFieldPairView: View {
 struct ButtonSubBarView: View {
     @EnvironmentObject var navigationCoordinator: NavigationCoordinator
     
+    @ViewBuilder
+    var centerContent: some View {
+        if case .thread = navigationCoordinator.navigationStack.last {
+            // Thread mode - show simple "Thread" label
+            Text("Thread")
+                .feedSelectorPillStyle()
+        } else {
+            // Timeline mode - show feed selector
+            BlueskyFeedSelector()
+        }
+    }
+    
     var body: some View {
         let isBackButtonDisabled = !navigationCoordinator.canPop
         HStack(spacing: 24) {
@@ -45,9 +57,8 @@ struct ButtonSubBarView: View {
             .disabled(isBackButtonDisabled)
             .opacity(isBackButtonDisabled ? 0.5 : 1)
             
-            // Feed selector
-            BlueskyFeedSelector()
-                .frame(maxWidth: .infinity)
+            // Context-aware center content
+            centerContent
             
             // Compose button
             Button(action: {
