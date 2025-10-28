@@ -86,7 +86,7 @@ struct TopBarExpanded: View {
     
     @ViewBuilder var userSettingsButton: some View {
         ImageTextFieldPairView(imageName: "person.circle", text: $userName) {
-            navigationCoordinator.push(.userSettings)
+            navigationCoordinator.presentSettings()
         }
         .frame(maxWidth: .infinity)
     }

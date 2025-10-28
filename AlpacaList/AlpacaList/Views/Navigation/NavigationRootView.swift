@@ -26,6 +26,11 @@ struct NavigationRootView: View {
             ComposeView(replyTo: navigationCoordinator.composeReplyTo)
                 .environmentObject(navigationCoordinator)
         }
+        .sheet(isPresented: $navigationCoordinator.showingSettingsSheet) {
+            UserSettings()
+                .environmentObject(navigationCoordinator)
+                .environmentObject(topBarController)
+        }
     }
 }
 

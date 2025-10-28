@@ -40,33 +40,45 @@ struct UserSettings: View {
     @State var selectedUser: String?
     @EnvironmentObject var navigationCoordinator: NavigationCoordinator
     @EnvironmentObject var topBarController: TopBarController
+    @Environment(\.dismiss) private var dismiss
     
     var body: some View {
-        SettingsList {
-            // Legacy Users Section
-            SettingsSection(title: "Active User") {
-                ForEach(fakeUsers, id: \.self) { user in
-                    SettingsRadioItem(
-                        title: user,
-                        isChecked: user == selectedUser,
-                        action: {
-                            selectedUser = user
-                        }
-                    )
-                }
-                SettingsRadioItem(
-                    title: "Anonymous User",
-                    isChecked: selectedUser == nil,
-                    action: {
-                        selectedUser = nil
+        NavigationView {
+            SettingsList {
+                // Legacy Users Section
+                SettingsSection(title: "Active User") {
+                    ForEach(fakeUsers, id: \.self) { user in
+                        SettingsRadioItem(
+                            title: user,
+                            isChecked: user == selectedUser,
+                            action: {
+                                selectedUser = user
+                            }
+                        )
                     }
-                
-                )
-                UserSettingsAddUserButton(action: { print("meow")})
+                    SettingsRadioItem(
+                        title: "Anonymous User",
+                        isChecked: selectedUser == nil,
+                        action: {
+                            selectedUser = nil
+                        }
+                    
+                    )
+                    UserSettingsAddUserButton(action: { print("meow")})
+                }
             }
-        }
-        .safeAreaInset(edge: .top) {
-            Spacer().frame(height: topBarController.topBarInset)
+            .navigationTitle("Settings")
+            .navigationBarTitleDisplayMode(.inline)
+            .alpacaListNavigationBar()
+            .toolbar {
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Done") {
+                        dismiss()
+                    }
+                    .foregroundColor(.white)
+                    .fontWeight(.bold)
+                }
+            }
         }
     }
 }

@@ -18,9 +18,6 @@ enum NavigationDestination {
     case compose(replyTo: Post?)             // New post/reply
     case quotePost(post: Post)               // Quote post composer
     
-    // Settings
-    case userSettings
-    
     // Timeline types
     enum TimelineType: Hashable {
         case home                            // User's home feed
@@ -70,9 +67,6 @@ extension NavigationDestination: Hashable {
         case .quotePost(let post):
             hasher.combine("quotePost")
             hasher.combine(post.id)
-            
-        case .userSettings:
-            hasher.combine("userSettings")
         }
     }
 }
@@ -85,6 +79,9 @@ class NavigationCoordinator: ObservableObject {
     // Compose sheet state (for modal presentation)
     @Published var showingComposeSheet: Bool = false
     @Published var composeReplyTo: Post? = nil
+    
+    // Settings sheet state
+    @Published var showingSettingsSheet: Bool = false
     
     init() {
         navigationStack = []
@@ -126,6 +123,10 @@ class NavigationCoordinator: ObservableObject {
         }
         showingComposeSheet = true
     }
+    
+    func presentSettings() {
+        showingSettingsSheet = true
+    }
 
     @ViewBuilder func viewForDestination(destination: NavigationDestination) -> some View {
         switch destination {
@@ -150,9 +151,6 @@ class NavigationCoordinator: ObservableObject {
         case .quotePost(let post):
             // TODO: Create QuotePostView
             Text("Quote post: \(post.text)")
-            
-        case .userSettings:
-            UserSettings()
         }
     }
     
