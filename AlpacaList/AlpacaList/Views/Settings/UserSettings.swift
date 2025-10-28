@@ -41,12 +41,13 @@ struct UserSettings: View {
     @State var users: [String] = fakeUsers
     @State private var showLogoutAlert = false
     @State private var userToLogout: String?
+    @State private var navigationPath = NavigationPath()
     @EnvironmentObject var navigationCoordinator: NavigationCoordinator
     @EnvironmentObject var topBarController: TopBarController
     @Environment(\.dismiss) private var dismiss
     
     var body: some View {
-        NavigationView {
+        NavigationStack(path: $navigationPath) {
             SettingsList {
                 // Accounts Section
                 SettingsSection(title: "Accounts") {
@@ -78,8 +79,7 @@ struct UserSettings: View {
                         .padding(.vertical, 5)
                     
                     UserSettingsAddUserButton(action: { 
-                        // Handle add user - for now just print
-                        print("Add new account")
+                        navigationPath.append("AddAccount")
                     })
                 }
             }
@@ -113,6 +113,18 @@ struct UserSettings: View {
                 }
             } message: { user in
                 Text("Are you sure you want to log out of \(user)?")
+            }
+            .navigationDestination(for: String.self) { destination in
+                if destination == "AddAccount" {
+                    AddAccountView { newHandle in
+                        // Add the new user to the list
+                        users.append(newHandle)
+                        // Automatically select the newly added user
+                        selectedUser = newHandle
+                        // Pop back to settings
+                        navigationPath.removeLast()
+                    }
+                }
             }
         }
     }

@@ -51,6 +51,7 @@
 		37EMBED0000000000000001 /* EmbedPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37EMBED0000000000000002 /* EmbedPreview.swift */; };
 		37F1983D2EAD8A6700AD8A67 /* ComposeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F1983C2EAD8A6700AD8A67 /* ComposeViewModel.swift */; };
 		37LINKIN0000000000000001 /* LinkInputSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37LINKIN0000000000000002 /* LinkInputSheet.swift */; };
+		3B3D2B092C3FCF343996A35B /* AddAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C45885AE5F6621F1BFF95E0 /* AddAccountView.swift */; };
 		75FA6A039CAD498AB3E99969E38A5DD9 /* BlueskyFeedSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97D03336943F43AFABCE34A2167CEDA0 /* BlueskyFeedSelector.swift */; };
 /* End PBXBuildFile section */
 
@@ -72,6 +73,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1C45885AE5F6621F1BFF95E0 /* AddAccountView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AddAccountView.swift; sourceTree = "<group>"; };
 		370A25AE2A54B9F70076D378 /* TopBarMinimized.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopBarMinimized.swift; sourceTree = "<group>"; };
 		370A25B52A54FA400076D378 /* TopBarContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopBarContainer.swift; sourceTree = "<group>"; };
 		37346BD22A520AB800CB346A /* TopBarExpanded.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopBarExpanded.swift; sourceTree = "<group>"; };
@@ -351,6 +353,7 @@
 			children = (
 				37D9FED52A5BC46300E539A6 /* SettingsComponents.swift */,
 				37D9FED12A5BA31100E539A6 /* UserSettings.swift */,
+				1C45885AE5F6621F1BFF95E0 /* AddAccountView.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -523,6 +526,7 @@
 				37B0A09A2EAAA31200DBB593 /* Author.swift in Sources */,
 				37B0A09B2EAAA31200DBB593 /* Post.swift in Sources */,
 				1BF257CD0B321BD64C896E60 /* MediaPickerComponents.swift in Sources */,
+				3B3D2B092C3FCF343996A35B /* AddAccountView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
