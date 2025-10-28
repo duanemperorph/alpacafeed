@@ -11,7 +11,7 @@ class TopBarController: ObservableObject {
     @Published var isExpanded = false
     
     var topBarInset: Double {
-        return isExpanded ? 130 : 40
+        return isExpanded ? 90 : 40
     }
     
     func expand() {

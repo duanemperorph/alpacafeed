@@ -38,6 +38,9 @@ struct UserSettingsAddUserButton: View {
 
 struct UserSettings: View {
     @State var selectedUser: String?
+    @State var users: [String] = fakeUsers
+    @State private var showLogoutAlert = false
+    @State private var userToLogout: String?
     @EnvironmentObject var navigationCoordinator: NavigationCoordinator
     @EnvironmentObject var topBarController: TopBarController
     @Environment(\.dismiss) private var dismiss
@@ -45,27 +48,43 @@ struct UserSettings: View {
     var body: some View {
         NavigationView {
             SettingsList {
-                // Legacy Users Section
-                SettingsSection(title: "Active User") {
-                    ForEach(fakeUsers, id: \.self) { user in
-                        SettingsRadioItem(
-                            title: user,
-                            isChecked: user == selectedUser,
-                            action: {
+                // Accounts Section
+                SettingsSection(title: "Accounts") {
+                    ForEach(users, id: \.self) { user in
+                        AccountListItem(
+                            username: user,
+                            isActive: user == selectedUser,
+                            onSwitch: {
                                 selectedUser = user
+                            },
+                            onLogout: {
+                                // Show confirmation alert
+                                userToLogout = user
+                                showLogoutAlert = true
                             }
                         )
                     }
+                    
+                    // Anonymous User option
                     SettingsRadioItem(
                         title: "Anonymous User",
                         isChecked: selectedUser == nil,
                         action: {
                             selectedUser = nil
                         }
-                    
                     )
-                    UserSettingsAddUserButton(action: { print("meow")})
+                    
+                    Divider()
+                        .padding(.vertical, 5)
+                    
+                    UserSettingsAddUserButton(action: { 
+                        // Handle add user - for now just print
+                        print("Add new account")
+                    })
                 }
+            }
+            .safeAreaInset(edge: .top) {
+                Color.clear.frame(height: 10)
             }
             .navigationTitle("Settings")
             .navigationBarTitleDisplayMode(.inline)
@@ -78,6 +97,22 @@ struct UserSettings: View {
                     .foregroundColor(.white)
                     .fontWeight(.bold)
                 }
+            }
+            .alert("Log Out", isPresented: $showLogoutAlert, presenting: userToLogout) { user in
+                Button("Cancel", role: .cancel) {
+                    userToLogout = nil
+                }
+                Button("Log Out", role: .destructive) {
+                    // Handle logout logic
+                    if user == selectedUser {
+                        selectedUser = nil // Switch to anonymous
+                    }
+                    // Remove user from list
+                    users.removeAll { $0 == user }
+                    userToLogout = nil
+                }
+            } message: { user in
+                Text("Are you sure you want to log out of \(user)?")
             }
         }
     }

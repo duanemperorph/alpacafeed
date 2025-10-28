@@ -78,10 +78,9 @@ struct EngagementBar: View {
                 action: onLike
             )
             
-            Spacer()
-            
             // Share button
             if let onShare = onShare {
+                Spacer()
                 EngagementButton(
                     icon: "square.and.arrow.up",
                     count: nil,

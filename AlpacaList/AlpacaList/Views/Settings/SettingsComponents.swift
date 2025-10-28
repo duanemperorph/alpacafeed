@@ -127,3 +127,57 @@ struct SettingsList<ContentsView: View>: View {
         .background(.ultraThinMaterial)
     }
 }
+
+struct AccountListItem: View {
+    var username: String
+    var isActive: Bool
+    var onSwitch: () -> Void
+    var onLogout: () -> Void
+    
+    var body: some View {
+        SettingsButton(action: onSwitch) {
+            HStack {
+                SettingsRadioItemCheckMark(isChecked: isActive)
+                    .font(.system(size: 20))
+                    .frame(width: 20)
+                Spacer().frame(width: 20)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(username)
+                        .settingsItemFont()
+                    if isActive {
+                        Text("Active")
+                            .font(.system(size: 12))
+                            .fontWeight(.medium)
+                            .fontDesign(.monospaced)
+                            .foregroundColor(.accentColor.opacity(0.8))
+                    }
+                }
+                Spacer()
+            }
+            .padding(5)
+            .contentShape(Rectangle())
+        }
+        .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+            Button {
+                onLogout()
+            } label: {
+                Label("Log Out", systemImage: "rectangle.portrait.and.arrow.right")
+            }
+            .tint(.red)
+        }
+        .contextMenu {
+            if !isActive {
+                Button {
+                    onSwitch()
+                } label: {
+                    Label("Switch to this account", systemImage: "arrow.left.arrow.right")
+                }
+            }
+            Button(role: .destructive) {
+                onLogout()
+            } label: {
+                Label("Log out", systemImage: "rectangle.portrait.and.arrow.right")
+            }
+        }
+    }
+}
