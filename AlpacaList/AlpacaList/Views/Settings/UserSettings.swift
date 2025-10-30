@@ -90,8 +90,8 @@ struct UserSettings: View {
             .navigationBarTitleDisplayMode(.inline)
             .alpacaListNavigationBar()
             .toolbar {
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Done") {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Close") {
                         dismiss()
                     }
                     .foregroundColor(.white)
@@ -117,14 +117,20 @@ struct UserSettings: View {
             .navigationDestination(for: SettingsDestination.self) { destination in
                 switch destination {
                 case .addAccount:
-                    AddAccountView { newHandle in
-                        // Add the new user to the list
-                        users.append(newHandle)
-                        // Automatically select the newly added user
-                        selectedUser = newHandle
-                        // Pop back to settings
-                        settingsCoordinator.pop()
-                    }
+                    AddAccountView(
+                        onLoginSuccess: { newHandle in
+                            // Add the new user to the list
+                            users.append(newHandle)
+                            // Automatically select the newly added user
+                            selectedUser = newHandle
+                            // Pop back to settings
+                            settingsCoordinator.pop()
+                        },
+                        onCancel: {
+                            // Pop back to settings
+                            settingsCoordinator.pop()
+                        }
+                    )
                 case .accountDetails(let handle):
                     // Placeholder for future account details view
                     Text("Account details for \(handle)")

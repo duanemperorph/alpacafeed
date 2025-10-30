@@ -16,8 +16,9 @@ struct AddAccountView: View {
     @State private var showError: Bool = false
     @State private var errorMessage: String = ""
     
-    // Callback to notify parent when login succeeds
+    // Callbacks
     var onLoginSuccess: (String) -> Void
+    var onCancel: () -> Void
     
     var body: some View {
         ZStack {
@@ -197,7 +198,17 @@ struct AddAccountView: View {
         }
         .navigationTitle("Add Account")
         .navigationBarTitleDisplayMode(.inline)
+        .navigationBarBackButtonHidden(true)
         .alpacaListNavigationBar()
+        .toolbar {
+            ToolbarItem(placement: .cancellationAction) {
+                Button("Cancel") {
+                    onCancel()
+                }
+                .foregroundColor(.white)
+                .fontWeight(.bold)
+            }
+        }
         .alert("Login Failed", isPresented: $showError) {
             Button("OK", role: .cancel) { }
         } message: {
@@ -255,9 +266,14 @@ struct AddAccountView_Previews: PreviewProvider {
                 )
                 .edgesIgnoringSafeArea(.all)
                 
-                AddAccountView { handle in
-                    print("Logged in as: \(handle)")
-                }
+                AddAccountView(
+                    onLoginSuccess: { handle in
+                        print("Logged in as: \(handle)")
+                    },
+                    onCancel: {
+                        print("Cancelled")
+                    }
+                )
             }
         }
         .tint(Color(red: 0.75, green: 0.25, blue: 0.75))
