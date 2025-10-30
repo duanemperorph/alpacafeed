@@ -11,6 +11,7 @@ struct AddAccountView: View {
     @State private var handle: String = ""
     @State private var appPassword: String = ""
     @State private var server: String = "bsky.social"
+    @State private var showAdvancedOptions: Bool = false
     @State private var isLoggingIn: Bool = false
     @State private var showError: Bool = false
     @State private var errorMessage: String = ""
@@ -48,28 +49,6 @@ struct AddAccountView: View {
                     
                     // Input Fields
                     VStack(spacing: 16) {
-                        // Server Input
-                        VStack(alignment: .leading, spacing: 8) {
-                            Text("Server")
-                                .font(.system(size: 14))
-                                .fontWeight(.semibold)
-                                .fontDesign(.monospaced)
-                                .foregroundColor(.primary.opacity(0.7))
-                            
-                            HStack {
-                                Image(systemName: "server.rack")
-                                    .foregroundColor(.secondary)
-                                TextField("bsky.social", text: $server)
-                                    .textInputAutocapitalization(.never)
-                                    .autocorrectionDisabled()
-                                    .keyboardType(.URL)
-                                    .fontDesign(.monospaced)
-                            }
-                            .padding()
-                            .background(Color.primary.opacity(0.08))
-                            .cornerRadius(10)
-                        }
-                        
                         // Handle Input
                         VStack(alignment: .leading, spacing: 8) {
                             Text("Handle")
@@ -111,6 +90,57 @@ struct AddAccountView: View {
                             .padding()
                             .background(Color.primary.opacity(0.08))
                             .cornerRadius(10)
+                        }
+                        
+                        // Advanced Options Toggle
+                        Button(action: {
+                            withAnimation(.easeInOut(duration: 0.2)) {
+                                showAdvancedOptions.toggle()
+                            }
+                        }) {
+                            HStack(spacing: 6) {
+                                Image(systemName: showAdvancedOptions ? "chevron.down" : "chevron.right")
+                                    .font(.system(size: 12, weight: .semibold))
+                                    .foregroundColor(.secondary)
+                                Text("Advanced Options")
+                                    .font(.system(size: 14))
+                                    .fontWeight(.medium)
+                                    .fontDesign(.monospaced)
+                                    .foregroundColor(.secondary)
+                                Spacer()
+                            }
+                            .padding(.top, 4)
+                        }
+                        .buttonStyle(.plain)
+                        
+                        // Server Input (Advanced)
+                        if showAdvancedOptions {
+                            VStack(alignment: .leading, spacing: 8) {
+                                Text("Server")
+                                    .font(.system(size: 14))
+                                    .fontWeight(.semibold)
+                                    .fontDesign(.monospaced)
+                                    .foregroundColor(.primary.opacity(0.7))
+                                
+                                HStack {
+                                    Image(systemName: "server.rack")
+                                        .foregroundColor(.secondary)
+                                    TextField("bsky.social", text: $server)
+                                        .textInputAutocapitalization(.never)
+                                        .autocorrectionDisabled()
+                                        .keyboardType(.URL)
+                                        .fontDesign(.monospaced)
+                                }
+                                .padding()
+                                .background(Color.primary.opacity(0.08))
+                                .cornerRadius(10)
+                                
+                                Text("Default: bsky.social (official Bluesky server)")
+                                    .font(.system(size: 11))
+                                    .fontDesign(.monospaced)
+                                    .foregroundColor(.secondary.opacity(0.8))
+                            }
+                            .transition(.opacity.combined(with: .move(edge: .top)))
                         }
                     }
                     .padding(.horizontal, 20)

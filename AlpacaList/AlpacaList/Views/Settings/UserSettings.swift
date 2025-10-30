@@ -41,13 +41,13 @@ struct UserSettings: View {
     @State var users: [String] = fakeUsers
     @State private var showLogoutAlert = false
     @State private var userToLogout: String?
-    @State private var navigationPath = NavigationPath()
+    @StateObject private var settingsCoordinator = SettingsCoordinator()
     @EnvironmentObject var navigationCoordinator: NavigationCoordinator
     @EnvironmentObject var topBarController: TopBarController
     @Environment(\.dismiss) private var dismiss
     
     var body: some View {
-        NavigationStack(path: $navigationPath) {
+        NavigationStack(path: $settingsCoordinator.navigationPath) {
             SettingsList {
                 // Accounts Section
                 SettingsSection(title: "Accounts") {
@@ -79,7 +79,7 @@ struct UserSettings: View {
                         .padding(.vertical, 5)
                     
                     UserSettingsAddUserButton(action: { 
-                        navigationPath.append("AddAccount")
+                        settingsCoordinator.push(.addAccount)
                     })
                 }
             }
@@ -114,16 +114,20 @@ struct UserSettings: View {
             } message: { user in
                 Text("Are you sure you want to log out of \(user)?")
             }
-            .navigationDestination(for: String.self) { destination in
-                if destination == "AddAccount" {
+            .navigationDestination(for: SettingsDestination.self) { destination in
+                switch destination {
+                case .addAccount:
                     AddAccountView { newHandle in
                         // Add the new user to the list
                         users.append(newHandle)
                         // Automatically select the newly added user
                         selectedUser = newHandle
                         // Pop back to settings
-                        navigationPath.removeLast()
+                        settingsCoordinator.pop()
                     }
+                case .accountDetails(let handle):
+                    // Placeholder for future account details view
+                    Text("Account details for \(handle)")
                 }
             }
         }
