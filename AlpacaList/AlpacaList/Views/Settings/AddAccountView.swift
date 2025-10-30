@@ -201,12 +201,17 @@ struct AddAccountView: View {
         .navigationBarBackButtonHidden(true)
         .alpacaListNavigationBar()
         .toolbar {
-            ToolbarItem(placement: .cancellationAction) {
-                Button("Cancel") {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button(action: {
                     onCancel()
+                }) {
+                    HStack(spacing: 4) {
+                        Image(systemName: "chevron.left")
+                            .font(.system(size: 17, weight: .semibold))
+                        Text("Back")
+                    }
+                    .foregroundColor(.white)
                 }
-                .foregroundColor(.white)
-                .fontWeight(.bold)
             }
         }
         .alert("Login Failed", isPresented: $showError) {

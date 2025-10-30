@@ -90,8 +90,8 @@ struct UserSettings: View {
             .navigationBarTitleDisplayMode(.inline)
             .alpacaListNavigationBar()
             .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Close") {
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Done") {
                         dismiss()
                     }
                     .foregroundColor(.white)
