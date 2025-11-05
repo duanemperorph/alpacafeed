@@ -198,13 +198,9 @@ AlpacaList/
 
 ---
 
-## Key Benefits of This Plan
+## TODOs:
 
-✅ **Incremental** - Each phase is testable independently  
-✅ **Minimal Breaking Changes** - Most views already structured correctly  
-✅ **Clear Separation** - Repositories handle data, ViewModels handle presentation  
-✅ **Centralized Wiring** - AppState is single source for creating dependencies  
-✅ **Easy Testing** - Mock repositories are swappable  
-✅ **Navigation Clarity** - NavigationCoordinator is pure state management  
-
-Ready to start implementation when you switch to agent mode!
+* Investigate cursor implementation
+* separate vm factory object
+* User / auth related repository
+* Simplify settings / top bar - don't need to support mutli user for now

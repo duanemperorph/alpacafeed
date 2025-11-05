@@ -11,6 +11,13 @@
 		34B4FE3F3C0B3C580B89398D /* QuotePostEmbed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8046A1A07EB54C81C9404B09 /* QuotePostEmbed.swift */; };
 		370A25AF2A54B9F70076D378 /* TopBarMinimized.swift in Sources */ = {isa = PBXBuildFile; fileRef = 370A25AE2A54B9F70076D378 /* TopBarMinimized.swift */; };
 		370A25B62A54FA400076D378 /* TopBarContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 370A25B52A54FA400076D378 /* TopBarContainer.swift */; };
+		3712E3F92EBC0F0500452C86 /* FeedRepositoryCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3712E3F42EBC0F0500452C86 /* FeedRepositoryCoordinator.swift */; };
+		3712E3FA2EBC0F0500452C86 /* ProfileCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3712E3F72EBC0F0500452C86 /* ProfileCache.swift */; };
+		3712E3FB2EBC0F0500452C86 /* ThreadRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3712E3F82EBC0F0500452C86 /* ThreadRepository.swift */; };
+		3712E3FC2EBC0F0500452C86 /* PostCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3712E3F52EBC0F0500452C86 /* PostCache.swift */; };
+		3712E3FD2EBC0F0500452C86 /* FeedRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3712E3F32EBC0F0500452C86 /* FeedRepository.swift */; };
+		3712E3FE2EBC0F0500452C86 /* PostRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3712E3F62EBC0F0500452C86 /* PostRepository.swift */; };
+		3712E3FF2EBC0F0500452C86 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3712E3F22EBC0F0500452C86 /* AppState.swift */; };
 		37346BD32A520AB800CB346A /* TopBarExpanded.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37346BD22A520AB800CB346A /* TopBarExpanded.swift */; };
 		37350F212A6DF4E000DD239B /* FeedViewBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37350F202A6DF4E000DD239B /* FeedViewBackground.swift */; };
 		373DABB32A75D9E500DF17EB /* MockDataGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 373DABB22A75D9E500DF17EB /* MockDataGenerator.swift */; };
@@ -83,6 +90,13 @@
 		32E4D3A0E8F408561A816404 /* SettingsCoordinator.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SettingsCoordinator.swift; sourceTree = "<group>"; };
 		370A25AE2A54B9F70076D378 /* TopBarMinimized.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopBarMinimized.swift; sourceTree = "<group>"; };
 		370A25B52A54FA400076D378 /* TopBarContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopBarContainer.swift; sourceTree = "<group>"; };
+		3712E3F22EBC0F0500452C86 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		3712E3F32EBC0F0500452C86 /* FeedRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedRepository.swift; sourceTree = "<group>"; };
+		3712E3F42EBC0F0500452C86 /* FeedRepositoryCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedRepositoryCoordinator.swift; sourceTree = "<group>"; };
+		3712E3F52EBC0F0500452C86 /* PostCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostCache.swift; sourceTree = "<group>"; };
+		3712E3F62EBC0F0500452C86 /* PostRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostRepository.swift; sourceTree = "<group>"; };
+		3712E3F72EBC0F0500452C86 /* ProfileCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCache.swift; sourceTree = "<group>"; };
+		3712E3F82EBC0F0500452C86 /* ThreadRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreadRepository.swift; sourceTree = "<group>"; };
 		37346BD22A520AB800CB346A /* TopBarExpanded.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopBarExpanded.swift; sourceTree = "<group>"; };
 		37350F202A6DF4E000DD239B /* FeedViewBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewBackground.swift; sourceTree = "<group>"; };
 		373DABB22A75D9E500DF17EB /* MockDataGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDataGenerator.swift; sourceTree = "<group>"; };
@@ -168,6 +182,20 @@
 				372C4C582A807843008AC69A /* Feeds */,
 			);
 			path = Feed;
+			sourceTree = "<group>";
+		};
+		3712E3F12EBC0E9600452C86 /* AppState */ = {
+			isa = PBXGroup;
+			children = (
+				3712E3F22EBC0F0500452C86 /* AppState.swift */,
+				3712E3F32EBC0F0500452C86 /* FeedRepository.swift */,
+				3712E3F42EBC0F0500452C86 /* FeedRepositoryCoordinator.swift */,
+				3712E3F52EBC0F0500452C86 /* PostCache.swift */,
+				3712E3F62EBC0F0500452C86 /* PostRepository.swift */,
+				3712E3F72EBC0F0500452C86 /* ProfileCache.swift */,
+				3712E3F82EBC0F0500452C86 /* ThreadRepository.swift */,
+			);
+			path = AppState;
 			sourceTree = "<group>";
 		};
 		371BCB312EAECC3F00FB88D1 /* Compose */ = {
@@ -363,6 +391,7 @@
 		37CF46D52A50FC4800952075 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				3712E3F12EBC0E9600452C86 /* AppState */,
 				3742DB9D2AA699E500B7E83F /* Mock */,
 				3742DB9C2AA699C700B7E83F /* Data */,
 				3742DB9B2AA699BE00B7E83F /* VM */,
@@ -513,6 +542,13 @@
 			files = (
 				37B0A0AE2EAAA34200DBB593 /* ThreadView.swift in Sources */,
 				37B0A0AF2EAAA34200DBB593 /* TimelineView.swift in Sources */,
+				3712E3F92EBC0F0500452C86 /* FeedRepositoryCoordinator.swift in Sources */,
+				3712E3FA2EBC0F0500452C86 /* ProfileCache.swift in Sources */,
+				3712E3FB2EBC0F0500452C86 /* ThreadRepository.swift in Sources */,
+				3712E3FC2EBC0F0500452C86 /* PostCache.swift in Sources */,
+				3712E3FD2EBC0F0500452C86 /* FeedRepository.swift in Sources */,
+				3712E3FE2EBC0F0500452C86 /* PostRepository.swift in Sources */,
+				3712E3FF2EBC0F0500452C86 /* AppState.swift in Sources */,
 				37B0A0B02EAAA35300DBB593 /* ComposeView.swift in Sources */,
 				37346BD32A520AB800CB346A /* TopBarExpanded.swift in Sources */,
 				370A25B62A54FA400076D378 /* TopBarContainer.swift in Sources */,

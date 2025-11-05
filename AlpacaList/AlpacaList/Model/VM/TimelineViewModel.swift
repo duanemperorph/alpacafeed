@@ -9,6 +9,18 @@ import Foundation
 import Observation
 
 /// View model for timeline/feed views (home, profile, custom feeds)
+///
+/// NOTE: This ViewModel will be refactored in Phase 4 to use FeedRepositoryCoordinator
+/// Pattern will be:
+/// ```
+/// class TimelineViewModel {
+///     private let feedCoordinator: FeedRepositoryCoordinator
+///     private let feedType: FeedRepository.FeedType
+///     private var feedRepository: FeedRepository { 
+///         feedCoordinator.repository(for: feedType)
+///     }
+/// }
+/// ```
 @Observable
 class TimelineViewModel {
     // MARK: - Properties
@@ -28,6 +40,8 @@ class TimelineViewModel {
         case home                          // User's home feed
         case authorFeed(handle: String)    // Specific author's posts
         case customFeed(uri: String)       // Algorithm feed
+        case likes(handle: String)         // User's liked posts
+        case search(query: String)         // Search results
     }
     
     private let timelineType: TimelineType
@@ -37,6 +51,22 @@ class TimelineViewModel {
     init(timelineType: TimelineType = .home) {
         self.timelineType = timelineType
     }
+    
+    // TODO: Phase 4 - Add this initializer:
+    // init(
+    //     timelineType: TimelineType,
+    //     feedCoordinator: FeedRepositoryCoordinator,
+    //     postRepository: PostRepository,
+    //     navigationCoordinator: NavigationCoordinator
+    // ) {
+    //     self.timelineType = timelineType
+    //     self.feedCoordinator = feedCoordinator
+    //     self.postRepository = postRepository
+    //     self.navigationCoordinator = navigationCoordinator
+    //     
+    //     // Get the appropriate feed repository for this timeline
+    //     self.feedRepository = feedCoordinator.repository(for: mapToFeedType(timelineType))
+    // }
     
     // MARK: - Fetch Methods
     
@@ -172,5 +202,23 @@ class TimelineViewModel {
         
         return vm
     }
+    
+    // MARK: - Phase 4 Helper Methods (for future use)
+    
+    // TODO: Phase 4 - Add this helper to map between types:
+    // private func mapToFeedType(_ timelineType: TimelineType) -> FeedRepository.FeedType {
+    //     switch timelineType {
+    //     case .home:
+    //         return .home
+    //     case .authorFeed(let handle):
+    //         return .authorFeed(handle: handle)
+    //     case .customFeed(let uri):
+    //         return .customFeed(uri: uri)
+    //     case .likes(let handle):
+    //         return .likes(handle: handle)
+    //     case .search(let query):
+    //         return .search(query: query)
+    //     }
+    // }
 }
 
