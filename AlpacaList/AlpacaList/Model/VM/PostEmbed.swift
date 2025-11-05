@@ -139,6 +139,7 @@ struct InlineVideoPlayer: View {
     @State private var isPlaying = false
     @State private var showThumbnail = true
     @State private var isLoading = false
+    @State private var statusObserver: NSKeyValueObservation?
     
     var body: some View {
         ZStack {
@@ -212,13 +213,16 @@ struct InlineVideoPlayer: View {
         }
         
         // Observe player status using KVO
-        // TODO: CHECK THIS
         if let item = player?.currentItem {
-            Task { @MainActor in
-                // Wait a bit for player to be ready
-                try? await Task.sleep(nanoseconds: 100_000_000) // 0.1 seconds
-                if item.status == .readyToPlay {
-                    isLoading = false
+            statusObserver = item.observe(\.status, options: [.new, .initial]) { item, change in
+                DispatchQueue.main.async {
+                    if item.status == .readyToPlay {
+                        isLoading = false
+                        print("Player is ready to play")
+                    } else if item.status == .failed {
+                        isLoading = false
+                        print("Player failed: \(item.error?.localizedDescription ?? "unknown error")")
+                    }
                 }
             }
         }
@@ -251,6 +255,8 @@ struct InlineVideoPlayer: View {
     }
     
     private func cleanupPlayer() {
+        statusObserver?.invalidate()
+        statusObserver = nil
         player?.pause()
         player = nil
         isPlaying = false
