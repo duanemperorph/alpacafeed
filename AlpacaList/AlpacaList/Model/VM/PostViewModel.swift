@@ -7,9 +7,11 @@
 
 import Foundation
 import SwiftUI
+import Observation
 
 /// View model for individual post display (no style/indentation distinction)
-class PostViewModel: ObservableObject, Identifiable {
+@Observable
+class PostViewModel: Identifiable {
     // MARK: - Properties
     
     let post: Post

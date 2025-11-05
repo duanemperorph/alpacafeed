@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Observation
 
 // MARK: - Navigation Destination
 
@@ -73,15 +74,16 @@ extension NavigationDestination: Hashable {
 
 // MARK: - Navigation Coordinator
 
-class NavigationCoordinator: ObservableObject {
-    @Published var navigationStack: [NavigationDestination]
+@Observable
+class NavigationCoordinator {
+    var navigationStack: [NavigationDestination]
     
     // Compose sheet state (for modal presentation)
-    @Published var showingComposeSheet: Bool = false
-    @Published var composeReplyTo: Post? = nil
+    var showingComposeSheet: Bool = false
+    var composeReplyTo: Post? = nil
     
     // Settings sheet state
-    @Published var showingSettingsSheet: Bool = false
+    var showingSettingsSheet: Bool = false
     
     init() {
         navigationStack = []

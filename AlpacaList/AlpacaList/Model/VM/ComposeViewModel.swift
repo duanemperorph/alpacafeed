@@ -9,22 +9,24 @@ import Foundation
 import SwiftUI
 import PhotosUI
 import AVFoundation
+import Observation
 
 /// View model for composing new posts and replies
-class ComposeViewModel: ObservableObject {
-    // MARK: - Published Properties
+@Observable
+class ComposeViewModel {
+    // MARK: - Properties
     
-    @Published var postText: String = ""
-    @Published var currentEmbed: PendingEmbed? = nil
-    @Published var isPosting: Bool = false
-    @Published var postError: Error? = nil
-    @Published var isLoadingLink: Bool = false
+    var postText: String = ""
+    var currentEmbed: PendingEmbed? = nil
+    var isPosting: Bool = false
+    var postError: Error? = nil
+    var isLoadingLink: Bool = false
     
     // UI presentation state
-    @Published var showingDraftAlert: Bool = false
-    @Published var showingImagePicker: Bool = false
-    @Published var showingVideoPicker: Bool = false
-    @Published var showingLinkInput: Bool = false
+    var showingDraftAlert: Bool = false
+    var showingImagePicker: Bool = false
+    var showingVideoPicker: Bool = false
+    var showingLinkInput: Bool = false
     
     // MARK: - Properties
     

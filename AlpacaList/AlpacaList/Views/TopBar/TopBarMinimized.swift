@@ -35,7 +35,7 @@ struct TopBarButtonMinimized: View {
 }
 
 struct TopBarMinimized: View {
-    @EnvironmentObject var navigationCoordinator: NavigationCoordinator
+    @Environment(NavigationCoordinator.self) private var navigationCoordinator
     @Binding var userName: String
     
     var body: some View {
@@ -73,9 +73,9 @@ struct TopBarMinimized_Previews: PreviewProvider {
             .edgesIgnoringSafeArea(.all)
             VStack {
                 TopBarMinimized(userName: .constant("alice.bsky.social"))
-                    .environmentObject(navigationCoordinatorCannotPop)
+                    .environment(navigationCoordinatorCannotPop)
                 TopBarMinimized(userName: .constant("alice.bsky.social"))
-                    .environmentObject(navigationCoordinatorCanPop)
+                    .environment(navigationCoordinatorCanPop)
             }
             .background(.regularMaterial)
             .environment(\.colorScheme, .dark)

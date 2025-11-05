@@ -10,7 +10,7 @@ import SwiftUI
 struct TopBarContainer: View {
     @Environment(\.colorScheme) var envColorScheme
     @State var userName = "alice.bsky.social"
-    @EnvironmentObject var topBarController: TopBarController
+    @Environment(TopBarController.self) private var topBarController
     
     var backgroundColorScheme: ColorScheme {
         return envColorScheme == .dark ? ColorScheme.light : ColorScheme.dark

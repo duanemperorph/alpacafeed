@@ -7,7 +7,6 @@
 
 import SwiftUI
 import AVKit
-import Combine
 
 /// Renders embedded content (images, videos, links, quotes)
 struct PostEmbed: View {
@@ -212,14 +211,17 @@ struct InlineVideoPlayer: View {
             player?.seek(to: .zero)
         }
         
-        // Observe player status
-        player?.currentItem?.publisher(for: \.status)
-            .sink { status in
-                if status == .readyToPlay {
+        // Observe player status using KVO
+        // TODO: CHECK THIS
+        if let item = player?.currentItem {
+            Task { @MainActor in
+                // Wait a bit for player to be ready
+                try? await Task.sleep(nanoseconds: 100_000_000) // 0.1 seconds
+                if item.status == .readyToPlay {
                     isLoading = false
                 }
             }
-            .store(in: &cancellables)
+        }
     }
     
     private func togglePlayback() {
@@ -255,8 +257,6 @@ struct InlineVideoPlayer: View {
         showThumbnail = true
         NotificationCenter.default.removeObserver(self)
     }
-    
-    @State private var cancellables = Set<AnyCancellable>()
 }
 
 // MARK: - External Link Embed

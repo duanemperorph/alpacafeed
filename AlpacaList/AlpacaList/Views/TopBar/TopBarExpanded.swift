@@ -31,7 +31,7 @@ struct ImageTextFieldPairView: View {
 }
 
 struct ButtonSubBarView: View {
-    @EnvironmentObject var navigationCoordinator: NavigationCoordinator
+    @Environment(NavigationCoordinator.self) private var navigationCoordinator
     
     @ViewBuilder
     var centerContent: some View {
@@ -81,7 +81,7 @@ extension Notification.Name {
 
 struct TopBarExpanded: View {
     @Binding var userName: String
-    @EnvironmentObject var navigationCoordinator: NavigationCoordinator
+    @Environment(NavigationCoordinator.self) private var navigationCoordinator
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     
     @ViewBuilder var userSettingsButton: some View {
@@ -119,7 +119,7 @@ struct TopBarViewExpanded_Previews: PreviewProvider {
                 TopBarExpanded(
                     userName: .constant("alice.bsky.social")
                 )
-                .environmentObject(navigationCoordinator)
+                .environment(navigationCoordinator)
             }
             .background(.regularMaterial)
             .environment(\.colorScheme, .dark)

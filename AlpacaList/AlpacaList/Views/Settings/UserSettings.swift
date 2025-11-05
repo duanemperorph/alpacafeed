@@ -41,12 +41,13 @@ struct UserSettings: View {
     @State var users: [String] = fakeUsers
     @State private var showLogoutAlert = false
     @State private var userToLogout: String?
-    @StateObject private var settingsCoordinator = SettingsCoordinator()
-    @EnvironmentObject var navigationCoordinator: NavigationCoordinator
-    @EnvironmentObject var topBarController: TopBarController
+    @State private var settingsCoordinator = SettingsCoordinator()
+    @Environment(NavigationCoordinator.self) private var navigationCoordinator
+    @Environment(TopBarController.self) private var topBarController
     @Environment(\.dismiss) private var dismiss
     
     var body: some View {
+        @Bindable var settingsCoordinator = settingsCoordinator
         NavigationStack(path: $settingsCoordinator.navigationPath) {
             SettingsList {
                 // Accounts Section
@@ -154,7 +155,7 @@ struct UserSettings_Previews: PreviewProvider {
             .safeAreaInset(edge: .top) {
                 VStack {
                     TopBarMinimized(userName: .constant("alice.bsky.social"))
-                        .environmentObject(NavigationCoordinator())
+                        .environment(NavigationCoordinator())
                     
                 }
                 .background(.ultraThickMaterial)

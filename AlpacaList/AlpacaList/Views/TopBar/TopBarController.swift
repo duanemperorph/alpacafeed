@@ -6,9 +6,11 @@
 //
 
 import Foundation
+import Observation
 
-class TopBarController: ObservableObject {
-    @Published var isExpanded = false
+@Observable
+class TopBarController {
+    var isExpanded = false
     
     var topBarInset: Double {
         return isExpanded ? 90 : 40

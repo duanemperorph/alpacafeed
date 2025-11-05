@@ -11,19 +11,20 @@ import PhotosUI
 struct ComposeView: View {
     // MARK: - Properties
     
-    @StateObject private var viewModel: ComposeViewModel
+    @State private var viewModel: ComposeViewModel
     @Environment(\.dismiss) private var dismiss
-    @EnvironmentObject var navigationCoordinator: NavigationCoordinator
+    @Environment(NavigationCoordinator.self) private var navigationCoordinator
     
     // MARK: - Initialization
     
     init(replyTo: Post? = nil) {
-        _viewModel = StateObject(wrappedValue: ComposeViewModel(replyTo: replyTo))
+        _viewModel = State(wrappedValue: ComposeViewModel(replyTo: replyTo))
     }
     
     // MARK: - Body
     
     var body: some View {
+        @Bindable var viewModel = viewModel
         NavigationView {
             VStack(spacing: 0) {
                 // Reply context header
@@ -234,12 +235,12 @@ struct ComposeView_Previews: PreviewProvider {
         // New post preview
         Group {
             ComposeView(replyTo: nil)
-                .environmentObject(NavigationCoordinator())
+                .environment(NavigationCoordinator())
                 .previewDisplayName("New Post")
             
             // Reply preview
             ComposeView(replyTo: mockPost)
-                .environmentObject(NavigationCoordinator())
+                .environment(NavigationCoordinator())
                 .previewDisplayName("Reply")
         }
     }

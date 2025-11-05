@@ -8,11 +8,12 @@
 import SwiftUI
 
 struct NavigationRootView: View {
-    @StateObject private var timelineViewModel = TimelineViewModel.withMockData()
-    @EnvironmentObject var navigationCoordinator: NavigationCoordinator
-    @EnvironmentObject var topBarController: TopBarController
+    @State private var timelineViewModel = TimelineViewModel.withMockData()
+    @Environment(NavigationCoordinator.self) private var navigationCoordinator
+    @Environment(TopBarController.self) private var topBarController
     
     var body: some View {
+        @Bindable var navigationCoordinator = navigationCoordinator
         NavigationStack(path: $navigationCoordinator.navigationStack) {
             TimelineView(viewModel: timelineViewModel)
                 .navigationDestination(for: NavigationDestination.self) { destination in
@@ -24,12 +25,9 @@ struct NavigationRootView: View {
         }
         .sheet(isPresented: $navigationCoordinator.showingComposeSheet) {
             ComposeView(replyTo: navigationCoordinator.composeReplyTo)
-                .environmentObject(navigationCoordinator)
         }
         .sheet(isPresented: $navigationCoordinator.showingSettingsSheet) {
             UserSettings()
-                .environmentObject(navigationCoordinator)
-                .environmentObject(topBarController)
         }
     }
 }

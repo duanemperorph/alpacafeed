@@ -22,8 +22,8 @@ struct PostListView<Item: Identifiable, Content: View, EmptyContent: View, Loadi
     @ViewBuilder var emptyStateView: () -> EmptyContent
     @ViewBuilder var loadingView: () -> LoadingContent
     
-    @EnvironmentObject var navigationCoordinator: NavigationCoordinator
-    @EnvironmentObject var topBarController: TopBarController
+    @Environment(NavigationCoordinator.self) private var navigationCoordinator
+    @Environment(TopBarController.self) private var topBarController
     
     init(
         items: [Item],

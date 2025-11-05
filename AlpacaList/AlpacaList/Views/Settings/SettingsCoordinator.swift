@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Observation
 
 // MARK: - Settings Destination
 
@@ -21,8 +22,9 @@ enum SettingsDestination: Hashable {
 
 // MARK: - Settings Coordinator
 
-class SettingsCoordinator: ObservableObject {
-    @Published var navigationPath: [SettingsDestination] = []
+@Observable
+class SettingsCoordinator {
+    var navigationPath: [SettingsDestination] = []
     
     var canPop: Bool {
         return !navigationPath.isEmpty

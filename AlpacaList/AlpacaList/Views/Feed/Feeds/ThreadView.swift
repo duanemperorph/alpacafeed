@@ -9,8 +9,8 @@ import SwiftUI
 
 /// Thread/conversation view for viewing a post and its replies
 struct ThreadView: View {
-    @ObservedObject var viewModel: ThreadViewModel
-    @EnvironmentObject var navigationCoordinator: NavigationCoordinator
+    @Bindable var viewModel: ThreadViewModel
+    @Environment(NavigationCoordinator.self) private var navigationCoordinator
     
     var body: some View {
         PostListView(

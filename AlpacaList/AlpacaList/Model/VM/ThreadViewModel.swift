@@ -6,25 +6,25 @@
 //
 
 import Foundation
-import Combine
+import Observation
 
 /// View model for post thread view (linear, not nested tree)
-class ThreadViewModel: ObservableObject {
-    // MARK: - Published Properties
+@Observable
+class ThreadViewModel {
+    // MARK: - Properties
     
-    @Published var rootPost: Post?           // The main post being viewed
-    @Published var parentPosts: [Post] = []  // Chain from main post to thread root
-    @Published var replies: [Post] = []      // Direct replies to the main post
-    @Published var isLoading = false
-    @Published var isLoadingMoreReplies = false
-    @Published var error: Error?
+    var rootPost: Post?           // The main post being viewed
+    var parentPosts: [Post] = []  // Chain from main post to thread root
+    var replies: [Post] = []      // Direct replies to the main post
+    var isLoading = false
+    var isLoadingMoreReplies = false
+    var error: Error?
     
     // MARK: - Private Properties
     
     private let postUri: String
     private var repliesCursor: String?
     private var hasMoreReplies = true
-    private var cancellables = Set<AnyCancellable>()
     
     // MARK: - Initialization
     

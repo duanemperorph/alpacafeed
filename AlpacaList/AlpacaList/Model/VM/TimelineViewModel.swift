@@ -6,22 +6,22 @@
 //
 
 import Foundation
-import Combine
+import Observation
 
 /// View model for timeline/feed views (home, profile, custom feeds)
-class TimelineViewModel: ObservableObject {
-    // MARK: - Published Properties
+@Observable
+class TimelineViewModel {
+    // MARK: - Properties
     
-    @Published var posts: [Post] = []
-    @Published var isLoading = false
-    @Published var isLoadingMore = false
-    @Published var error: Error?
+    var posts: [Post] = []
+    var isLoading = false
+    var isLoadingMore = false
+    var error: Error?
     
     // MARK: - Private Properties
     
     private var cursor: String?
     private var hasMorePosts = true
-    private var cancellables = Set<AnyCancellable>()
     
     // Timeline type
     enum TimelineType {

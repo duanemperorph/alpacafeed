@@ -9,8 +9,6 @@ import SwiftUI
 
 struct RootPreviews: View {
     let mockFeedItems: [FeedItem]
-    let navigationCoordinator: NavigationCoordinator = NavigationCoordinator()
-    let topBarController: TopBarController = TopBarController()
     
     init() {
         if ProcessInfo.processInfo.arguments.contains("-uiTesting") {
@@ -29,8 +27,6 @@ struct RootPreviews: View {
     
     var body: some View {
         NavigationRootView()
-            .environmentObject(navigationCoordinator)
-            .environmentObject(topBarController)
     }
 }
 

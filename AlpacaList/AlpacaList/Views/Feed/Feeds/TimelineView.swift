@@ -9,8 +9,8 @@ import SwiftUI
 
 /// Timeline feed view for home, profile, or custom feeds
 struct TimelineView: View {
-    @ObservedObject var viewModel: TimelineViewModel
-    @EnvironmentObject var navigationCoordinator: NavigationCoordinator
+    @Bindable var viewModel: TimelineViewModel
+    @Environment(NavigationCoordinator.self) private var navigationCoordinator
     
     var body: some View {
         PostListView(
