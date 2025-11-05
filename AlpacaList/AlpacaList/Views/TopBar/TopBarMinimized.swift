@@ -35,21 +35,10 @@ struct TopBarButtonMinimized: View {
 }
 
 struct TopBarMinimized: View {
-    @Environment(NavigationCoordinator.self) private var navigationCoordinator
     @Binding var userName: String
     
     var body: some View {
         HStack {
-            if navigationCoordinator.canPop {
-                Button(action: {
-                    navigationCoordinator.pop()
-                }) {
-                    Image(systemName: "chevron.left")
-                }
-                .foregroundColor(.white)
-                .font(.system(size: 22)).fontWeight(.semibold)
-                Spacer().frame(width: 15)
-            }
             TopBarButtonMinimized(imageName: "person.circle", text: userName)
         }
         .font(.system(size: 18))

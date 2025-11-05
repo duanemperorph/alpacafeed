@@ -200,6 +200,5 @@ AlpacaList/
 
 ## TODOs:
 
-* separate vm factory object
 * User / auth related repository
-* Simplify settings / top bar - don't need to support mutli user for now
+    - must take into account multi-user capability
