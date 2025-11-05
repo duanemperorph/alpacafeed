@@ -11,8 +11,8 @@ import Observation
 
 /// Central application state manager
 /// - Manages global app state (auth, navigation, etc.)
-/// - Owns caches and long-lived coordinators
-/// - Provides ViewModel factory methods that create fresh repositories
+/// - Owns shared caches only (repositories and coordinators are created fresh)
+/// - Delegates ViewModel creation to ViewModelFactory
 @Observable
 class AppState {
     // MARK: - Navigation
@@ -24,9 +24,9 @@ class AppState {
     let postCache: PostCache
     let profileCache: ProfileCache
     
-    // MARK: - Coordinators (Cached, manage repository instances)
+    // MARK: - ViewModel Factory
     
-    let feedRepositoryCoordinator: FeedRepositoryCoordinator
+    let viewModelFactory: ViewModelFactory
     
     // MARK: - Global State
     
@@ -40,8 +40,8 @@ class AppState {
         self.postCache = PostCache()
         self.profileCache = ProfileCache()
         
-        // Initialize feed repository coordinator
-        self.feedRepositoryCoordinator = FeedRepositoryCoordinator(
+        // Initialize ViewModel factory
+        self.viewModelFactory = ViewModelFactory(
             postCache: postCache,
             profileCache: profileCache
         )
@@ -54,46 +54,6 @@ class AppState {
         self.isAuthenticated = true
     }
     
-    // MARK: - ViewModel Factory Methods
-    
-    // NOTE: These factory methods create FRESH repository instances per ViewModel
-    // Only caches and coordinators are shared/long-lived
-    
-    /// Create a TimelineViewModel with proper dependencies
-    /// TODO: Phase 4 - Update when TimelineViewModel accepts repositories
-    func makeTimelineViewModel(type: TimelineViewModel.TimelineType) -> TimelineViewModel {
-        // For now, use the existing initializer
-        // Will be updated in Phase 4 to pass feedRepositoryCoordinator
-        return TimelineViewModel(timelineType: type)
-    }
-    
-    /// Create a ThreadViewModel with proper dependencies
-    /// TODO: Phase 4 - Update when ThreadViewModel accepts repositories
-    func makeThreadViewModel(post: Post) -> ThreadViewModel {
-        // For now, use the existing initializer
-        // Will be updated in Phase 4 to pass fresh ThreadRepository
-        return ThreadViewModel(post: post)
-    }
-    
-    /// Create a ComposeViewModel with proper dependencies
-    /// TODO: Phase 4 - Update when ComposeViewModel accepts repositories
-    func makeComposeViewModel(replyTo: Post? = nil, onPostCreated: @escaping (Post) -> Void = { _ in }) -> ComposeViewModel {
-        // For now, use the existing initializer
-        // Will be updated in Phase 4 to pass fresh PostRepository
-        return ComposeViewModel(replyTo: replyTo)
-    }
-    
-    // MARK: - Private Helper Methods
-    
-    /// Create a fresh ThreadRepository instance
-    private func makeThreadRepository() -> ThreadRepository {
-        return ThreadRepository(postCache: postCache, profileCache: profileCache)
-    }
-    
-    /// Create a fresh PostRepository instance
-    private func makePostRepository() -> PostRepository {
-        return PostRepository(postCache: postCache)
-    }
     
     // MARK: - Cache Management
     
@@ -113,13 +73,6 @@ class AppState {
         return await profileCache.getProfile(handle: handle)
     }
     
-    // MARK: - Coordinator Management
-    
-    /// Clear all feed repositories (useful for account switch)
-    func clearAllFeedRepositories() {
-        feedRepositoryCoordinator.clearAll()
-    }
-    
     // MARK: - Authentication (Mock for now)
     
     /// Mock login
@@ -135,7 +88,6 @@ class AppState {
         currentUser = nil
         isAuthenticated = false
         await clearAllCaches()
-        clearAllFeedRepositories()
     }
 }
 
