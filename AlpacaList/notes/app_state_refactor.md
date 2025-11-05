@@ -109,7 +109,33 @@
 
 ### **Phase 3: Refactor NavigationCoordinator**
 
-* TODO: Figure out relationship between navigation coordinator and app state
+Division of Responsibilities:
+
+**NavigationCoordinator**
+- Holds navigation state (`navigationStack`, modal flags)
+- Provides navigation commands (`push()`, `pop()`, `presentCompose()`)
+- No view or viewmodel knowledge
+
+**AppState**
+- Owns `NavigationCoordinator` and repositories
+- Creates ViewModels with proper dependencies (factory methods)
+- No view knowledge
+
+**NavigationRootView**
+- Binds `NavigationCoordinator` state to SwiftUI's `NavigationStack` API
+- Creates Views from destinations
+- Asks `AppState` for ViewModels
+
+**Flow**: ViewModel calls NavigationCoordinator → State changes → SwiftUI detects change → NavigationRootView creates View → AppState provides ViewModel
+
+| Role | Responsibility | Who |
+|------|---------------|-----|
+| **State Container** | Navigation state | `NavigationCoordinator` |
+| **State Mutator** | Navigation commands | `NavigationCoordinator` |
+| **ViewModel Factory** | Creates ViewModels with dependencies | `AppState` |
+| **View Factory** | Creates Views with ViewModels | `NavigationRootView` |
+| **SwiftUI Integration** | Binds to SwiftUI APIs | `NavigationRootView` |
+
 
 ---
 
@@ -136,25 +162,7 @@
 
 ---
 
-### **Phase 5: Update Views**
-
-?
-
----
-
-### **Phase 6: Wire Everything Together**
-
-?
-
----
-
-### **Phase 7: Update MockDataGenerator**
-
-?
-
----
-
-### **Phase 8: Testing & Cleanup**
+### **Phase 5: Update Views / Finish Wire Everything Together**
 
 ?
 

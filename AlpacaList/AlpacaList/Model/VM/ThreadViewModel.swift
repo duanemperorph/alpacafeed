@@ -212,8 +212,6 @@ class ThreadViewModel {
     // MARK: - Mock Data (for testing)
     
     static func withMockData(for post: Post? = nil) -> ThreadViewModel {
-        let mockAuthors = MockDataGenerator.mockAuthors
-        
         // Create main post
         let mainPost = post ?? Post.createTextPost(
             author: mockAuthors[0],
@@ -227,57 +225,6 @@ class ThreadViewModel {
         vm.replies = MockDataGenerator.generateThreadReplies(to: mainPost, count: 10)
         
         return vm
-    }
-}
-
-// MARK: - Mock Data Generator Extension
-
-extension MockDataGenerator {
-    /// Generate mock thread replies
-    static func generateThreadReplies(to post: Post, count: Int = 10) -> [Post] {
-        let authors = mockAuthors
-        var replies: [Post] = []
-        
-        for i in 0..<count {
-            let author = authors[i % authors.count]
-            let date = post.createdAt.addingTimeInterval(Double((i + 1) * 300)) // 5 min apart
-            
-            let reply = Post.createReply(
-                author: author,
-                text: mockReplyTexts[i % mockReplyTexts.count],
-                replyTo: post,
-                createdAt: date
-            )
-            
-            replies.append(reply)
-        }
-        
-        return replies
-    }
-    
-    static var mockReplyTexts: [String] {
-        [
-            "Great point! I completely agree with this.",
-            "Interesting perspective 🤔",
-            "Thanks for sharing!",
-            "This is exactly what I was thinking",
-            "Could you elaborate more on this?",
-            "I have a different take on this...",
-            "Well said! 👏",
-            "This made my day, thank you!",
-            "Adding to this: ...",
-            "Not sure I agree, but interesting nonetheless",
-            "Facts! 💯",
-            "This is so true",
-            "Never thought about it this way",
-            "Brilliant observation",
-            "I learned something new today",
-            "Sharing this with my friends",
-            "More people need to see this",
-            "Couldn't have said it better myself",
-            "This deserves more attention",
-            "Appreciate you sharing this perspective"
-        ]
     }
 }
 
