@@ -66,6 +66,7 @@
 		75FA6A039CAD498AB3E99969E38A5DD9 /* BlueskyFeedSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97D03336943F43AFABCE34A2167CEDA0 /* BlueskyFeedSelector.swift */; };
 		926266A28C7276394986C9A4 /* ViewModelFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40397FE75161F1524D4B99A4 /* ViewModelFactory.swift */; };
 		93DA66C5783734833084BF54 /* VideoEmbed.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5AABAB663575ACA8DC764FC /* VideoEmbed.swift */; };
+		C3D82BB5C2903A9AA24F40C3 /* MockRepositories.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2FEEE45A53C15477363DB4D /* MockRepositories.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -149,6 +150,7 @@
 		865F76C1326788398C35F4EF /* MediaPickerComponents.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MediaPickerComponents.swift; sourceTree = "<group>"; };
 		97D03336943F43AFABCE34A2167CEDA0 /* BlueskyFeedSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlueskyFeedSelector.swift; sourceTree = "<group>"; };
 		A5AABAB663575ACA8DC764FC /* VideoEmbed.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = VideoEmbed.swift; sourceTree = "<group>"; };
+		F2FEEE45A53C15477363DB4D /* MockRepositories.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MockRepositories.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -196,6 +198,7 @@
 				3712E3F62EBC0F0500452C86 /* PostRepository.swift */,
 				3712E3F72EBC0F0500452C86 /* ProfileCache.swift */,
 				3712E3F82EBC0F0500452C86 /* ThreadRepository.swift */,
+				F2FEEE45A53C15477363DB4D /* MockRepositories.swift */,
 			);
 			path = AppState;
 			sourceTree = "<group>";
@@ -595,6 +598,7 @@
 				6B5AE2C8A129576238D0D392 /* ExternalLinkEmbed.swift in Sources */,
 				34B4FE3F3C0B3C580B89398D /* QuotePostEmbed.swift in Sources */,
 				926266A28C7276394986C9A4 /* ViewModelFactory.swift in Sources */,
+				C3D82BB5C2903A9AA24F40C3 /* MockRepositories.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

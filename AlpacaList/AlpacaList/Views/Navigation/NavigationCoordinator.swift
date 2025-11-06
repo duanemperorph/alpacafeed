@@ -75,6 +75,7 @@ extension NavigationDestination: Hashable {
 // MARK: - Navigation Coordinator
 
 @Observable
+@MainActor
 class NavigationCoordinator {
     var navigationStack: [NavigationDestination]
     

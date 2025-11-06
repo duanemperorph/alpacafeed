@@ -239,10 +239,12 @@ class ComposeViewModel {
             let metadata = parseHTMLMetadata(html: html, url: url)
             
             // Download thumbnail if available
-            var thumbnailImage: UIImage?
+            let thumbnailImage: UIImage?
             if let thumbnailURLString = metadata.thumbnailURL,
                let thumbnailURL = URL(string: thumbnailURLString) {
                 thumbnailImage = await downloadImage(from: thumbnailURL)
+            } else {
+                thumbnailImage = nil
             }
             
             // Update embed

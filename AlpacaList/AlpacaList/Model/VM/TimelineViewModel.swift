@@ -10,18 +10,25 @@ import Observation
 
 /// View model for timeline/feed views (home, profile, custom feeds)
 @Observable
+@MainActor
 class TimelineViewModel {
     // MARK: - Properties
     
-    var posts: [Post] = []
-    var isLoading = false
-    var isLoadingMore = false
-    var error: Error?
+    /// Posts for the current timeline - computed from repository (single source of truth)
+    var posts: [Post] {
+        return feedRepository.posts
+    }
+    
+    /// Loading states - computed from repository (single source of truth)
+    var isLoading: Bool {
+        return feedRepository.isLoading
+    }
+    
+    var isLoadingMore: Bool {
+        return feedRepository.isLoadingMore
+    }
     
     // MARK: - Private Properties
-    
-    private var cursor: String?
-    private var hasMorePosts = true
     
     // Timeline type
     enum TimelineType: Equatable {
@@ -35,12 +42,11 @@ class TimelineViewModel {
     private(set) var timelineType: TimelineType  // Changed to var to support switching
     
     // Repository dependencies
-    private let feedCoordinator: FeedRepositoryCoordinator?
-    private let postRepository: PostRepository?
+    private let feedCoordinator: FeedRepositoryCoordinator
+    private let postRepository: PostRepository
     
     // Computed property to get the feed repository for this timeline
-    private var feedRepository: FeedRepository? {
-        guard let feedCoordinator = feedCoordinator else { return nil }
+    private var feedRepository: FeedRepository {
         return feedCoordinator.repository(for: mapToFeedType(timelineType))
     }
     
@@ -57,11 +63,12 @@ class TimelineViewModel {
         self.postRepository = postRepository
     }
     
-    /// Legacy initializer for backward compatibility (will be removed)
+    /// Legacy initializer for backward compatibility (uses mock repositories)
+    // TODO: DELETEME
     init(timelineType: TimelineType = .home) {
         self.timelineType = timelineType
-        self.feedCoordinator = nil
-        self.postRepository = nil
+        self.feedCoordinator = MockFeedRepositoryCoordinator()
+        self.postRepository = MockPostRepository()
     }
     
     // MARK: - Timeline Switching
@@ -74,15 +81,11 @@ class TimelineViewModel {
         // Update the timeline type
         timelineType = newType
         
-        // Clear current state
-        posts = []
-        error = nil
-        cursor = nil
-        hasMorePosts = true
+        // Note: The feedRepository computed property will now return a different repository
+        // from the coordinator based on the new timeline type, and posts will automatically
+        // reflect the new repository's state
         
         // Fetch the new timeline
-        // Note: The feedRepository computed property will now return a different repository
-        // from the coordinator based on the new timeline type
         fetchTimeline()
     }
     
@@ -90,124 +93,107 @@ class TimelineViewModel {
     
     /// Fetch timeline (initial load)
     func fetchTimeline() {
-        guard !isLoading else { return }
-        
-        isLoading = true
-        error = nil
-        cursor = nil
-        hasMorePosts = true
-        
-        // TODO: Replace with actual API call
-        // For now, just clear posts
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
-            self?.posts = []
-            self?.isLoading = false
+        Task {
+            await feedRepository.fetchFeed()
         }
     }
     
     /// Load more posts (pagination)
     func loadMore() {
-        guard !isLoadingMore, !isLoading, hasMorePosts, cursor != nil else {
-            return
-        }
-        
-        isLoadingMore = true
-        
-        // TODO: Replace with actual API call using cursor
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
-            self?.isLoadingMore = false
+        Task {
+            await feedRepository.loadMore()
         }
     }
     
     /// Refresh timeline (pull to refresh)
     func refresh() async {
-        cursor = nil
-        hasMorePosts = true
-        
-        // TODO: Replace with actual API call
-        await MainActor.run {
-            self.posts = []
-        }
+        await feedRepository.refresh()
     }
     
     // MARK: - Interaction Methods
     
     /// Like a post
     func likePost(uri: String) {
-        guard let index = posts.firstIndex(where: { $0.uri == uri }) else {
-            return
-        }
-        
-        var post = posts[index]
-        
-        if post.isLiked {
-            // Unlike
-            post.isLiked = false
-            post.likeCount = max(0, post.likeCount - 1)
-            post.likeUri = nil
+        Task {
+            guard let post = posts.first(where: { $0.uri == uri }) else { return }
             
-            // TODO: API call to delete like record
-        } else {
-            // Like
-            post.isLiked = true
-            post.likeCount += 1
+            // PostRepository handles optimistic update in cache
+            if post.isLiked {
+                await postRepository.unlikePost(uri: uri)
+            } else {
+                await postRepository.likePost(uri: uri)
+            }
             
-            // TODO: API call to create like record
-            // Set post.likeUri from response
+            // Refresh posts from cache to show updated state
+            await feedRepository.refreshPostsFromCache()
         }
-        
-        posts[index] = post
     }
     
     /// Repost a post
     func repost(uri: String) {
-        guard let index = posts.firstIndex(where: { $0.uri == uri }) else {
-            return
-        }
-        
-        var post = posts[index]
-        
-        if post.isReposted {
-            // Undo repost
-            post.isReposted = false
-            post.repostCount = max(0, post.repostCount - 1)
-            post.repostUri = nil
+        Task {
+            guard let post = posts.first(where: { $0.uri == uri }) else { return }
             
-            // TODO: API call to delete repost record
-        } else {
-            // Repost
-            post.isReposted = true
-            post.repostCount += 1
+            // PostRepository handles optimistic update in cache
+            if post.isReposted {
+                await postRepository.deleteRepost(uri: uri)
+            } else {
+                await postRepository.repost(uri: uri)
+            }
             
-            // TODO: API call to create repost record
-            // Set post.repostUri from response
+            // Refresh posts from cache to show updated state
+            await feedRepository.refreshPostsFromCache()
         }
-        
-        posts[index] = post
     }
     
     /// Quote post (repost with comment)
     func quotePost(uri: String, text: String) {
-        // TODO: API call to create quote post
-        // This creates a new post with embed.record pointing to the quoted post
+        guard let quotedPost = posts.first(where: { $0.uri == uri }) else {
+            return
+        }
+        
+        // Create a record embed for the quoted post
+        let recordEmbed = Embed.RecordEmbed(
+            uri: quotedPost.uri,
+            cid: quotedPost.cid
+        )
+        
+        Task {
+            if let newPost = await postRepository.createPost(
+                text: text,
+                replyTo: nil,
+                embed: .record(recordEmbed)
+            ) {
+                // Add the new quote post to the timeline via repository
+                await self.feedRepository.prependPost(newPost)
+            }
+        }
     }
     
     /// Delete own post
     func deletePost(uri: String) {
-        // TODO: API call to delete post record
-        // Remove from local array on success
-        posts.removeAll { $0.uri == uri }
+        Task {
+            // Remove from repository and cache
+            await feedRepository.removePost(uri: uri)
+            
+            // Delete via API
+            _ = await postRepository.deletePost(uri: uri)
+        }
     }
     
     /// Bookmark a post (local only for now)
     func toggleBookmark(uri: String) {
-        guard let index = posts.firstIndex(where: { $0.uri == uri }) else {
-            return
+        Task {
+            guard let post = posts.first(where: { $0.uri == uri }) else {
+                return
+            }
+            
+            var updatedPost = post
+            updatedPost.isBookmarked.toggle()
+            await feedRepository.updatePost(updatedPost)
+            
+            // TODO: Persist bookmarks locally or via API
         }
-        
-        posts[index].isBookmarked.toggle()
-        
-        // TODO: Persist bookmarks locally or via API
     }
     
     // MARK: - Mock Data (for testing)
@@ -215,8 +201,8 @@ class TimelineViewModel {
     static func withMockData() -> TimelineViewModel {
         let vm = TimelineViewModel()
         
-        // Generate mock posts
-        vm.posts = MockDataGenerator.generateTimeline()
+        // Trigger fetching which will populate repository with mock data
+        vm.fetchTimeline()
         
         return vm
     }

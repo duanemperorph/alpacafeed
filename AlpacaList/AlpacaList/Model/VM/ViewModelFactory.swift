@@ -10,6 +10,7 @@ import Foundation
 /// Factory for creating ViewModels with proper dependencies
 /// - Creates FRESH repository and coordinator instances per ViewModel
 /// - Uses shared caches only
+@MainActor
 class ViewModelFactory {
     // MARK: - Dependencies (Shared, long-lived)
     

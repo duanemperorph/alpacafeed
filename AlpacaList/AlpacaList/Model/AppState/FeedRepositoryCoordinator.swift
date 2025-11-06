@@ -8,6 +8,7 @@
 import Foundation
 
 /// Coordinates multiple FeedRepository instances, one per feed
+@MainActor
 class FeedRepositoryCoordinator {
     private let postCache: PostCache
     private let profileCache: ProfileCache

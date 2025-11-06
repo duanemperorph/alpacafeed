@@ -14,6 +14,7 @@ import Observation
 /// - Owns shared caches only (repositories and coordinators are created fresh)
 /// - Delegates ViewModel creation to ViewModelFactory
 @Observable
+@MainActor
 class AppState {
     // MARK: - Navigation
     
