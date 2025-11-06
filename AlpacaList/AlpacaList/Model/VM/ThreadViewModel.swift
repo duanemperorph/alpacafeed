@@ -26,12 +26,32 @@ class ThreadViewModel {
     private var repliesCursor: String?
     private var hasMoreReplies = true
     
+    // Repository dependencies
+    private let threadRepository: ThreadRepository?
+    private let postRepository: PostRepository?
+    
     // MARK: - Initialization
     
-    init(postUri: String) {
-        self.postUri = postUri
+    /// Modern initializer with repository dependencies
+    init(
+        post: Post,
+        threadRepository: ThreadRepository,
+        postRepository: PostRepository
+    ) {
+        self.postUri = post.uri
+        self.rootPost = post
+        self.threadRepository = threadRepository
+        self.postRepository = postRepository
     }
     
+    /// Legacy initializer for backward compatibility (will be removed)
+    init(postUri: String) {
+        self.postUri = postUri
+        self.threadRepository = nil
+        self.postRepository = nil
+    }
+    
+    /// Legacy convenience initializer for backward compatibility (will be removed)
     convenience init(post: Post) {
         self.init(postUri: post.uri)
         self.rootPost = post

@@ -196,7 +196,6 @@
 				3712E3F62EBC0F0500452C86 /* PostRepository.swift */,
 				3712E3F72EBC0F0500452C86 /* ProfileCache.swift */,
 				3712E3F82EBC0F0500452C86 /* ThreadRepository.swift */,
-				40397FE75161F1524D4B99A4 /* ViewModelFactory.swift */,
 			);
 			path = AppState;
 			sourceTree = "<group>";
@@ -247,6 +246,7 @@
 				37B0A09C2EAAA32000DBB593 /* PostViewModel.swift */,
 				37B0A09D2EAAA32000DBB593 /* ThreadViewModel.swift */,
 				37B0A09E2EAAA32000DBB593 /* TimelineViewModel.swift */,
+				40397FE75161F1524D4B99A4 /* ViewModelFactory.swift */,
 			);
 			path = VM;
 			sourceTree = "<group>";

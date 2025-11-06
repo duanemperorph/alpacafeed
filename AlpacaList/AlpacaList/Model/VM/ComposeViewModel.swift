@@ -32,6 +32,10 @@ class ComposeViewModel {
     
     let replyTo: Post?
     
+    // Repository dependencies
+    private let postRepository: PostRepository?
+    private let onPostCreated: ((Post) -> Void)?
+    
     // MARK: - Constants
     
     let characterLimit = 300
@@ -98,8 +102,22 @@ class ComposeViewModel {
     
     // MARK: - Initialization
     
+    /// Modern initializer with repository dependencies
+    init(
+        replyTo: Post? = nil,
+        postRepository: PostRepository,
+        onPostCreated: @escaping (Post) -> Void
+    ) {
+        self.replyTo = replyTo
+        self.postRepository = postRepository
+        self.onPostCreated = onPostCreated
+    }
+    
+    /// Legacy initializer for backward compatibility (will be removed)
     init(replyTo: Post? = nil) {
         self.replyTo = replyTo
+        self.postRepository = nil
+        self.onPostCreated = nil
     }
     
     // MARK: - Actions

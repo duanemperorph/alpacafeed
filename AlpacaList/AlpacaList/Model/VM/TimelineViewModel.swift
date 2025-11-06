@@ -9,18 +9,6 @@ import Foundation
 import Observation
 
 /// View model for timeline/feed views (home, profile, custom feeds)
-///
-/// NOTE: This ViewModel will be refactored in Phase 4 to use FeedRepositoryCoordinator
-/// Pattern will be:
-/// ```
-/// class TimelineViewModel {
-///     private let feedCoordinator: FeedRepositoryCoordinator
-///     private let feedType: FeedRepository.FeedType
-///     private var feedRepository: FeedRepository { 
-///         feedCoordinator.repository(for: feedType)
-///     }
-/// }
-/// ```
 @Observable
 class TimelineViewModel {
     // MARK: - Properties
@@ -36,7 +24,7 @@ class TimelineViewModel {
     private var hasMorePosts = true
     
     // Timeline type
-    enum TimelineType {
+    enum TimelineType: Equatable {
         case home                          // User's home feed
         case authorFeed(handle: String)    // Specific author's posts
         case customFeed(uri: String)       // Algorithm feed
@@ -44,29 +32,59 @@ class TimelineViewModel {
         case search(query: String)         // Search results
     }
     
-    private let timelineType: TimelineType
+    private(set) var timelineType: TimelineType  // Changed to var to support switching
+    
+    // Repository dependencies
+    private let feedCoordinator: FeedRepositoryCoordinator?
+    private let postRepository: PostRepository?
+    
+    // Computed property to get the feed repository for this timeline
+    private var feedRepository: FeedRepository? {
+        guard let feedCoordinator = feedCoordinator else { return nil }
+        return feedCoordinator.repository(for: mapToFeedType(timelineType))
+    }
     
     // MARK: - Initialization
     
-    init(timelineType: TimelineType = .home) {
+    /// Modern initializer with repository dependencies
+    init(
+        timelineType: TimelineType,
+        feedCoordinator: FeedRepositoryCoordinator,
+        postRepository: PostRepository
+    ) {
         self.timelineType = timelineType
+        self.feedCoordinator = feedCoordinator
+        self.postRepository = postRepository
     }
     
-    // TODO: Phase 4 - Add this initializer:
-    // init(
-    //     timelineType: TimelineType,
-    //     feedCoordinator: FeedRepositoryCoordinator,
-    //     postRepository: PostRepository,
-    //     navigationCoordinator: NavigationCoordinator
-    // ) {
-    //     self.timelineType = timelineType
-    //     self.feedCoordinator = feedCoordinator
-    //     self.postRepository = postRepository
-    //     self.navigationCoordinator = navigationCoordinator
-    //     
-    //     // Get the appropriate feed repository for this timeline
-    //     self.feedRepository = feedCoordinator.repository(for: mapToFeedType(timelineType))
-    // }
+    /// Legacy initializer for backward compatibility (will be removed)
+    init(timelineType: TimelineType = .home) {
+        self.timelineType = timelineType
+        self.feedCoordinator = nil
+        self.postRepository = nil
+    }
+    
+    // MARK: - Timeline Switching
+    
+    /// Switch to a different timeline type
+    /// This allows the same ViewModel to display different feeds without recreating it
+    func switchTimeline(to newType: TimelineType) {
+        guard newType != timelineType else { return }
+        
+        // Update the timeline type
+        timelineType = newType
+        
+        // Clear current state
+        posts = []
+        error = nil
+        cursor = nil
+        hasMorePosts = true
+        
+        // Fetch the new timeline
+        // Note: The feedRepository computed property will now return a different repository
+        // from the coordinator based on the new timeline type
+        fetchTimeline()
+    }
     
     // MARK: - Fetch Methods
     
@@ -203,22 +221,22 @@ class TimelineViewModel {
         return vm
     }
     
-    // MARK: - Phase 4 Helper Methods (for future use)
+    // MARK: - Helper Methods
     
-    // TODO: Phase 4 - Add this helper to map between types:
-    // private func mapToFeedType(_ timelineType: TimelineType) -> FeedRepository.FeedType {
-    //     switch timelineType {
-    //     case .home:
-    //         return .home
-    //     case .authorFeed(let handle):
-    //         return .authorFeed(handle: handle)
-    //     case .customFeed(let uri):
-    //         return .customFeed(uri: uri)
-    //     case .likes(let handle):
-    //         return .likes(handle: handle)
-    //     case .search(let query):
-    //         return .search(query: query)
-    //     }
-    // }
+    /// Map TimelineType to FeedRepository.FeedType
+    private func mapToFeedType(_ timelineType: TimelineType) -> FeedRepository.FeedType {
+        switch timelineType {
+        case .home:
+            return .home
+        case .authorFeed(let handle):
+            return .authorFeed(handle: handle)
+        case .customFeed(let uri):
+            return .customFeed(uri: uri)
+        case .likes(let handle):
+            return .likes(handle: handle)
+        case .search(let query):
+            return .search(query: query)
+        }
+    }
 }
 

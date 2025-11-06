@@ -29,27 +29,44 @@ class ViewModelFactory {
     // MARK: - ViewModel Factory Methods
     
     /// Create a TimelineViewModel with proper dependencies
-    /// TODO: Phase 4 - Update when TimelineViewModel accepts repositories
     func makeTimelineViewModel(type: TimelineViewModel.TimelineType) -> TimelineViewModel {
-        // For now, use the existing initializer
-        // Will be updated in Phase 4 to pass fresh FeedRepositoryCoordinator
-        return TimelineViewModel(timelineType: type)
+        // Create fresh repository instances for this ViewModel
+        let feedCoordinator = makeFeedRepositoryCoordinator()
+        let postRepository = makePostRepository()
+        
+        return TimelineViewModel(
+            timelineType: type,
+            feedCoordinator: feedCoordinator,
+            postRepository: postRepository
+        )
     }
     
     /// Create a ThreadViewModel with proper dependencies
-    /// TODO: Phase 4 - Update when ThreadViewModel accepts repositories
     func makeThreadViewModel(post: Post) -> ThreadViewModel {
-        // For now, use the existing initializer
-        // Will be updated in Phase 4 to pass fresh ThreadRepository
-        return ThreadViewModel(post: post)
+        // Create fresh repository instances for this ViewModel
+        let threadRepository = makeThreadRepository()
+        let postRepository = makePostRepository()
+        
+        return ThreadViewModel(
+            post: post,
+            threadRepository: threadRepository,
+            postRepository: postRepository
+        )
     }
     
     /// Create a ComposeViewModel with proper dependencies
-    /// TODO: Phase 4 - Update when ComposeViewModel accepts repositories
-    func makeComposeViewModel(replyTo: Post? = nil, onPostCreated: @escaping (Post) -> Void = { _ in }) -> ComposeViewModel {
-        // For now, use the existing initializer
-        // Will be updated in Phase 4 to pass fresh PostRepository
-        return ComposeViewModel(replyTo: replyTo)
+    func makeComposeViewModel(
+        replyTo: Post? = nil,
+        onPostCreated: @escaping (Post) -> Void = { _ in }
+    ) -> ComposeViewModel {
+        // Create fresh PostRepository instance for this ViewModel
+        let postRepository = makePostRepository()
+        
+        return ComposeViewModel(
+            replyTo: replyTo,
+            postRepository: postRepository,
+            onPostCreated: onPostCreated
+        )
     }
     
     // MARK: - Repository Factory Methods
