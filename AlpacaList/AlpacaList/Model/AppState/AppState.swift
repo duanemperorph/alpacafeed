@@ -10,16 +10,12 @@ import Foundation
 import Observation
 
 /// Central application state manager
-/// - Manages global app state (auth, navigation, etc.)
+/// - Manages global app state (auth, caches, etc.)
 /// - Owns shared caches only (repositories and coordinators are created fresh)
 /// - Delegates ViewModel creation to ViewModelFactory
 @Observable
 @MainActor
 class AppState {
-    // MARK: - Navigation
-    
-    let navigationCoordinator: NavigationCoordinator
-    
     // MARK: - Caches (Shared, long-lived)
     
     let postCache: PostCache
@@ -46,9 +42,6 @@ class AppState {
             postCache: postCache,
             profileCache: profileCache
         )
-        
-        // Initialize navigation coordinator
-        self.navigationCoordinator = NavigationCoordinator()
         
         // Set mock current user for now
         self.currentUser = mockAuthors[0]

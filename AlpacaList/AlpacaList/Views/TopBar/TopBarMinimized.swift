@@ -49,9 +49,6 @@ struct TopBarMinimized: View {
 }
 
 struct TopBarMinimized_Previews: PreviewProvider {
-    private static let navigationCoordinatorCannotPop = NavigationCoordinator()
-    private static let navigationCoordinatorCanPop = NavigationCoordinator(initialStack: [.timeline(type: .home)])
-    
     @ViewBuilder static var createPreview: some View {
         ZStack {
             LinearGradient(
@@ -62,9 +59,6 @@ struct TopBarMinimized_Previews: PreviewProvider {
             .edgesIgnoringSafeArea(.all)
             VStack {
                 TopBarMinimized(userName: .constant("alice.bsky.social"))
-                    .environment(navigationCoordinatorCannotPop)
-                TopBarMinimized(userName: .constant("alice.bsky.social"))
-                    .environment(navigationCoordinatorCanPop)
             }
             .background(.regularMaterial)
             .environment(\.colorScheme, .dark)

@@ -86,12 +86,17 @@ class NavigationCoordinator {
     // Settings sheet state
     var showingSettingsSheet: Bool = false
     
-    init() {
-        navigationStack = []
+    // AppState for accessing ViewModelFactory
+    private let appState: AppState
+    
+    init(appState: AppState) {
+        self.navigationStack = []
+        self.appState = appState
     }
     
-    init(initialStack: [NavigationDestination]) {
+    init(initialStack: [NavigationDestination], appState: AppState) {
         self.navigationStack = initialStack
+        self.appState = appState
     }
     
     var canPop: Bool {
@@ -130,26 +135,34 @@ class NavigationCoordinator {
     func presentSettings() {
         showingSettingsSheet = true
     }
+    
+    // MARK: - View Builders
+    
+    @ViewBuilder var composeSheetView: some View {
+        let viewModel = appState.viewModelFactory.makeComposeViewModel(replyTo: composeReplyTo)
+        ComposeView(viewModel: viewModel)
+    }
 
     @ViewBuilder func viewForDestination(destination: NavigationDestination) -> some View {
         switch destination {
         // Bluesky navigation
         case .timeline(let type):
-            let viewModel = TimelineViewModel(timelineType: timelineTypeFromDestination(type))
+            let viewModel = appState.viewModelFactory.makeTimelineViewModel(type: timelineTypeFromDestination(type))
             TimelineView(viewModel: viewModel)
             
         case .thread(let post):
             // Initialize with the post we're viewing (semantic state!)
-            let viewModel = ThreadViewModel.withMockData(for: post)
+            let viewModel = appState.viewModelFactory.makeThreadViewModel(post: post)
             ThreadView(viewModel: viewModel)
             
         case .profile(let handle):
             // TODO: Create ProfileView
-            let viewModel = TimelineViewModel(timelineType: .authorFeed(handle: handle))
+            let viewModel = appState.viewModelFactory.makeTimelineViewModel(type: .authorFeed(handle: handle))
             TimelineView(viewModel: viewModel)
             
         case .compose(let replyTo):
-            ComposeView(replyTo: replyTo)
+            let viewModel = appState.viewModelFactory.makeComposeViewModel(replyTo: replyTo)
+            ComposeView(viewModel: viewModel)
             
         case .quotePost(let post):
             // TODO: Create QuotePostView

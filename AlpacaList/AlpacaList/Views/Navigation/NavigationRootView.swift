@@ -9,8 +9,14 @@ import SwiftUI
 
 struct NavigationRootView: View {
     @State private var timelineViewModel = TimelineViewModel.withMockData()
-    @Environment(NavigationCoordinator.self) private var navigationCoordinator
     @Environment(TopBarController.self) private var topBarController
+    
+    // NavigationCoordinator passed via dependency injection
+    let navigationCoordinator: NavigationCoordinator
+    
+    init(navigationCoordinator: NavigationCoordinator) {
+        self.navigationCoordinator = navigationCoordinator
+    }
     
     var body: some View {
         @Bindable var navigationCoordinator = navigationCoordinator
@@ -24,16 +30,23 @@ struct NavigationRootView: View {
             TopBarContainer()
         }
         .sheet(isPresented: $navigationCoordinator.showingComposeSheet) {
-            ComposeView(replyTo: navigationCoordinator.composeReplyTo)
+            navigationCoordinator.composeSheetView
         }
         .sheet(isPresented: $navigationCoordinator.showingSettingsSheet) {
             UserSettings()
         }
+        .environment(navigationCoordinator)
     }
 }
 
 struct NavigationRootView_Previews: PreviewProvider {
     static var previews: some View {
-        return RootPreviews()
+        let appState = AppState()
+        let navigationCoordinator = NavigationCoordinator(appState: appState)
+        let topBarController = TopBarController()
+        
+        return NavigationRootView(navigationCoordinator: navigationCoordinator)
+            .environment(appState)
+            .environment(topBarController)
     }
 }

@@ -13,12 +13,11 @@ struct ComposeView: View {
     
     @State private var viewModel: ComposeViewModel
     @Environment(\.dismiss) private var dismiss
-    @Environment(NavigationCoordinator.self) private var navigationCoordinator
     
     // MARK: - Initialization
     
-    init(replyTo: Post? = nil) {
-        _viewModel = State(wrappedValue: ComposeViewModel(replyTo: replyTo))
+    init(viewModel: ComposeViewModel) {
+        _viewModel = State(wrappedValue: viewModel)
     }
     
     // MARK: - Body
@@ -232,15 +231,22 @@ struct ComposeView_Previews: PreviewProvider {
     }
     
     static var previews: some View {
+        let appState = AppState()
+        let navigationCoordinator = NavigationCoordinator(appState: appState)
+        
         // New post preview
         Group {
-            ComposeView(replyTo: nil)
-                .environment(NavigationCoordinator())
+            let newPostViewModel = appState.viewModelFactory.makeComposeViewModel(replyTo: nil)
+            ComposeView(viewModel: newPostViewModel)
+                .environment(appState)
+                .environment(navigationCoordinator)
                 .previewDisplayName("New Post")
             
             // Reply preview
-            ComposeView(replyTo: mockPost)
-                .environment(NavigationCoordinator())
+            let replyViewModel = appState.viewModelFactory.makeComposeViewModel(replyTo: mockPost)
+            ComposeView(viewModel: replyViewModel)
+                .environment(appState)
+                .environment(navigationCoordinator)
                 .previewDisplayName("Reply")
         }
     }

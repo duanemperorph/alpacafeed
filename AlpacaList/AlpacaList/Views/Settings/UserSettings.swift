@@ -143,6 +143,9 @@ struct UserSettings: View {
 
 struct UserSettings_Previews: PreviewProvider {
     static var previews: some View {
+        let appState = AppState()
+        let navigationCoordinator = NavigationCoordinator(appState: appState)
+        
         ZStack {
             LinearGradient(
                 gradient: Gradient(colors: [.blue, .purple]),
@@ -155,7 +158,8 @@ struct UserSettings_Previews: PreviewProvider {
             .safeAreaInset(edge: .top) {
                 VStack {
                     TopBarMinimized(userName: .constant("alice.bsky.social"))
-                        .environment(NavigationCoordinator())
+                        .environment(appState)
+                        .environment(navigationCoordinator)
                     
                 }
                 .background(.ultraThickMaterial)

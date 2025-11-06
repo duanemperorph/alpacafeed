@@ -105,7 +105,8 @@ struct TopBarExpanded: View {
 }
 
 struct TopBarViewExpanded_Previews: PreviewProvider {
-    static let navigationCoordinator = NavigationCoordinator()
+    static let appState = AppState()
+    static let navigationCoordinator = NavigationCoordinator(appState: appState)
     
     @ViewBuilder static var createPreview: some View {
         ZStack {
@@ -119,6 +120,7 @@ struct TopBarViewExpanded_Previews: PreviewProvider {
                 TopBarExpanded(
                     userName: .constant("alice.bsky.social")
                 )
+                .environment(appState)
                 .environment(navigationCoordinator)
             }
             .background(.regularMaterial)

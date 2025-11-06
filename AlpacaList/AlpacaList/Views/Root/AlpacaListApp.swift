@@ -9,13 +9,21 @@ import SwiftUI
 
 @main
 struct AlpacaListApp: App {
-    @State private var navigationCoordinator = NavigationCoordinator()
+    @State private var appState = AppState()
+    @State private var navigationCoordinator: NavigationCoordinator
     @State private var topBarController = TopBarController()
+    
+    init() {
+        let appState = AppState()
+        self._appState = State(initialValue: appState)
+        self._navigationCoordinator = State(initialValue: NavigationCoordinator(appState: appState))
+        self._topBarController = State(initialValue: TopBarController())
+    }
     
     var body: some Scene {
         WindowGroup {
-            RootPreviews()
-                .environment(navigationCoordinator)
+            NavigationRootView(navigationCoordinator: navigationCoordinator)
+                .environment(appState)
                 .environment(topBarController)
         }
     }
