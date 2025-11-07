@@ -79,6 +79,9 @@ class FeedRepository {
         defer { isLoading = false }
         
         do {
+            // Simulate network delay
+            try await Task.sleep(nanoseconds: 2_000_000_000) // 2 seconds
+            
             // TODO: Replace with actual API call when ready
             // For now, return mock data
             
@@ -110,6 +113,9 @@ class FeedRepository {
         defer { isLoadingMore = false }
         
         do {
+            // Simulate network delay
+            try await Task.sleep(nanoseconds: 2_000_000_000) // 2 seconds
+            
             // TODO: Replace with actual API call using cursor (will use cursor parameter then)
             // For now, return mock data
             

@@ -75,6 +75,10 @@ struct TimelineView: View {
                 ProgressView("Loading timeline...")
             }
         )
+        .task {
+            // Fetch timeline when view appears
+            viewModel.fetchTimeline()
+        }
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 Button(action: {
