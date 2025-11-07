@@ -27,12 +27,12 @@ class ThreadViewModel {
     private var hasMoreReplies = true
     
     // Repository dependencies
-    private let threadRepository: ThreadRepository?
-    private let postRepository: PostRepository?
+    private let threadRepository: ThreadRepository
+    private let postRepository: PostRepository
     
     // MARK: - Initialization
     
-    /// Modern initializer with repository dependencies
+    /// Initializer with repository dependencies
     init(
         post: Post,
         threadRepository: ThreadRepository,
@@ -42,19 +42,6 @@ class ThreadViewModel {
         self.rootPost = post
         self.threadRepository = threadRepository
         self.postRepository = postRepository
-    }
-    
-    /// Legacy initializer for backward compatibility (will be removed)
-    init(postUri: String) {
-        self.postUri = postUri
-        self.threadRepository = nil
-        self.postRepository = nil
-    }
-    
-    /// Legacy convenience initializer for backward compatibility (will be removed)
-    convenience init(post: Post) {
-        self.init(postUri: post.uri)
-        self.rootPost = post
     }
     
     // MARK: - Fetch Methods
@@ -227,24 +214,6 @@ class ThreadViewModel {
     /// Is this a reply thread (has parents)?
     var isReplyThread: Bool {
         !parentPosts.isEmpty
-    }
-    
-    // MARK: - Mock Data (for testing)
-    
-    static func withMockData(for post: Post? = nil) -> ThreadViewModel {
-        // Create main post
-        let mainPost = post ?? Post.createTextPost(
-            author: mockAuthors[0],
-            text: "This is the main post in the thread. What do you all think?",
-            createdAt: Date().addingTimeInterval(-3600)
-        )
-        
-        let vm = ThreadViewModel(post: mainPost)
-        
-        // Generate mock replies
-        vm.replies = MockDataGenerator.generateThreadReplies(to: mainPost, count: 10)
-        
-        return vm
     }
 }
 

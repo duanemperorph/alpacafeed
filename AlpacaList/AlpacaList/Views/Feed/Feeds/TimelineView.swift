@@ -92,9 +92,15 @@ struct TimelineView: View {
 
 struct TimelineView_Previews: PreviewProvider {
     static var previews: some View {
+        let appState = AppState()
+        let navigationCoordinator = NavigationCoordinator(appState: appState)
+        let viewModel = appState.viewModelFactory.makeTimelineViewModel(type: .home)
+        
         NavigationView {
-            TimelineView(viewModel: TimelineViewModel.withMockData())
+            TimelineView(viewModel: viewModel)
                 .navigationTitle("Home")
+                .environment(appState)
+                .environment(navigationCoordinator)
         }
     }
 }

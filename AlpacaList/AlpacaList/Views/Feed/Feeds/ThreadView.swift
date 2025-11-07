@@ -143,10 +143,24 @@ struct ThreadView: View {
 
 struct ThreadView_Previews: PreviewProvider {
     static var previews: some View {
+        let appState = AppState()
+        let navigationCoordinator = NavigationCoordinator(appState: appState)
+        
+        // Create a mock post for preview
+        let mockPost = Post.createTextPost(
+            author: mockAuthors[0],
+            text: "This is the main post in the thread. What do you all think?",
+            createdAt: Date().addingTimeInterval(-3600)
+        )
+        
+        let viewModel = appState.viewModelFactory.makeThreadViewModel(post: mockPost)
+        
         NavigationView {
-            ThreadView(viewModel: ThreadViewModel.withMockData())
+            ThreadView(viewModel: viewModel)
                 .navigationTitle("Thread")
                 .navigationBarTitleDisplayMode(.inline)
+                .environment(appState)
+                .environment(navigationCoordinator)
         }
     }
 }

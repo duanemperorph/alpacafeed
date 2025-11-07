@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct NavigationRootView: View {
-    @State private var timelineViewModel = TimelineViewModel.withMockData()
     @Environment(TopBarController.self) private var topBarController
     
     // NavigationCoordinator passed via dependency injection
@@ -21,7 +20,8 @@ struct NavigationRootView: View {
     var body: some View {
         @Bindable var navigationCoordinator = navigationCoordinator
         NavigationStack(path: $navigationCoordinator.navigationStack) {
-            TimelineView(viewModel: timelineViewModel)
+            // Root view provided by NavigationCoordinator
+            navigationCoordinator.rootView
                 .navigationDestination(for: NavigationDestination.self) { destination in
                     navigationCoordinator.viewForDestination(destination: destination)
                 }

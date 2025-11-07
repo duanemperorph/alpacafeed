@@ -52,7 +52,7 @@ class TimelineViewModel {
     
     // MARK: - Initialization
     
-    /// Modern initializer with repository dependencies
+    /// Initializer with repository dependencies
     init(
         timelineType: TimelineType,
         feedCoordinator: FeedRepositoryCoordinator,
@@ -61,14 +61,6 @@ class TimelineViewModel {
         self.timelineType = timelineType
         self.feedCoordinator = feedCoordinator
         self.postRepository = postRepository
-    }
-    
-    /// Legacy initializer for backward compatibility (uses mock repositories)
-    // TODO: DELETEME
-    init(timelineType: TimelineType = .home) {
-        self.timelineType = timelineType
-        self.feedCoordinator = MockFeedRepositoryCoordinator()
-        self.postRepository = MockPostRepository()
     }
     
     // MARK: - Timeline Switching
@@ -194,17 +186,6 @@ class TimelineViewModel {
             
             // TODO: Persist bookmarks locally or via API
         }
-    }
-    
-    // MARK: - Mock Data (for testing)
-    
-    static func withMockData() -> TimelineViewModel {
-        let vm = TimelineViewModel()
-        
-        // Trigger fetching which will populate repository with mock data
-        vm.fetchTimeline()
-        
-        return vm
     }
     
     // MARK: - Helper Methods

@@ -138,6 +138,12 @@ class NavigationCoordinator {
     
     // MARK: - View Builders
     
+    /// Default root view (Home timeline)
+    @ViewBuilder var rootView: some View {
+        let viewModel = appState.viewModelFactory.makeTimelineViewModel(type: .home)
+        TimelineView(viewModel: viewModel)
+    }
+    
     @ViewBuilder var composeSheetView: some View {
         let viewModel = appState.viewModelFactory.makeComposeViewModel(replyTo: composeReplyTo)
         ComposeView(viewModel: viewModel)
