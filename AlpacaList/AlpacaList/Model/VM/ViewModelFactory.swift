@@ -45,11 +45,10 @@ class ViewModelFactory {
     /// Create a ThreadViewModel with proper dependencies
     func makeThreadViewModel(post: Post) -> ThreadViewModel {
         // Create fresh repository instances for this ViewModel
-        let threadRepository = makeThreadRepository()
+        let threadRepository = makeThreadRepository(postUri: post.uri)
         let postRepository = makePostRepository()
         
         return ThreadViewModel(
-            post: post,
             threadRepository: threadRepository,
             postRepository: postRepository
         )
@@ -77,9 +76,9 @@ class ViewModelFactory {
         return FeedRepositoryCoordinator(postCache: postCache, profileCache: profileCache)
     }
     
-    /// Create a fresh ThreadRepository instance
-    func makeThreadRepository() -> ThreadRepository {
-        return ThreadRepository(postCache: postCache, profileCache: profileCache)
+    /// Create a fresh ThreadRepository instance for a specific thread
+    func makeThreadRepository(postUri: String) -> ThreadRepository {
+        return ThreadRepository(postUri: postUri, postCache: postCache, profileCache: profileCache)
     }
     
     /// Create a fresh PostRepository instance

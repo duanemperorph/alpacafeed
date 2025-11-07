@@ -10,21 +10,35 @@ import Observation
 
 /// View model for post thread view (linear, not nested tree)
 @Observable
+@MainActor
 class ThreadViewModel {
-    // MARK: - Properties
+    // MARK: - Properties (computed from repository - single source of truth)
     
-    var rootPost: Post?           // The main post being viewed
-    var parentPosts: [Post] = []  // Chain from main post to thread root
-    var replies: [Post] = []      // Direct replies to the main post
-    var isLoading = false
-    var isLoadingMoreReplies = false
-    var error: Error?
+    var rootPost: Post? {
+        return threadRepository.rootPost
+    }
+    
+    var parentPosts: [Post] {
+        return threadRepository.parentPosts
+    }
+    
+    var replies: [Post] {
+        return threadRepository.replies
+    }
+    
+    var isLoading: Bool {
+        return threadRepository.isLoading
+    }
+    
+    var isLoadingMoreReplies: Bool {
+        return threadRepository.isLoadingMoreReplies
+    }
+    
+    var error: Error? {
+        return threadRepository.error
+    }
     
     // MARK: - Private Properties
-    
-    private let postUri: String
-    private var repliesCursor: String?
-    private var hasMoreReplies = true
     
     // Repository dependencies
     private let threadRepository: ThreadRepository
@@ -34,12 +48,9 @@ class ThreadViewModel {
     
     /// Initializer with repository dependencies
     init(
-        post: Post,
         threadRepository: ThreadRepository,
         postRepository: PostRepository
     ) {
-        self.postUri = post.uri
-        self.rootPost = post
         self.threadRepository = threadRepository
         self.postRepository = postRepository
     }
@@ -48,147 +59,82 @@ class ThreadViewModel {
     
     /// Fetch the thread (main post + context + replies)
     func fetchThread(depth: Int = 6) {
-        guard !isLoading else { return }
-        
-        isLoading = true
-        error = nil
-        
-        // TODO: Replace with actual API call to app.bsky.feed.getPostThread
-        // For now, simulate loading
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
-            guard let self = self else { return }
-            
-            // If we don't have the post yet, set it
-            if self.rootPost == nil {
-                // TODO: Get from API response
-            }
-            
-            self.isLoading = false
+        Task {
+            await threadRepository.fetchThread(depth: depth)
         }
     }
     
     /// Load more replies (pagination)
     func fetchMoreReplies() {
-        guard !isLoadingMoreReplies, hasMoreReplies else {
-            return
-        }
-        
-        isLoadingMoreReplies = true
-        
-        // TODO: Replace with actual API call
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
-            self?.isLoadingMoreReplies = false
+        Task {
+            await threadRepository.loadMoreReplies()
         }
     }
     
     /// Refresh thread
     func refresh() async {
-        repliesCursor = nil
-        hasMoreReplies = true
-        
-        await MainActor.run {
-            self.parentPosts = []
-            self.replies = []
-        }
-        
-        fetchThread()
+        await threadRepository.refresh()
     }
     
     // MARK: - Interaction Methods
     
     /// Like a post (root or reply)
     func likePost(uri: String) {
-        // Update the appropriate post
-        if rootPost?.uri == uri {
-            guard var post = rootPost else { return }
+        Task {
+            guard let post = findPost(by: uri) else { return }
             
+            // PostRepository handles optimistic update in cache
             if post.isLiked {
-                post.isLiked = false
-                post.likeCount = max(0, post.likeCount - 1)
-                post.likeUri = nil
+                await postRepository.unlikePost(uri: uri)
             } else {
-                post.isLiked = true
-                post.likeCount += 1
+                await postRepository.likePost(uri: uri)
             }
             
-            rootPost = post
-        } else if let index = replies.firstIndex(where: { $0.uri == uri }) {
-            var post = replies[index]
-            
-            if post.isLiked {
-                post.isLiked = false
-                post.likeCount = max(0, post.likeCount - 1)
-                post.likeUri = nil
-            } else {
-                post.isLiked = true
-                post.likeCount += 1
-            }
-            
-            replies[index] = post
-        } else if let index = parentPosts.firstIndex(where: { $0.uri == uri }) {
-            var post = parentPosts[index]
-            
-            if post.isLiked {
-                post.isLiked = false
-                post.likeCount = max(0, post.likeCount - 1)
-                post.likeUri = nil
-            } else {
-                post.isLiked = true
-                post.likeCount += 1
-            }
-            
-            parentPosts[index] = post
+            // Refresh posts from cache to show updated state
+            await threadRepository.refreshPostsFromCache()
         }
-        
-        // TODO: API call to create/delete like
     }
     
     /// Repost a post
     func repost(uri: String) {
-        // Similar to likePost but for reposts
-        if rootPost?.uri == uri {
-            guard var post = rootPost else { return }
+        Task {
+            guard let post = findPost(by: uri) else { return }
             
+            // PostRepository handles optimistic update in cache
             if post.isReposted {
-                post.isReposted = false
-                post.repostCount = max(0, post.repostCount - 1)
-                post.repostUri = nil
+                await postRepository.deleteRepost(uri: uri)
             } else {
-                post.isReposted = true
-                post.repostCount += 1
+                await postRepository.repost(uri: uri)
             }
             
-            rootPost = post
-        } else if let index = replies.firstIndex(where: { $0.uri == uri }) {
-            var post = replies[index]
-            
-            if post.isReposted {
-                post.isReposted = false
-                post.repostCount = max(0, post.repostCount - 1)
-                post.repostUri = nil
-            } else {
-                post.isReposted = true
-                post.repostCount += 1
-            }
-            
-            replies[index] = post
+            // Refresh posts from cache to show updated state
+            await threadRepository.refreshPostsFromCache()
         }
-        
-        // TODO: API call to create/delete repost
     }
     
     /// Reply to a post
     func reply(to uri: String, text: String) {
-        // TODO: API call to create reply post
-        // After success, refresh thread or add reply optimistically
+        Task {
+            guard let post = findPost(by: uri) else { return }
+            
+            // Create reply via PostRepository
+            if let newReply = await postRepository.createPost(text: text, replyTo: post) {
+                // TODO: Add the new reply to the thread
+                // For now, just refresh the whole thread
+                await threadRepository.refresh()
+            }
+        }
     }
     
     /// Delete own post/reply
     func deletePost(uri: String) {
-        // TODO: API call to delete post
-        
-        // Remove from replies if it's there
-        replies.removeAll { $0.uri == uri }
+        Task {
+            // Delete via API
+            _ = await postRepository.deletePost(uri: uri)
+            
+            // Refresh thread to reflect deletion
+            await threadRepository.refresh()
+        }
     }
     
     // MARK: - Computed Properties
@@ -214,6 +160,15 @@ class ThreadViewModel {
     /// Is this a reply thread (has parents)?
     var isReplyThread: Bool {
         !parentPosts.isEmpty
+    }
+    
+    // MARK: - Private Helper Methods
+    
+    /// Find a post by URI in rootPost, parentPosts, or replies
+    private func findPost(by uri: String) -> Post? {
+        return [rootPost].compactMap({ $0 }).first(where: { $0.uri == uri })
+            ?? parentPosts.first(where: { $0.uri == uri })
+            ?? replies.first(where: { $0.uri == uri })
     }
 }
 
