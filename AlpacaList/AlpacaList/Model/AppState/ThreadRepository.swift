@@ -10,6 +10,11 @@ import Observation
 
 /// Repository for thread operations
 /// Each instance manages one specific thread (identified by root post URI)
+///
+/// Uses progressive depth fetching instead of cursor pagination
+/// (Bluesky's getPostThread doesn't support cursors)
+/// - Initial fetch: depth=100
+/// - Load more doubles depth: 100 → 200 → 400 (max)
 @Observable
 @MainActor
 class ThreadRepository {
@@ -32,9 +37,10 @@ class ThreadRepository {
     // Error state
     private(set) var error: Error?
     
-    // Pagination state
-    private var repliesCursor: String?
-    private var hasMoreReplies = true
+    // Depth-based pagination (Bluesky doesn't support cursor for threads)
+    private static let initialDepth = 100
+    private static let maxDepth = 400
+    private var currentDepth: Int = ThreadRepository.initialDepth
     
     init(postUri: String, postCache: PostCache, profileCache: ProfileCache) {
         self.postUri = postUri
@@ -52,7 +58,8 @@ class ThreadRepository {
     // MARK: - Fetch Methods
     
     /// Fetch a post thread (main post + parents + replies)
-    func fetchThread(depth: Int = 6) async {
+    /// - Parameter replaceExisting: If true, replaces all reply URIs. If false, appends only new URIs (preserves scroll position)
+    func fetchThread(replaceExisting: Bool = true) async {
         guard !isLoading else { return }
         
         isLoading = true
@@ -64,6 +71,7 @@ class ThreadRepository {
             try await Task.sleep(nanoseconds: 2_000_000_000) // 2 seconds
             
             // TODO: Replace with actual API call to app.bsky.feed.getPostThread
+            // API call would use: getPostThread(uri: postUri, depth: currentDepth)
             // For now, return mock data
             
             // Try to get the post from cache first
@@ -82,10 +90,12 @@ class ThreadRepository {
                 throw ThreadError.postNotFound
             }
             
-            // Generate mock replies
-            let fetchedReplies = MockDataGenerator.generateThreadReplies(to: mainPost, count: 10)
+            // Generate mock replies based on current depth
+            // Scale mock count with depth (10 per 100 depth)
+            let mockReplyCount = currentDepth / 10
+            let fetchedReplies = MockDataGenerator.generateThreadReplies(to: mainPost, count: mockReplyCount)
             
-            // Cache all posts
+            // Cache all posts (updates existing posts with fresh data)
             await postCache.cachePost(mainPost)
             await postCache.cachePosts(fetchedReplies)
             
@@ -93,46 +103,49 @@ class ThreadRepository {
             let allAuthors = [mainPost.author] + fetchedReplies.map { $0.author }
             await profileCache.cacheProfiles(allAuthors)
             
-            // Update internal state - store URIs and refresh from cache
+            // Update internal state
             self.parentPostUris = []  // No parents for now in mock
-            self.replyPostUris = fetchedReplies.map { $0.uri }
+            
+            if replaceExisting {
+                // Full replace (used for initial fetch and refresh)
+                self.replyPostUris = fetchedReplies.map { $0.uri }
+            } else {
+                // Append-only merge (preserves scroll position for load more)
+                let existingUriSet = Set(replyPostUris)
+                let newUris = fetchedReplies.map { $0.uri }.filter { !existingUriSet.contains($0) }
+                self.replyPostUris.append(contentsOf: newUris)
+            }
+            
             await self.refreshPostsFromCache()
         } catch {
             self.error = error
         }
     }
     
-    /// Fetch more replies (pagination within thread)
+    /// Load more replies by doubling the fetch depth
+    /// Uses append-only merge to preserve scroll position
     func loadMoreReplies() async {
-        guard let cursor = repliesCursor, hasMoreReplies, !isLoadingMoreReplies, !isLoading else {
+        guard canLoadMoreReplies, !isLoadingMoreReplies, !isLoading else {
             return
         }
         
         isLoadingMoreReplies = true
         defer { isLoadingMoreReplies = false }
         
-        do {
-            // Simulate network delay
-            try await Task.sleep(nanoseconds: 2_000_000_000) // 2 seconds
-            
-            // TODO: Replace with actual API call
-            // For now, return empty (no more replies in mock)
-            
-            // Update state
-            self.repliesCursor = nil
-            self.hasMoreReplies = false
-        } catch {
-            // Error handling
-        }
+        // Double the depth (capped at max)
+        currentDepth = min(currentDepth * 2, Self.maxDepth)
+        
+        // Re-fetch with higher depth, appending only new replies
+        await fetchThread(replaceExisting: false)
     }
     
     /// Refresh thread (pull to refresh)
+    /// Resets depth to initial value and replaces all data
     func refresh() async {
-        // Clear state and fetch fresh
-        self.repliesCursor = nil
-        self.hasMoreReplies = true
+        // Reset depth and fetch fresh
+        currentDepth = Self.initialDepth
         
-        await fetchThread()
+        await fetchThread(replaceExisting: true)
     }
     
     /// Reset state
@@ -142,13 +155,12 @@ class ThreadRepository {
         rootPost = nil
         parentPosts = []
         replies = []
-        repliesCursor = nil
-        hasMoreReplies = true
+        currentDepth = Self.initialDepth
     }
     
-    /// Check if there are more replies to load
+    /// Check if there are more replies to load (depth can still be increased)
     var canLoadMoreReplies: Bool {
-        return hasMoreReplies && repliesCursor != nil
+        return currentDepth < Self.maxDepth
     }
     
     // MARK: - Supporting Types

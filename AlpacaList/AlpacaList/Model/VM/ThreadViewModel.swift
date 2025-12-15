@@ -9,6 +9,11 @@ import Foundation
 import Observation
 
 /// View model for post thread view (linear, not nested tree)
+///
+/// Uses progressive depth fetching for loading more replies:
+/// - Initial fetch: depth=100
+/// - Load more doubles depth: 100 → 200 → 400 (max)
+/// - Append-only merge preserves scroll position when loading more
 @Observable
 @MainActor
 class ThreadViewModel {
@@ -32,6 +37,10 @@ class ThreadViewModel {
     
     var isLoadingMoreReplies: Bool {
         return threadRepository.isLoadingMoreReplies
+    }
+    
+    var canLoadMoreReplies: Bool {
+        return threadRepository.canLoadMoreReplies
     }
     
     var error: Error? {
@@ -58,13 +67,15 @@ class ThreadViewModel {
     // MARK: - Fetch Methods
     
     /// Fetch the thread (main post + context + replies)
-    func fetchThread(depth: Int = 6) {
+    /// Uses initial depth (100) - call fetchMoreReplies() to load more
+    func fetchThread() {
         Task {
-            await threadRepository.fetchThread(depth: depth)
+            await threadRepository.fetchThread()
         }
     }
     
-    /// Load more replies (pagination)
+    /// Load more replies by doubling fetch depth (100 → 200 → 400 max)
+    /// Uses append-only merge to preserve scroll position
     func fetchMoreReplies() {
         Task {
             await threadRepository.loadMoreReplies()

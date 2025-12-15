@@ -17,6 +17,7 @@ struct ThreadView: View {
             items: viewModel.replies,
             isLoading: viewModel.isLoading,
             isLoadingMore: viewModel.isLoadingMoreReplies,
+            canLoadMore: viewModel.canLoadMoreReplies,
             spacing: 0,
             listAccessibilityIdentifier: "thread_list",
             onRefresh: {

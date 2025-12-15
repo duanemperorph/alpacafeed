@@ -11,6 +11,7 @@ struct PostListView<Item: Identifiable, Content: View, EmptyContent: View, Loadi
     let items: [Item]
     let isLoading: Bool
     let isLoadingMore: Bool
+    let canLoadMore: Bool
     let spacing: CGFloat
     let listAccessibilityIdentifier: String?
     
@@ -28,6 +29,7 @@ struct PostListView<Item: Identifiable, Content: View, EmptyContent: View, Loadi
         items: [Item],
         isLoading: Bool = false,
         isLoadingMore: Bool = false,
+        canLoadMore: Bool = true,
         spacing: CGFloat = 0,
         listAccessibilityIdentifier: String? = nil,
         onRefresh: (() async -> Void)? = nil,
@@ -42,6 +44,7 @@ struct PostListView<Item: Identifiable, Content: View, EmptyContent: View, Loadi
         self.items = items
         self.isLoading = isLoading
         self.isLoadingMore = isLoadingMore
+        self.canLoadMore = canLoadMore
         self.spacing = spacing
         self.listAccessibilityIdentifier = listAccessibilityIdentifier
         self.onRefresh = onRefresh
@@ -113,13 +116,14 @@ struct PostListView<Item: Identifiable, Content: View, EmptyContent: View, Loadi
                 Spacer()
             }
             .padding()
-        } else {
+        } else if canLoadMore {
             Color.clear
                 .frame(height: 1)
                 .onAppear {
                     onLoadMore?()
                 }
         }
+        // When canLoadMore is false, nothing is rendered (no trigger)
     }
 }
 
