@@ -11,11 +11,15 @@ import Observation
 
 /// Central application state manager
 /// - Manages global app state (auth, caches, etc.)
-/// - Owns shared caches only (repositories and coordinators are created fresh)
+/// - Owns shared caches and repositories (some repositories are created fresh per-ViewModel)
 /// - Delegates ViewModel creation to ViewModelFactory
 @Observable
 @MainActor
 class AppState {
+    // MARK: - Repositories (Shared, long-lived)
+    
+    let authRepository: AuthenticationRepository
+    
     // MARK: - Caches (Shared, long-lived)
     
     let postCache: PostCache
@@ -28,11 +32,18 @@ class AppState {
     // MARK: - Global State
     
     var currentUser: Author?
-    var isAuthenticated: Bool = false
+    
+    /// Whether user is authenticated (delegated to AuthenticationRepository)
+    var isAuthenticated: Bool {
+        authRepository.isAuthenticated
+    }
     
     // MARK: - Initialization
     
     init() {
+        // Initialize authentication repository
+        self.authRepository = AuthenticationRepository()
+        
         // Initialize caches
         self.postCache = PostCache()
         self.profileCache = ProfileCache()
@@ -45,7 +56,6 @@ class AppState {
         
         // Set mock current user for now
         self.currentUser = mockAuthors[0]
-        self.isAuthenticated = true
     }
     
     
@@ -67,20 +77,25 @@ class AppState {
         return await profileCache.getProfile(handle: handle)
     }
     
-    // MARK: - Authentication (Mock for now)
+    // MARK: - Authentication
     
-    /// Mock login
-    func login(identifier: String, password: String) async throws {
-        // TODO: Implement actual authentication
-        // For now, just set mock user
-        currentUser = mockAuthors[0]
-        isAuthenticated = true
+    /// Restore session from secure storage on app launch
+    func restoreSession() async {
+        await authRepository.restoreSession()
+        // TODO: Fetch current user profile from session
     }
     
-    /// Logout
+    /// Login with identifier and password
+    func login(identifier: String, password: String, server: String = "bsky.social") async throws {
+        try await authRepository.login(identifier: identifier, password: password, server: server)
+        // TODO: Fetch current user profile from session
+        currentUser = mockAuthors[0]  // Mock for now
+    }
+    
+    /// Logout and clear caches
     func logout() async {
+        await authRepository.logout()
         currentUser = nil
-        isAuthenticated = false
         await clearAllCaches()
     }
 }
