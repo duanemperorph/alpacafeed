@@ -16,8 +16,6 @@ enum NavigationDestination {
     case timeline(type: TimelineType)        // Home, profile, custom feed
     case thread(post: Post)                  // Post thread (semantic: which post we're viewing)
     case profile(handle: String)             // User profile
-    case compose(replyTo: Post?)             // New post/reply
-    case quotePost(post: Post)               // Quote post composer
     
     // Timeline types
     enum TimelineType: Hashable {
@@ -33,18 +31,12 @@ enum NavigationDestination {
 extension NavigationDestination: Hashable {
     static func == (lhs: NavigationDestination, rhs: NavigationDestination) -> Bool {
         switch (lhs, rhs) {
-        // Bluesky
         case (.timeline(let type1), .timeline(let type2)):
             return type1 == type2
         case (.thread(let post1), .thread(let post2)):
             return post1.uri == post2.uri
         case (.profile(let handle1), .profile(let handle2)):
             return handle1 == handle2
-        case (.compose(let post1), .compose(let post2)):
-            return post1?.id == post2?.id
-        case (.quotePost(let post1), .quotePost(let post2)):
-            return post1.id == post2.id
-            
         default:
             return false
         }
@@ -52,7 +44,6 @@ extension NavigationDestination: Hashable {
     
     func hash(into hasher: inout Hasher) {
         switch self {
-        // Bluesky
         case .timeline(let type):
             hasher.combine("timeline")
             hasher.combine(type)
@@ -62,12 +53,6 @@ extension NavigationDestination: Hashable {
         case .profile(let handle):
             hasher.combine("profile")
             hasher.combine(handle)
-        case .compose(let post):
-            hasher.combine("compose")
-            hasher.combine(post?.id)
-        case .quotePost(let post):
-            hasher.combine("quotePost")
-            hasher.combine(post.id)
         }
     }
 }
@@ -78,6 +63,13 @@ extension NavigationDestination: Hashable {
 @MainActor
 class NavigationCoordinator {
     var navigationStack: [NavigationDestination]
+    
+    // Parallel ViewModel stack - mirrors navigationStack
+    // Each ViewModel corresponds to the destination at the same index
+    private var viewModelStack: [Any] = []
+    
+    // Root view ViewModel (not on stack, always exists)
+    private var homeTimelineViewModel: TimelineViewModel?
     
     // Compose sheet state (for modal presentation)
     var showingComposeSheet: Bool = false
@@ -97,6 +89,7 @@ class NavigationCoordinator {
     init(initialStack: [NavigationDestination], appState: AppState) {
         self.navigationStack = initialStack
         self.appState = appState
+        // Note: initialStack ViewModels would need to be created here if used
     }
     
     var canPop: Bool {
@@ -104,15 +97,22 @@ class NavigationCoordinator {
     }
     
     func push(_ destination: NavigationDestination) {
+        // Create ViewModel for this destination and add to parallel stack
+        let viewModel = createViewModel(for: destination)
+        viewModelStack.append(viewModel)
         navigationStack.append(destination)
     }
     
     func pop() {
         navigationStack.removeLast()
+        if !viewModelStack.isEmpty {
+            viewModelStack.removeLast()
+        }
     }
     
     func popToRoot() {
         navigationStack.removeAll()
+        viewModelStack.removeAll()
     }
     
     func presentCompose(replyTo: Post? = nil) {
@@ -138,10 +138,19 @@ class NavigationCoordinator {
     
     // MARK: - View Builders
     
-    /// Default root view (Home timeline)
+    /// Default root view (Home timeline) - uses cached ViewModel
     @ViewBuilder var rootView: some View {
-        let viewModel = appState.viewModelFactory.makeTimelineViewModel(type: .home)
-        TimelineView(viewModel: viewModel)
+        TimelineView(viewModel: getOrCreateHomeViewModel())
+    }
+    
+    /// Get cached home ViewModel or create one
+    private func getOrCreateHomeViewModel() -> TimelineViewModel {
+        if let cached = homeTimelineViewModel {
+            return cached
+        }
+        let newViewModel = appState.viewModelFactory.makeTimelineViewModel(type: .home)
+        homeTimelineViewModel = newViewModel
+        return newViewModel
     }
     
     @ViewBuilder var composeSheetView: some View {
@@ -149,30 +158,70 @@ class NavigationCoordinator {
         ComposeView(viewModel: viewModel)
     }
 
+    /// Build view for navigation destination using cached ViewModel from parallel stack
     @ViewBuilder func viewForDestination(destination: NavigationDestination) -> some View {
+        // Look up cached ViewModel from parallel stack (search from top of stack)
+        if let index = navigationStack.lastIndex(of: destination),
+           index < viewModelStack.count {
+            let cachedViewModel = viewModelStack[index]
+            viewFromCachedViewModel(cachedViewModel, destination: destination)
+        } else {
+            // Fallback: create new ViewModel (shouldn't normally happen)
+            viewFromNewViewModel(destination: destination)
+        }
+    }
+    
+    /// Build view using a cached ViewModel
+    @ViewBuilder private func viewFromCachedViewModel(_ viewModel: Any, destination: NavigationDestination) -> some View {
         switch destination {
-        // Bluesky navigation
+        case .timeline:
+            if let vm = viewModel as? TimelineViewModel {
+                TimelineView(viewModel: vm)
+            }
+            
+        case .thread:
+            if let vm = viewModel as? ThreadViewModel {
+                ThreadView(viewModel: vm)
+            }
+            
+        case .profile:
+            if let vm = viewModel as? TimelineViewModel {
+                TimelineView(viewModel: vm)
+            }
+        }
+    }
+    
+    /// Fallback: Build view with a new ViewModel (used if cache lookup fails)
+    @ViewBuilder private func viewFromNewViewModel(destination: NavigationDestination) -> some View {
+        switch destination {
         case .timeline(let type):
             let viewModel = appState.viewModelFactory.makeTimelineViewModel(type: timelineTypeFromDestination(type))
             TimelineView(viewModel: viewModel)
             
         case .thread(let post):
-            // Initialize with the post we're viewing (semantic state!)
             let viewModel = appState.viewModelFactory.makeThreadViewModel(post: post)
             ThreadView(viewModel: viewModel)
             
         case .profile(let handle):
-            // TODO: Create ProfileView
             let viewModel = appState.viewModelFactory.makeTimelineViewModel(type: .authorFeed(handle: handle))
             TimelineView(viewModel: viewModel)
+        }
+    }
+    
+    // MARK: - ViewModel Creation
+    
+    /// Create a ViewModel for a navigation destination
+    /// Called by push() to populate the parallel viewModelStack
+    private func createViewModel(for destination: NavigationDestination) -> Any {
+        switch destination {
+        case .timeline(let type):
+            return appState.viewModelFactory.makeTimelineViewModel(type: timelineTypeFromDestination(type))
             
-        case .compose(let replyTo):
-            let viewModel = appState.viewModelFactory.makeComposeViewModel(replyTo: replyTo)
-            ComposeView(viewModel: viewModel)
+        case .thread(let post):
+            return appState.viewModelFactory.makeThreadViewModel(post: post)
             
-        case .quotePost(let post):
-            // TODO: Create QuotePostView
-            Text("Quote post: \(post.text)")
+        case .profile(let handle):
+            return appState.viewModelFactory.makeTimelineViewModel(type: .authorFeed(handle: handle))
         }
     }
     
