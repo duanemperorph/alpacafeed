@@ -16,8 +16,10 @@ struct AddAccountView: View {
     @State private var showError: Bool = false
     @State private var errorMessage: String = ""
     
+    @Environment(AppState.self) private var appState
+    
     // Callbacks
-    var onLoginSuccess: (String) -> Void
+    var onLoginSuccess: () -> Void
     var onCancel: () -> Void
     
     var body: some View {
@@ -226,36 +228,52 @@ struct AddAccountView: View {
     }
     
     private func handleLogin() {
+        let trimmedHandle = handle.trimmingCharacters(in: .whitespaces)
+        let trimmedServer = server.trimmingCharacters(in: .whitespaces)
+        
+        guard !trimmedHandle.isEmpty, !appPassword.isEmpty else {
+            errorMessage = "Please enter a valid handle and app password."
+            showError = true
+            return
+        }
+        
+        guard !trimmedServer.isEmpty else {
+            errorMessage = "Please enter a valid server."
+            showError = true
+            return
+        }
+        
         isLoggingIn = true
         
-        // TODO: Implement actual Bluesky authentication
-        // Use the server field to construct the API endpoint
-        // e.g., https://bsky.social/xrpc/com.atproto.server.createSession
-        
-        // For now, simulate a network call
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+        Task {
+            do {
+                try await appState.login(
+                    identifier: trimmedHandle,
+                    password: appPassword,
+                    server: trimmedServer
+                )
+                onLoginSuccess()
+            } catch let error as AuthSessionRepository.AuthError {
+                errorMessage = mapAuthError(error)
+                showError = true
+            } catch {
+                errorMessage = "An unexpected error occurred."
+                showError = true
+            }
             isLoggingIn = false
-            
-            // Validate handle format
-            let trimmedHandle = handle.trimmingCharacters(in: .whitespaces)
-            let trimmedServer = server.trimmingCharacters(in: .whitespaces)
-            
-            // Validate inputs
-            guard !trimmedHandle.isEmpty && !appPassword.isEmpty else {
-                errorMessage = "Please enter a valid handle and app password."
-                showError = true
-                return
-            }
-            
-            guard !trimmedServer.isEmpty else {
-                errorMessage = "Please enter a valid server."
-                showError = true
-                return
-            }
-            
-            // TODO: When implementing real auth, use: https://\(trimmedServer)/xrpc/com.atproto.server.createSession
-            // For now, just call success
-            onLoginSuccess(trimmedHandle)
+        }
+    }
+    
+    private func mapAuthError(_ error: AuthSessionRepository.AuthError) -> String {
+        switch error {
+        case .invalidCredentials:
+            return "Invalid handle or app password."
+        case .networkError:
+            return "Network error. Please check your connection."
+        case .serverError(let message):
+            return message
+        case .notAuthenticated, .refreshFailed:
+            return "Authentication failed. Please try again."
         }
     }
 }
@@ -272,8 +290,8 @@ struct AddAccountView_Previews: PreviewProvider {
                 .edgesIgnoringSafeArea(.all)
                 
                 AddAccountView(
-                    onLoginSuccess: { handle in
-                        print("Logged in as: \(handle)")
+                    onLoginSuccess: {
+                        print("Logged in successfully")
                     },
                     onCancel: {
                         print("Cancelled")
@@ -281,6 +299,7 @@ struct AddAccountView_Previews: PreviewProvider {
                 )
             }
         }
+        .environment(AppState())
         .tint(Color(red: 0.75, green: 0.25, blue: 0.75))
     }
 }

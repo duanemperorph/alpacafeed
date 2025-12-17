@@ -7,27 +7,18 @@
 
 import SwiftUI
 
-let fakeUsers = [
-    "moonlight@stellarverse.net",
-    "wanderlust@dreamscape.com",
-    "starrynight@cosmicrealm.io",
-    "whimsical@enchantedwoods.xyz",
-    "serendipity@eternalhorizon.co"
-]
-
-struct UserSettingsAddUserButton: View {
+struct UserSettingsLoginButton: View {
     var action: () -> Void
     
     var body: some View {
         SettingsButton(action: action) {
             HStack {
-                // bookmark image
-                Image(systemName: "plus")
+                Image(systemName: "person.crop.circle.badge.plus")
                     .font(.system(size: 20))
                     .fontWeight(.bold)
                     .frame(width: 20)
                 Spacer().frame(width: 20)
-                Text("Add New User")
+                Text("Sign In")
                     .settingsItemFont()
                 Spacer()
             }
@@ -37,11 +28,9 @@ struct UserSettingsAddUserButton: View {
 }
 
 struct UserSettings: View {
-    @State var selectedUser: String?
-    @State var users: [String] = fakeUsers
     @State private var showLogoutAlert = false
-    @State private var userToLogout: String?
     @State private var settingsCoordinator = SettingsCoordinator()
+    @Environment(AppState.self) private var appState
     @Environment(NavigationCoordinator.self) private var navigationCoordinator
     @Environment(TopBarController.self) private var topBarController
     @Environment(\.dismiss) private var dismiss
@@ -50,38 +39,24 @@ struct UserSettings: View {
         @Bindable var settingsCoordinator = settingsCoordinator
         NavigationStack(path: $settingsCoordinator.navigationPath) {
             SettingsList {
-                // Accounts Section
-                SettingsSection(title: "Accounts") {
-                    ForEach(users, id: \.self) { user in
+                // Account Section
+                SettingsSection(title: "Account") {
+                    if appState.isAuthenticated, let handle = appState.authRepository.currentHandle {
+                        // Show logged-in user
                         AccountListItem(
-                            username: user,
-                            isActive: user == selectedUser,
-                            onSwitch: {
-                                selectedUser = user
-                            },
+                            username: handle,
+                            isActive: true,
+                            onSwitch: { },
                             onLogout: {
-                                // Show confirmation alert
-                                userToLogout = user
                                 showLogoutAlert = true
                             }
                         )
+                    } else {
+                        // Show sign in option
+                        UserSettingsLoginButton(action: {
+                            settingsCoordinator.push(.addAccount)
+                        })
                     }
-                    
-                    // Anonymous User option
-                    SettingsRadioItem(
-                        title: "Anonymous User",
-                        isChecked: selectedUser == nil,
-                        action: {
-                            selectedUser = nil
-                        }
-                    )
-                    
-                    Divider()
-                        .padding(.vertical, 5)
-                    
-                    UserSettingsAddUserButton(action: { 
-                        settingsCoordinator.push(.addAccount)
-                    })
                 }
             }
             .safeAreaInset(edge: .top) {
@@ -99,36 +74,24 @@ struct UserSettings: View {
                     .fontWeight(.bold)
                 }
             }
-            .alert("Log Out", isPresented: $showLogoutAlert, presenting: userToLogout) { user in
-                Button("Cancel", role: .cancel) {
-                    userToLogout = nil
-                }
+            .alert("Log Out", isPresented: $showLogoutAlert) {
+                Button("Cancel", role: .cancel) { }
                 Button("Log Out", role: .destructive) {
-                    // Handle logout logic
-                    if user == selectedUser {
-                        selectedUser = nil // Switch to anonymous
+                    Task {
+                        await appState.logout()
                     }
-                    // Remove user from list
-                    users.removeAll { $0 == user }
-                    userToLogout = nil
                 }
-            } message: { user in
-                Text("Are you sure you want to log out of \(user)?")
+            } message: {
+                Text("Are you sure you want to log out?")
             }
             .navigationDestination(for: SettingsDestination.self) { destination in
                 switch destination {
                 case .addAccount:
                     AddAccountView(
-                        onLoginSuccess: { newHandle in
-                            // Add the new user to the list
-                            users.append(newHandle)
-                            // Automatically select the newly added user
-                            selectedUser = newHandle
-                            // Pop back to settings
+                        onLoginSuccess: {
                             settingsCoordinator.pop()
                         },
                         onCancel: {
-                            // Pop back to settings
                             settingsCoordinator.pop()
                         }
                     )
@@ -145,6 +108,7 @@ struct UserSettings_Previews: PreviewProvider {
     static var previews: some View {
         let appState = AppState()
         let navigationCoordinator = NavigationCoordinator(appState: appState)
+        let topBarController = TopBarController()
         
         ZStack {
             LinearGradient(
@@ -154,17 +118,11 @@ struct UserSettings_Previews: PreviewProvider {
             )
             .edgesIgnoringSafeArea(.all)
             UserSettings()
-                .frame(width: .infinity, height: .infinity)
-            .safeAreaInset(edge: .top) {
-                VStack {
-                    TopBarMinimized(userName: .constant("alice.bsky.social"))
-                        .environment(appState)
-                        .environment(navigationCoordinator)
-                    
-                }
-                .background(.ultraThickMaterial)
-                .environment(\.colorScheme, .dark)
-            }
-        }.tint(Color(red: 0.75, green: 0.25, blue: 0.75))
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .environment(appState)
+                .environment(navigationCoordinator)
+                .environment(topBarController)
+        }
+        .tint(Color(red: 0.75, green: 0.25, blue: 0.75))
     }
 }
