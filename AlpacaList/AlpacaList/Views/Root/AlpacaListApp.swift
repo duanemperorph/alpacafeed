@@ -25,6 +25,9 @@ struct AlpacaListApp: App {
             NavigationRootView(navigationCoordinator: navigationCoordinator)
                 .environment(appState)
                 .environment(topBarController)
+                .task {
+                    await appState.restoreSession()
+                }
         }
     }
 }
