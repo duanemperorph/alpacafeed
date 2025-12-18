@@ -348,37 +348,37 @@ struct CreatePostFacet: Encodable {
     // Will be expanded when implementing rich text
 }
 
-// MARK: - Response Types
+// MARK: - Response Types (DTOs)
 
 /// Response from getTimeline / getFeed
 struct TimelineResponse: Decodable {
-    let feed: [FeedViewPost]
+    let feed: [FeedItemDTO]
     let cursor: String?
 }
 
 /// A post in the feed with viewer context
-struct FeedViewPost: Decodable {
-    let post: PostView
-    let reply: ReplyContext?
-    let reason: FeedReason?
+struct FeedItemDTO: Decodable {
+    let post: PostDTO
+    let reply: ReplyContextDTO?
+    let reason: FeedReasonDTO?
 }
 
-/// Post view with full data
-struct PostView: Decodable {
+/// Post data transfer object with full data
+struct PostDTO: Decodable {
     let uri: String
     let cid: String
-    let author: AuthorView
-    let record: PostRecordView
+    let author: AuthorDTO
+    let record: PostRecordDTO
     let replyCount: Int?
     let repostCount: Int?
     let likeCount: Int?
     let indexedAt: String
-    let viewer: ViewerState?
-    // embed: EmbedView? - TODO
+    let viewer: ViewerStateDTO?
+    // embed: EmbedDTO? - TODO
 }
 
-/// Author information
-struct AuthorView: Decodable {
+/// Author data transfer object
+struct AuthorDTO: Decodable {
     let did: String
     let handle: String
     let displayName: String?
@@ -386,28 +386,28 @@ struct AuthorView: Decodable {
 }
 
 /// Post record content
-struct PostRecordView: Decodable {
+struct PostRecordDTO: Decodable {
     let text: String
     let createdAt: String
     // facets, reply, embed - TODO
 }
 
 /// Viewer's relationship to the post
-struct ViewerState: Decodable {
+struct ViewerStateDTO: Decodable {
     let like: String?      // URI of viewer's like record
     let repost: String?    // URI of viewer's repost record
 }
 
 /// Reply context (parent/root post info)
-struct ReplyContext: Decodable {
-    let root: PostView?
-    let parent: PostView?
+struct ReplyContextDTO: Decodable {
+    let root: PostDTO?
+    let parent: PostDTO?
 }
 
 /// Reason for post appearing in feed (e.g., repost)
-struct FeedReason: Decodable {
+struct FeedReasonDTO: Decodable {
     let type: String?
-    let by: AuthorView?
+    let by: AuthorDTO?
     
     enum CodingKeys: String, CodingKey {
         case type = "$type"
@@ -417,20 +417,20 @@ struct FeedReason: Decodable {
 
 /// Response from getPostThread
 struct ThreadResponse: Decodable {
-    let thread: ThreadViewPost
+    let thread: ThreadItemDTO
 }
 
-/// Thread view with post, parents, and replies
+/// Thread item with post, parents, and replies
 /// Uses class to allow recursive references
-final class ThreadViewPost: Decodable {
-    let post: PostView
-    let parent: ThreadParent?
-    let replies: [ThreadReply]?
+final class ThreadItemDTO: Decodable {
+    let post: PostDTO
+    let parent: ThreadParentDTO?
+    let replies: [ThreadReplyDTO]?
 }
 
 /// Parent in thread (can be post or blocked/not found)
-enum ThreadParent: Decodable {
-    case post(ThreadViewPost)
+enum ThreadParentDTO: Decodable {
+    case post(ThreadItemDTO)
     case notFound
     case blocked
     
@@ -440,13 +440,13 @@ enum ThreadParent: Decodable {
         
         switch type {
         case "app.bsky.feed.defs#threadViewPost":
-            self = .post(try ThreadViewPost(from: decoder))
+            self = .post(try ThreadItemDTO(from: decoder))
         case "app.bsky.feed.defs#notFoundPost":
             self = .notFound
         case "app.bsky.feed.defs#blockedPost":
             self = .blocked
         default:
-            self = .post(try ThreadViewPost(from: decoder))
+            self = .post(try ThreadItemDTO(from: decoder))
         }
     }
     
@@ -456,8 +456,8 @@ enum ThreadParent: Decodable {
 }
 
 /// Reply in thread
-enum ThreadReply: Decodable {
-    case post(ThreadViewPost)
+enum ThreadReplyDTO: Decodable {
+    case post(ThreadItemDTO)
     case notFound
     case blocked
     
@@ -467,13 +467,13 @@ enum ThreadReply: Decodable {
         
         switch type {
         case "app.bsky.feed.defs#threadViewPost":
-            self = .post(try ThreadViewPost(from: decoder))
+            self = .post(try ThreadItemDTO(from: decoder))
         case "app.bsky.feed.defs#notFoundPost":
             self = .notFound
         case "app.bsky.feed.defs#blockedPost":
             self = .blocked
         default:
-            self = .post(try ThreadViewPost(from: decoder))
+            self = .post(try ThreadItemDTO(from: decoder))
         }
     }
     

@@ -13,12 +13,14 @@ import Observation
 @MainActor
 class PostRepository {
     private let postCache: PostCache
+    private let feedService: FeedService
     
     // Error state for post operations
     private(set) var error: Error?
     
-    init(postCache: PostCache) {
+    init(postCache: PostCache, feedService: FeedService) {
         self.postCache = postCache
+        self.feedService = feedService
     }
     
     // MARK: - Post Creation

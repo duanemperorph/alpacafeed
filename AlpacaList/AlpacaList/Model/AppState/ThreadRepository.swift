@@ -20,6 +20,7 @@ import Observation
 class ThreadRepository {
     private let postCache: PostCache
     private let profileCache: ProfileCache
+    private let feedService: FeedService
     private let postUri: String  // The root post URI this repository manages
     
     // Thread state - stores URIs and cached posts
@@ -42,10 +43,11 @@ class ThreadRepository {
     private static let maxDepth = 400
     private var currentDepth: Int = ThreadRepository.initialDepth
     
-    init(postUri: String, postCache: PostCache, profileCache: ProfileCache) {
+    init(postUri: String, postCache: PostCache, profileCache: ProfileCache, feedService: FeedService) {
         self.postUri = postUri
         self.postCache = postCache
         self.profileCache = profileCache
+        self.feedService = feedService
     }
     
     /// Refresh posts from cache - call this to get latest post states
@@ -67,44 +69,23 @@ class ThreadRepository {
         defer { isLoading = false }
         
         do {
-            // Simulate network delay
-            try await Task.sleep(nanoseconds: 2_000_000_000) // 2 seconds
+            // Fetch thread from API
+            let response = try await feedService.getPostThread(uri: postUri, depth: currentDepth)
             
-            // TODO: Replace with actual API call to app.bsky.feed.getPostThread
-            // API call would use: getPostThread(uri: postUri, depth: currentDepth)
-            // For now, return mock data
-            
-            // Try to get the post from cache first
-            var fetchedRootPost = await postCache.getPost(uri: postUri)
-            
-            // If not in cache, generate a mock post
-            if fetchedRootPost == nil {
-                fetchedRootPost = Post.createTextPost(
-                    author: mockAuthors[0],
-                    text: "This is the main post in the thread. What do you all think?",
-                    createdAt: Date().addingTimeInterval(-3600)
-                )
-            }
-            
-            guard let mainPost = fetchedRootPost else {
-                throw ThreadError.postNotFound
-            }
-            
-            // Generate mock replies based on current depth
-            // Scale mock count with depth (10 per 100 depth)
-            let mockReplyCount = currentDepth / 10
-            let fetchedReplies = MockDataGenerator.generateThreadReplies(to: mainPost, count: mockReplyCount)
+            // Flatten thread into components
+            let (mainPost, fetchedParents, fetchedReplies) = response.flatten()
             
             // Cache all posts (updates existing posts with fresh data)
             await postCache.cachePost(mainPost)
+            await postCache.cachePosts(fetchedParents)
             await postCache.cachePosts(fetchedReplies)
             
             // Cache authors
-            let allAuthors = [mainPost.author] + fetchedReplies.map { $0.author }
+            let allAuthors = [mainPost.author] + fetchedParents.map { $0.author } + fetchedReplies.map { $0.author }
             await profileCache.cacheProfiles(allAuthors)
             
             // Update internal state
-            self.parentPostUris = []  // No parents for now in mock
+            self.parentPostUris = fetchedParents.map { $0.uri }
             
             if replaceExisting {
                 // Full replace (used for initial fetch and refresh)

@@ -13,17 +13,9 @@ import Observation
 /// Navigation destinations for the app
 enum NavigationDestination {
     // Bluesky navigation
-    case timeline(type: TimelineType)        // Home, profile, custom feed
+    case timeline                            // Home timeline (feed type managed by ViewModel)
     case thread(post: Post)                  // Post thread (semantic: which post we're viewing)
     case profile(handle: String)             // User profile
-    
-    // Timeline types
-    enum TimelineType: Hashable {
-        case home                            // User's home feed
-        case authorFeed(handle: String)      // Specific author's posts
-        case customFeed(uri: String)         // Algorithm feed (e.g., discover, trending)
-        case likes(handle: String)           // User's liked posts
-    }
 }
 
 // MARK: - Hashable Conformance
@@ -31,8 +23,8 @@ enum NavigationDestination {
 extension NavigationDestination: Hashable {
     static func == (lhs: NavigationDestination, rhs: NavigationDestination) -> Bool {
         switch (lhs, rhs) {
-        case (.timeline(let type1), .timeline(let type2)):
-            return type1 == type2
+        case (.timeline, .timeline):
+            return true
         case (.thread(let post1), .thread(let post2)):
             return post1.uri == post2.uri
         case (.profile(let handle1), .profile(let handle2)):
@@ -44,9 +36,8 @@ extension NavigationDestination: Hashable {
     
     func hash(into hasher: inout Hasher) {
         switch self {
-        case .timeline(let type):
+        case .timeline:
             hasher.combine("timeline")
-            hasher.combine(type)
         case .thread(let post):
             hasher.combine("thread")
             hasher.combine(post.uri)
@@ -194,8 +185,8 @@ class NavigationCoordinator {
     /// Fallback: Build view with a new ViewModel (used if cache lookup fails)
     @ViewBuilder private func viewFromNewViewModel(destination: NavigationDestination) -> some View {
         switch destination {
-        case .timeline(let type):
-            let viewModel = appState.viewModelFactory.makeTimelineViewModel(type: timelineTypeFromDestination(type))
+        case .timeline:
+            let viewModel = appState.viewModelFactory.makeTimelineViewModel(type: .home)
             TimelineView(viewModel: viewModel)
             
         case .thread(let post):
@@ -214,42 +205,14 @@ class NavigationCoordinator {
     /// Called by push() to populate the parallel viewModelStack
     private func createViewModel(for destination: NavigationDestination) -> Any {
         switch destination {
-        case .timeline(let type):
-            return appState.viewModelFactory.makeTimelineViewModel(type: timelineTypeFromDestination(type))
+        case .timeline:
+            return appState.viewModelFactory.makeTimelineViewModel(type: .home)
             
         case .thread(let post):
             return appState.viewModelFactory.makeThreadViewModel(post: post)
             
         case .profile(let handle):
             return appState.viewModelFactory.makeTimelineViewModel(type: .authorFeed(handle: handle))
-        }
-    }
-    
-    // MARK: - Helper Methods
-    
-    private func timelineTypeFromDestination(_ type: NavigationDestination.TimelineType) -> TimelineViewModel.TimelineType {
-        switch type {
-        case .home:
-            return .home
-        case .authorFeed(let handle):
-            return .authorFeed(handle: handle)
-        case .customFeed(let uri):
-            return .customFeed(uri: uri)
-        case .likes:
-            return .home // TODO: Add likes timeline type
-        }
-    }
-    
-    private func titleForTimelineType(_ type: NavigationDestination.TimelineType) -> String {
-        switch type {
-        case .home:
-            return "Home"
-        case .authorFeed(let handle):
-            return "@\(handle)"
-        case .customFeed:
-            return "Feed"
-        case .likes(let handle):
-            return "@\(handle)'s Likes"
         }
     }
 }

@@ -9,22 +9,25 @@ import Foundation
 
 /// Factory for creating ViewModels with proper dependencies
 /// - Creates FRESH repository and coordinator instances per ViewModel
-/// - Uses shared caches only
+/// - Uses shared caches and services
 @MainActor
 class ViewModelFactory {
     // MARK: - Dependencies (Shared, long-lived)
     
     private let postCache: PostCache
     private let profileCache: ProfileCache
+    private let feedService: FeedService
     
     // MARK: - Initialization
     
     init(
         postCache: PostCache,
-        profileCache: ProfileCache
+        profileCache: ProfileCache,
+        feedService: FeedService
     ) {
         self.postCache = postCache
         self.profileCache = profileCache
+        self.feedService = feedService
     }
     
     // MARK: - ViewModel Factory Methods
@@ -73,17 +76,26 @@ class ViewModelFactory {
     
     /// Create a fresh FeedRepositoryCoordinator instance
     func makeFeedRepositoryCoordinator() -> FeedRepositoryCoordinator {
-        return FeedRepositoryCoordinator(postCache: postCache, profileCache: profileCache)
+        return FeedRepositoryCoordinator(
+            postCache: postCache,
+            profileCache: profileCache,
+            feedService: feedService
+        )
     }
     
     /// Create a fresh ThreadRepository instance for a specific thread
     func makeThreadRepository(postUri: String) -> ThreadRepository {
-        return ThreadRepository(postUri: postUri, postCache: postCache, profileCache: profileCache)
+        return ThreadRepository(
+            postUri: postUri,
+            postCache: postCache,
+            profileCache: profileCache,
+            feedService: feedService
+        )
     }
     
     /// Create a fresh PostRepository instance
     func makePostRepository() -> PostRepository {
-        return PostRepository(postCache: postCache)
+        return PostRepository(postCache: postCache, feedService: feedService)
     }
 }
 

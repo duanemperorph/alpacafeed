@@ -12,14 +12,16 @@ import Foundation
 class FeedRepositoryCoordinator {
     private let postCache: PostCache
     private let profileCache: ProfileCache
+    private let feedService: FeedService
     
     // Cache of repository instances per feed
     private var repositories: [String: FeedRepository] = [:]
     private let lock = NSLock()
     
-    init(postCache: PostCache, profileCache: ProfileCache) {
+    init(postCache: PostCache, profileCache: ProfileCache, feedService: FeedService) {
         self.postCache = postCache
         self.profileCache = profileCache
+        self.feedService = feedService
     }
     
     /// Get or create a repository for a specific feed type
@@ -37,7 +39,8 @@ class FeedRepositoryCoordinator {
         let repository = FeedRepository(
             feedType: feedType,
             postCache: postCache,
-            profileCache: profileCache
+            profileCache: profileCache,
+            feedService: feedService
         )
         repositories[feedId] = repository
         return repository

@@ -10,6 +10,7 @@
 		03874AF1F38447DB1E8D466A /* CredentialStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C117BC50B24E39A6CCA4D13 /* CredentialStore.swift */; };
 		06C413A69A634200B2855FDD /* AuthSessionRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5864261E4245F116CE7067C0 /* AuthSessionRepository.swift */; };
 		1BF257CD0B321BD64C896E60 /* MediaPickerComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 865F76C1326788398C35F4EF /* MediaPickerComponents.swift */; };
+		1CB5B93182B60AFF8DCFEDE1 /* ResponseMappers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C46FAEDBFEAC8D0F387BD85 /* ResponseMappers.swift */; };
 		33685DACF2BE7B01C7552587 /* FeedService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87A3784EB7A39FDA68553EB9 /* FeedService.swift */; };
 		34B4FE3F3C0B3C580B89398D /* QuotePostEmbed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8046A1A07EB54C81C9404B09 /* QuotePostEmbed.swift */; };
 		370A25AF2A54B9F70076D378 /* TopBarMinimized.swift in Sources */ = {isa = PBXBuildFile; fileRef = 370A25AE2A54B9F70076D378 /* TopBarMinimized.swift */; };
@@ -159,6 +160,7 @@
 		865F76C1326788398C35F4EF /* MediaPickerComponents.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MediaPickerComponents.swift; sourceTree = "<group>"; };
 		87A3784EB7A39FDA68553EB9 /* FeedService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FeedService.swift; sourceTree = "<group>"; };
 		97D03336943F43AFABCE34A2167CEDA0 /* BlueskyFeedSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlueskyFeedSelector.swift; sourceTree = "<group>"; };
+		9C46FAEDBFEAC8D0F387BD85 /* ResponseMappers.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ResponseMappers.swift; sourceTree = "<group>"; };
 		A5AABAB663575ACA8DC764FC /* VideoEmbed.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = VideoEmbed.swift; sourceTree = "<group>"; };
 		C7B5191431BC2148A6165957 /* AuthService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -315,6 +317,7 @@
 				87A3784EB7A39FDA68553EB9 /* FeedService.swift */,
 				5864261E4245F116CE7067C0 /* AuthSessionRepository.swift */,
 				1C117BC50B24E39A6CCA4D13 /* CredentialStore.swift */,
+				9C46FAEDBFEAC8D0F387BD85 /* ResponseMappers.swift */,
 			);
 			path = API;
 			sourceTree = "<group>";
@@ -627,6 +630,7 @@
 				33685DACF2BE7B01C7552587 /* FeedService.swift in Sources */,
 				B004C5FA2ADC584DCFD66F6A /* ATProtoClient.swift in Sources */,
 				5CCEDA37DF7C110D7E1FDF73 /* BSAPIClient.swift in Sources */,
+				1CB5B93182B60AFF8DCFEDE1 /* ResponseMappers.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

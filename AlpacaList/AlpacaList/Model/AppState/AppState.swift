@@ -20,6 +20,11 @@ class AppState {
     
     let authRepository: AuthenticationRepository
     
+    // MARK: - API Services (Shared, long-lived)
+    
+    let apiClient: BSAPIClient
+    let feedService: FeedService
+    
     // MARK: - Caches (Shared, long-lived)
     
     let postCache: PostCache
@@ -44,6 +49,10 @@ class AppState {
         // Initialize authentication repository
         self.authRepository = AuthenticationRepository()
         
+        // Initialize API client and services
+        self.apiClient = BSAPIClient(sessionRepository: authRepository)
+        self.feedService = FeedService(apiService: apiClient)
+        
         // Initialize caches
         self.postCache = PostCache()
         self.profileCache = ProfileCache()
@@ -51,7 +60,8 @@ class AppState {
         // Initialize ViewModel factory
         self.viewModelFactory = ViewModelFactory(
             postCache: postCache,
-            profileCache: profileCache
+            profileCache: profileCache,
+            feedService: feedService
         )
         
         // Set mock current user for now

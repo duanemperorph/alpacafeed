@@ -15,6 +15,7 @@ import Observation
 class FeedRepository {
     private let postCache: PostCache
     private let profileCache: ProfileCache
+    private let feedService: FeedService
     private let feedType: FeedType
     
     // Feed state - stores URIs and cached posts
@@ -37,10 +38,11 @@ class FeedRepository {
     private var cursor: String?
     private var hasMore: Bool = true
     
-    init(feedType: FeedType, postCache: PostCache, profileCache: ProfileCache) {
+    init(feedType: FeedType, postCache: PostCache, profileCache: ProfileCache, feedService: FeedService) {
         self.feedType = feedType
         self.postCache = postCache
         self.profileCache = profileCache
+        self.feedService = feedService
     }
     
     // MARK: - Feed Types
@@ -71,7 +73,7 @@ class FeedRepository {
     // MARK: - Fetch Methods
     
     /// Fetch initial feed (resets pagination)
-    func fetchFeed(limit: Int = 20) async {
+    func fetchFeed(limit: Int = 50) async {
         guard !isLoading else { return }
         
         isLoading = true
@@ -79,14 +81,20 @@ class FeedRepository {
         defer { isLoading = false }
         
         do {
-            // Simulate network delay
-            try await Task.sleep(nanoseconds: 2_000_000_000) // 2 seconds
+            let response: TimelineResponse
             
-            // TODO: Replace with actual API call when ready
-            // For now, return mock data
+            switch feedType {
+            case .home:
+                response = try await feedService.getTimeline(cursor: nil, limit: limit)
+            case .customFeed(let uri):
+                response = try await feedService.getFeed(feedUri: uri, cursor: nil, limit: limit)
+            case .authorFeed, .likes, .search:
+                // TODO: Implement these feed types
+                return
+            }
             
-            let fetchedPosts = MockDataGenerator.generateTimeline(count: limit)
-            let newCursor = "mock_cursor_\(UUID().uuidString)"
+            // Convert DTOs to domain models
+            let fetchedPosts = response.toPosts()
             
             // Cache the posts and authors
             await postCache.cachePosts(fetchedPosts)
@@ -95,8 +103,8 @@ class FeedRepository {
             
             // Update internal state - store URIs and refresh from cache
             self.postUris = fetchedPosts.map { $0.uri }
-            self.cursor = newCursor
-            self.hasMore = true
+            self.cursor = response.cursor
+            self.hasMore = response.cursor != nil
             await self.refreshPostsFromCache()
         } catch {
             self.error = error
@@ -104,8 +112,8 @@ class FeedRepository {
     }
     
     /// Load more posts (pagination)
-    func loadMore(limit: Int = 20) async {
-        guard let _ = cursor, hasMore, !isLoadingMore, !isLoading else {
+    func loadMore(limit: Int = 50) async {
+        guard let currentCursor = cursor, hasMore, !isLoadingMore, !isLoading else {
             return
         }
         
@@ -113,14 +121,20 @@ class FeedRepository {
         defer { isLoadingMore = false }
         
         do {
-            // Simulate network delay
-            try await Task.sleep(nanoseconds: 2_000_000_000) // 2 seconds
+            let response: TimelineResponse
             
-            // TODO: Replace with actual API call using cursor (will use cursor parameter then)
-            // For now, return mock data
+            switch feedType {
+            case .home:
+                response = try await feedService.getTimeline(cursor: currentCursor, limit: limit)
+            case .customFeed(let uri):
+                response = try await feedService.getFeed(feedUri: uri, cursor: currentCursor, limit: limit)
+            case .authorFeed, .likes, .search:
+                // TODO: Implement these feed types
+                return
+            }
             
-            let morePosts = MockDataGenerator.generateTimeline(count: limit)
-            let newCursor = "mock_cursor_\(UUID().uuidString)"
+            // Convert DTOs to domain models
+            let morePosts = response.toPosts()
             
             // Cache the posts and authors
             await postCache.cachePosts(morePosts)
@@ -129,7 +143,8 @@ class FeedRepository {
             
             // Append URIs to internal state and refresh from cache
             self.postUris.append(contentsOf: morePosts.map { $0.uri })
-            self.cursor = newCursor
+            self.cursor = response.cursor
+            self.hasMore = response.cursor != nil
             await self.refreshPostsFromCache()
         } catch {
             self.error = error
