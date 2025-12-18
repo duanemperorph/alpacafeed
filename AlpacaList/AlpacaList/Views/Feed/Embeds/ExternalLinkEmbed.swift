@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Kingfisher
 
 /// Displays external link with preview card
 struct ExternalLinkEmbed: View {
@@ -44,7 +45,11 @@ struct ExternalLinkEmbed: View {
                 
                 // Thumbnail
                 if let thumb = external.thumb {
-                    Image(thumb)
+                    KFImage(URL(string: thumb))
+                        .placeholder {
+                            RoundedRectangle(cornerRadius: 8)
+                                .fill(Color.gray.opacity(0.2))
+                        }
                         .resizable()
                         .scaledToFill()
                         .frame(width: 80, height: 80)

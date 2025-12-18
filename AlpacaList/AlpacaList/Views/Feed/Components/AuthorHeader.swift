@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Kingfisher
 
 /// Header showing author info (avatar, display name, handle, timestamp)
 struct AuthorHeader: View {
@@ -36,22 +37,19 @@ struct AuthorHeader: View {
             // Main author info
             HStack(spacing: 12) {
                 // Avatar
-                if let avatarName = author.avatar {
-                    Image(avatarName)
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: 48, height: 48)
-                        .clipShape(Circle())
-                } else {
-                    // Placeholder avatar
-                    Circle()
-                        .fill(Color.gray.opacity(0.3))
-                        .frame(width: 48, height: 48)
-                        .overlay(
-                            Image(systemName: "person.fill")
-                                .foregroundColor(.gray)
-                        )
-                }
+                KFImage(URL(string: author.avatar ?? ""))
+                    .placeholder {
+                        Circle()
+                            .fill(Color.gray.opacity(0.3))
+                            .overlay(
+                                Image(systemName: "person.fill")
+                                    .foregroundColor(.gray)
+                            )
+                    }
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 48, height: 48)
+                    .clipShape(Circle())
                 
                 // Name, handle, timestamp
                 VStack(alignment: .leading, spacing: 2) {
@@ -135,22 +133,20 @@ struct AuthorHeaderCompact: View {
     var body: some View {
         HStack(spacing: 8) {
             // Smaller avatar
-            if let avatarName = author.avatar {
-                Image(avatarName)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 32, height: 32)
-                    .clipShape(Circle())
-            } else {
-                Circle()
-                    .fill(Color.gray.opacity(0.3))
-                    .frame(width: 32, height: 32)
-                    .overlay(
-                        Image(systemName: "person.fill")
-                            .font(.caption)
-                            .foregroundColor(.gray)
-                    )
-            }
+            KFImage(URL(string: author.avatar ?? ""))
+                .placeholder {
+                    Circle()
+                        .fill(Color.gray.opacity(0.3))
+                        .overlay(
+                            Image(systemName: "person.fill")
+                                .font(.caption)
+                                .foregroundColor(.gray)
+                        )
+                }
+                .resizable()
+                .scaledToFill()
+                .frame(width: 32, height: 32)
+                .clipShape(Circle())
             
             // Name and handle inline
             HStack(spacing: 4) {

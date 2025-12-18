@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Kingfisher
 
 /// Displays one or multiple images in various layouts
 struct ImagesEmbed: View {
@@ -58,8 +59,14 @@ struct SingleImageView: View {
     let image: Embed.ImageEmbed
     
     var body: some View {
-        // Use fullsize as image name for now
-        Image(image.fullsize)
+        KFImage(URL(string: image.thumb ?? image.fullsize))
+            .placeholder {
+                Rectangle()
+                    .fill(Color.gray.opacity(0.2))
+                    .overlay(
+                        ProgressView()
+                    )
+            }
             .resizable()
             .scaledToFill()
             .frame(maxHeight: 300)

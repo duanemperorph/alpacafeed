@@ -7,6 +7,7 @@
 
 import SwiftUI
 import AVKit
+import Kingfisher
 
 /// Displays video embed with inline player
 struct VideoEmbed: View {
@@ -46,7 +47,11 @@ struct InlineVideoPlayer: View {
             } else {
                 // Thumbnail
                 if let thumbnail = thumbnail {
-                    Image(thumbnail)
+                    KFImage(URL(string: thumbnail))
+                        .placeholder {
+                            Rectangle()
+                                .fill(Color.gray.opacity(0.3))
+                        }
                         .resizable()
                         .scaledToFit()
                         .frame(maxHeight: 300)
