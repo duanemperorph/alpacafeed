@@ -76,28 +76,42 @@ class PostRepository {
     func likePost(uri: String) async {
         error = nil
         
+        guard let post = await postCache.getPost(uri: uri) else {
+            self.error = PostError.postNotFound
+            return
+        }
+        
+        guard !post.isLiked else {
+            // Already liked
+            return
+        }
+        
+        // Optimistic update
+        let originalLikeCount = post.likeCount
+        await postCache.updateInteraction(
+            uri: uri,
+            likeCount: post.likeCount + 1,
+            isLiked: true,
+            likeUri: nil  // Will be set after API call
+        )
+        
         do {
-            // TODO: Replace with actual API call to com.atproto.repo.createRecord
-            // For now, update cache optimistically
+            // Call the real API
+            let response = try await feedService.likePost(uri: post.uri, cid: post.cid)
             
-            guard let post = await postCache.getPost(uri: uri) else {
-                throw PostError.postNotFound
-            }
-            
-            guard !post.isLiked else {
-                // Already liked
-                return
-            }
-            
-            let likeUri = "at://\(post.author.did)/app.bsky.feed.like/\(UUID().uuidString)"
-            
+            // Update cache with the real like URI from the response
             await postCache.updateInteraction(
                 uri: uri,
-                likeCount: post.likeCount + 1,
-                isLiked: true,
-                likeUri: likeUri
+                likeUri: response.uri
             )
         } catch {
+            // Rollback optimistic update on failure
+            await postCache.updateInteraction(
+                uri: uri,
+                likeCount: originalLikeCount,
+                isLiked: false,
+                likeUri: nil
+            )
             self.error = error
         }
     }
@@ -106,26 +120,37 @@ class PostRepository {
     func unlikePost(uri: String) async {
         error = nil
         
+        guard let post = await postCache.getPost(uri: uri) else {
+            self.error = PostError.postNotFound
+            return
+        }
+        
+        guard post.isLiked, let likeUri = post.likeUri else {
+            // Not liked or missing like URI
+            return
+        }
+        
+        // Optimistic update
+        let originalLikeCount = post.likeCount
+        let originalLikeUri = likeUri
+        await postCache.updateInteraction(
+            uri: uri,
+            likeCount: max(0, post.likeCount - 1),
+            isLiked: false,
+            likeUri: nil
+        )
+        
         do {
-            // TODO: Replace with actual API call to com.atproto.repo.deleteRecord
-            // For now, update cache optimistically
-            
-            guard let post = await postCache.getPost(uri: uri) else {
-                throw PostError.postNotFound
-            }
-            
-            guard post.isLiked else {
-                // Not liked
-                return
-            }
-            
+            // Call the real API to delete the like record
+            try await feedService.unlikePost(likeUri: likeUri)
+        } catch {
+            // Rollback optimistic update on failure
             await postCache.updateInteraction(
                 uri: uri,
-                likeCount: max(0, post.likeCount - 1),
-                isLiked: false,
-                likeUri: nil
+                likeCount: originalLikeCount,
+                isLiked: true,
+                likeUri: originalLikeUri
             )
-        } catch {
             self.error = error
         }
     }
