@@ -153,7 +153,6 @@ class TimelineViewModel {
         Task {
             if let newPost = await postRepository.createPost(
                 text: text,
-                replyTo: nil,
                 embed: .record(recordEmbed)
             ) {
                 // Add the new quote post to the timeline via repository

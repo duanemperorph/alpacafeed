@@ -95,7 +95,7 @@ class ViewModelFactory {
     
     /// Create a fresh PostRepository instance
     func makePostRepository() -> PostRepository {
-        return PostRepository(postCache: postCache, feedService: feedService)
+        return PostRepository(postCache: postCache, profileCache: profileCache, feedService: feedService)
     }
 }
 

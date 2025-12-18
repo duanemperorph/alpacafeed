@@ -13,61 +13,109 @@ import Observation
 @MainActor
 class PostRepository {
     private let postCache: PostCache
+    private let profileCache: ProfileCache
     private let feedService: FeedService
     
     // Error state for post operations
     private(set) var error: Error?
     
-    init(postCache: PostCache, feedService: FeedService) {
+    init(postCache: PostCache, profileCache: ProfileCache, feedService: FeedService) {
         self.postCache = postCache
+        self.profileCache = profileCache
         self.feedService = feedService
     }
     
     // MARK: - Post Creation
     
-    /// Create a new post
-    func createPost(text: String, replyTo: Post? = nil, embed: Embed? = nil) async -> Post? {
+    /// Create a new top-level post
+    func createPost(text: String, embed: Embed? = nil) async -> Post? {
+        return await publishPost(text: text, embed: embed)
+    }
+    
+    /// Create a reply to an existing post
+    func createReply(text: String, to parent: Post, embed: Embed? = nil) async -> Post? {
+        // Build reply references for the API
+        // Root is the thread starter; parent is what we're directly replying to
+        let rootRef = parent.reply?.root ?? ReplyRef.StrongRef(uri: parent.uri, cid: parent.cid)
+        
+        let apiReply = ReplyReference(
+            root: RecordRef(uri: rootRef.uri, cid: rootRef.cid),
+            parent: RecordRef(uri: parent.uri, cid: parent.cid)
+        )
+        
+        let modelReply = ReplyRef(
+            root: rootRef,
+            parent: ReplyRef.StrongRef(uri: parent.uri, cid: parent.cid)
+        )
+        
+        let post = await publishPost(text: text, apiReply: apiReply, modelReply: modelReply, embed: embed)
+        
+        // Update parent's reply count on success
+        if post != nil {
+            await postCache.updateInteraction(
+                uri: parent.uri,
+                replyCount: parent.replyCount + 1
+            )
+        }
+        
+        return post
+    }
+    
+    /// Shared logic for publishing a post or reply
+    private func publishPost(
+        text: String,
+        apiReply: ReplyReference? = nil,
+        modelReply: ReplyRef? = nil,
+        embed: Embed? = nil
+    ) async -> Post? {
         error = nil
         
         do {
-            // TODO: Replace with actual API call to com.atproto.repo.createRecord
-            // For now, create a mock post
+            let response = try await feedService.createPost(
+                text: text,
+                reply: apiReply,
+                embed: nil,  // TODO: Convert Embed to CreatePostEmbed
+                facets: nil  // TODO: Extract facets from text
+            )
             
-            let author = mockAuthors[0]  // Use mock current user
-            
-            let reply: ReplyRef? = replyTo.map { parent in
-                ReplyRef(
-                    root: ReplyRef.StrongRef(uri: parent.uri, cid: parent.cid),
-                    parent: ReplyRef.StrongRef(uri: parent.uri, cid: parent.cid)
-                )
-            }
+            let author = await getCurrentUserAuthor()
             
             let post = Post(
-                uri: "at://\(author.did)/app.bsky.feed.post/\(UUID().uuidString)",
-                cid: "bafyrei\(UUID().uuidString.prefix(16))",
+                uri: response.uri,
+                cid: response.cid,
                 author: author,
                 createdAt: Date(),
                 text: text,
                 embed: embed,
-                reply: reply
+                reply: modelReply
             )
             
-            // Cache the new post
             await postCache.cachePost(post)
-            
-            // If replying, update the parent's reply count
-            if let parent = replyTo {
-                await postCache.updateInteraction(
-                    uri: parent.uri,
-                    replyCount: parent.replyCount + 1
-                )
-            }
-            
             return post
         } catch {
             self.error = error
             return nil
         }
+    }
+    
+    /// Get the current user's Author object
+    private func getCurrentUserAuthor() async -> Author {
+        // Try to get from profile cache by DID
+        if let did = feedService.currentDID,
+           let cached = await profileCache.getProfileByDID(did: did) {
+            return cached
+        }
+        
+        // Fallback: construct minimal Author from session info
+        let did = feedService.currentDID ?? "unknown"
+        let handle = feedService.currentHandle ?? "unknown"
+        
+        return Author(
+            did: did,
+            handle: handle,
+            displayName: nil,
+            avatar: nil
+        )
     }
     
     // MARK: - Like Operations
@@ -76,16 +124,16 @@ class PostRepository {
     func likePost(uri: String) async {
         error = nil
         
-        guard let post = await postCache.getPost(uri: uri) else {
+            guard let post = await postCache.getPost(uri: uri) else {
             self.error = PostError.postNotFound
             return
-        }
-        
-        guard !post.isLiked else {
-            // Already liked
-            return
-        }
-        
+            }
+            
+            guard !post.isLiked else {
+                // Already liked
+                return
+            }
+            
         // Optimistic update
         let originalLikeCount = post.likeCount
         await postCache.updateInteraction(
@@ -119,26 +167,26 @@ class PostRepository {
     /// Unlike a post
     func unlikePost(uri: String) async {
         error = nil
-        
-        guard let post = await postCache.getPost(uri: uri) else {
+            
+            guard let post = await postCache.getPost(uri: uri) else {
             self.error = PostError.postNotFound
             return
-        }
-        
+            }
+            
         guard post.isLiked, let likeUri = post.likeUri else {
             // Not liked or missing like URI
-            return
-        }
-        
+                return
+            }
+            
         // Optimistic update
         let originalLikeCount = post.likeCount
         let originalLikeUri = likeUri
-        await postCache.updateInteraction(
-            uri: uri,
-            likeCount: max(0, post.likeCount - 1),
-            isLiked: false,
-            likeUri: nil
-        )
+            await postCache.updateInteraction(
+                uri: uri,
+                likeCount: max(0, post.likeCount - 1),
+                isLiked: false,
+                likeUri: nil
+            )
         
         do {
             // Call the real API to delete the like record
@@ -221,12 +269,18 @@ class PostRepository {
     func deletePost(uri: String) async {
         error = nil
         
+        // Optimistically remove from cache first for responsive UI
+        let cachedPost = await postCache.getPost(uri: uri)
+        await postCache.removePost(uri: uri)
+        
         do {
-            // TODO: Replace with actual API call to com.atproto.repo.deleteRecord
-            // For now, just remove from cache
-            
-            await postCache.removePost(uri: uri)
+            // Call the real API to delete the post record
+            try await feedService.deletePost(postUri: uri)
         } catch {
+            // Rollback: restore the post to cache if API call failed
+            if let post = cachedPost {
+                await postCache.cachePost(post)
+            }
             self.error = error
         }
     }

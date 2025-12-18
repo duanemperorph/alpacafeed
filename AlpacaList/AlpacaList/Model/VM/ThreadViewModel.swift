@@ -129,7 +129,7 @@ class ThreadViewModel {
             guard let post = findPost(by: uri) else { return }
             
             // Create reply via PostRepository
-            if let newReply = await postRepository.createPost(text: text, replyTo: post) {
+            if let newReply = await postRepository.createReply(text: text, to: post) {
                 // TODO: Add the new reply to the thread
                 // For now, just refresh the whole thread
                 await threadRepository.refresh()
