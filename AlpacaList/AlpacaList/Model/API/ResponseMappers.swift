@@ -34,7 +34,7 @@ extension PostDTO {
             createdAt: parseDate(record.createdAt),
             text: record.text,
             facets: nil,  // TODO: Parse facets from record
-            embed: nil,   // TODO: Parse embed from response
+            embed: embed?.toEmbed(),
             langs: nil,
             reply: nil,   // TODO: Parse reply ref from record
             likeCount: likeCount ?? 0,
@@ -170,6 +170,101 @@ extension ThreadResponse {
     /// Flatten the thread response into components
     func flatten() -> (root: Post, parents: [Post], replies: [Post]) {
         thread.flatten()
+    }
+}
+
+// MARK: - EmbedDTO → Embed
+
+extension EmbedDTO {
+    /// Convert API EmbedDTO to app Embed model
+    func toEmbed() -> Embed? {
+        switch self {
+        case .images(let imagesDTO):
+            let images = imagesDTO.images.map { $0.toImageEmbed() }
+            return .images(images)
+            
+        case .video(let videoDTO):
+            return .video(videoDTO.toVideoEmbed())
+            
+        case .external(let externalDTO):
+            return .external(externalDTO.external.toExternalEmbed())
+            
+        case .record(let recordDTO):
+            guard let recordEmbed = recordDTO.toRecordEmbed() else { return nil }
+            return .record(recordEmbed)
+            
+        case .recordWithMedia(let recordWithMediaDTO):
+            guard let recordEmbed = recordWithMediaDTO.record.toRecordEmbed(),
+                  let mediaEmbed = recordWithMediaDTO.media.toMediaEmbed() else { return nil }
+            return .recordWithMedia(recordEmbed, mediaEmbed)
+            
+        case .unknown:
+            return nil
+        }
+    }
+}
+
+extension EmbedImageDTO {
+    func toImageEmbed() -> Embed.ImageEmbed {
+        Embed.ImageEmbed(
+            thumb: thumb,
+            fullsize: fullsize,
+            alt: alt.isEmpty ? nil : alt,
+            aspectRatio: aspectRatio?.toAspectRatio()
+        )
+    }
+}
+
+extension AspectRatioDTO {
+    func toAspectRatio() -> Embed.AspectRatio {
+        Embed.AspectRatio(width: width, height: height)
+    }
+}
+
+extension EmbedVideoDTO {
+    func toVideoEmbed() -> Embed.VideoEmbed {
+        Embed.VideoEmbed(
+            thumbnail: thumbnail,
+            playlist: playlist,
+            alt: alt,
+            aspectRatio: aspectRatio?.toAspectRatio()
+        )
+    }
+}
+
+extension ExternalLinkDTO {
+    func toExternalEmbed() -> Embed.ExternalEmbed {
+        Embed.ExternalEmbed(
+            uri: uri,
+            title: title,
+            description: description,
+            thumb: thumb
+        )
+    }
+}
+
+extension EmbedRecordDTO {
+    func toRecordEmbed() -> Embed.RecordEmbed? {
+        switch record {
+        case .post(let postDTO):
+            return Embed.RecordEmbed(uri: postDTO.uri, cid: postDTO.cid)
+        case .notFound, .blocked, .unknown:
+            return nil
+        }
+    }
+}
+
+extension EmbedMediaDTO {
+    func toMediaEmbed() -> Embed.MediaEmbed? {
+        switch self {
+        case .images(let imagesDTO):
+            let images = imagesDTO.images.map { $0.toImageEmbed() }
+            return .images(images)
+        case .video(let videoDTO):
+            return .video(videoDTO.toVideoEmbed())
+        case .unknown:
+            return nil
+        }
     }
 }
 
