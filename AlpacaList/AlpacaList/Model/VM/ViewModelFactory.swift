@@ -57,12 +57,8 @@ class ViewModelFactory {
         switch feedType {
         case .following:
             return .home
-        case .discover:
-            // Bluesky's Discover feed URI
-            return .customFeed(uri: "at://did:plc:z72i7hdynmk6r22z27h6tvur/app.bsky.feed.generator/whats-hot")
-        case .custom:
-            // TODO: Allow user to select custom feed URI
-            return .home
+        case .custom(let savedFeed):
+            return .customFeed(uri: savedFeed.uri)
         }
     }
     

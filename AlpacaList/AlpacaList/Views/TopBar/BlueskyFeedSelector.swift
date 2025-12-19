@@ -32,78 +32,113 @@ extension View {
     }
 }
 
+// MARK: - Saved Feed Model
+
+/// Represents a custom feed generator (algorithm feed)
+struct SavedFeed: Hashable, Identifiable {
+    let uri: String
+    let name: String
+    let description: String?
+    let avatar: String?
+    let creator: String?
+    
+    var id: String { uri }
+    
+    init(uri: String, name: String, description: String? = nil, avatar: String? = nil, creator: String? = nil) {
+        self.uri = uri
+        self.name = name
+        self.description = description
+        self.avatar = avatar
+        self.creator = creator
+    }
+}
+
 // MARK: - Feed Type
 
-enum FeedType: String, CaseIterable {
-    case following = "Following"
-    case discover = "Discover"
-    case custom = "Custom"
+/// Feed type: either the home timeline (Following) or a custom feed
+enum FeedType: Hashable {
+    case following
+    case custom(SavedFeed)
+    
+    /// Display name for the feed
+    var displayName: String {
+        switch self {
+        case .following:
+            return "Following"
+        case .custom(let feed):
+            return feed.name
+        }
+    }
 }
 
-// MARK: - Feed Selector
+// MARK: - Mock Data
 
-struct BlueskyFeedSelector: View {
-    @Binding var selectedFeed: FeedType
+extension SavedFeed {
+    static let mockSavedFeeds: [SavedFeed] = [
+        SavedFeed(
+            uri: "at://did:plc:z72i7hdynmk6r22z27h6tvur/app.bsky.feed.generator/whats-hot",
+            name: "Discover",
+            description: "Discover new and interesting content",
+            creator: "Bluesky"
+        ),
+        SavedFeed(
+            uri: "at://did:plc:z72i7hdynmk6r22z27h6tvur/app.bsky.feed.generator/hot-classic",
+            name: "What's Hot",
+            description: "The hottest posts right now",
+            creator: "Bluesky"
+        ),
+        SavedFeed(
+            uri: "at://did:plc:vpkhqolt662uhesyj6nxm7ys/app.bsky.feed.generator/infreq",
+            name: "Quiet Posters",
+            description: "Posts from people who don't post often",
+            creator: "@why.bsky.team"
+        ),
+    ]
+    
+    static let mockSuggestedFeeds: [SavedFeed] = [
+        SavedFeed(
+            uri: "at://did:plc:xxx/app.bsky.feed.generator/science",
+            name: "Science",
+            description: "Scientific discoveries and discussions",
+            creator: "@science.bsky.social"
+        ),
+        SavedFeed(
+            uri: "at://did:plc:xxx/app.bsky.feed.generator/art",
+            name: "Art",
+            description: "Creative works and artistic expression",
+            creator: "@art.bsky.social"
+        ),
+        SavedFeed(
+            uri: "at://did:plc:xxx/app.bsky.feed.generator/news",
+            name: "News",
+            description: "Breaking news and current events",
+            creator: "@news.bsky.social"
+        ),
+        SavedFeed(
+            uri: "at://did:plc:xxx/app.bsky.feed.generator/tech",
+            name: "Tech",
+            description: "Technology news and discussions",
+            creator: "@tech.bsky.social"
+        ),
+    ]
+}
+
+// MARK: - Feed Selector Button
+
+/// Button that shows current feed and opens the feed selector sheet
+struct FeedSelectorButton: View {
+    let currentFeed: FeedType
+    let onTap: () -> Void
     
     var body: some View {
-        HStack {
-            Image(systemName: "chevron.left")
-                .font(.system(size: 14))
-                .fontWeight(.bold)
-                .onTapGesture {
-                    cycleFeed(backwards: true)
-                }
-            
-            Text(selectedFeed.rawValue)
-                .frame(maxWidth: .infinity)
-            
-            Image(systemName: "chevron.right")
-                .font(.system(size: 14))
-                .fontWeight(.bold)
-                .onTapGesture {
-                    cycleFeed(backwards: false)
-                }
+        Button(action: onTap) {
+            HStack(spacing: 6) {
+                Text(currentFeed.displayName)
+                Image(systemName: "chevron.down")
+                    .font(.system(size: 12, weight: .bold))
+            }
         }
         .feedSelectorPillStyle()
-    }
-    
-    private func cycleFeed(backwards: Bool) {
-        let allCases = FeedType.allCases
-        guard let currentIndex = allCases.firstIndex(of: selectedFeed) else { return }
-        
-        let nextIndex = backwards
-            ? (currentIndex - 1 + allCases.count) % allCases.count
-            : (currentIndex + 1) % allCases.count
-        
-        selectedFeed = allCases[nextIndex]
-    }
-}
-
-// MARK: - Previews
-
-struct BlueskyFeedSelector_Previews: PreviewProvider {
-    @State static var selectedFeed: FeedType = .following
-    
-    static var previews: some View {
-        ZStack {
-            LinearGradient(
-                gradient: Gradient(colors: [.blue, .purple]),
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
-            .edgesIgnoringSafeArea(.all)
-            
-            VStack(spacing: 20) {
-                BlueskyFeedSelector(selectedFeed: $selectedFeed)
-                    .frame(width: 150)
-                
-                BlueskyFeedSelector(selectedFeed: .constant(.discover))
-                    .frame(width: 200)
-            }
-            .padding()
-            .background(.regularMaterial)
-            .environment(\.colorScheme, .dark)
-        }
     }
 }
 

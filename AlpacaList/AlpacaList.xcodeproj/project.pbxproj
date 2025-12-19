@@ -72,6 +72,7 @@
 		8D7ADF6EF4BFFA599832A078 /* APIError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43FE0DDD9B4372B5280F3A9B /* APIError.swift */; };
 		926266A28C7276394986C9A4 /* ViewModelFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40397FE75161F1524D4B99A4 /* ViewModelFactory.swift */; };
 		93DA66C5783734833084BF54 /* VideoEmbed.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5AABAB663575ACA8DC764FC /* VideoEmbed.swift */; };
+		AD0077113DB4CE176A090F95 /* FeedSelectorSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC9FE23F699A8B7A0887DF74 /* FeedSelectorSheet.swift */; };
 		B004C5FA2ADC584DCFD66F6A /* ATProtoClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6513CC837EA3F35C10942EDE /* ATProtoClient.swift */; };
 		D43B3AEA45F5C1E584C5FBBF /* FeedDTOs.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3FEC796F3D9B8DA877BB005 /* FeedDTOs.swift */; };
 /* End PBXBuildFile section */
@@ -164,6 +165,7 @@
 		A5AABAB663575ACA8DC764FC /* VideoEmbed.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = VideoEmbed.swift; sourceTree = "<group>"; };
 		B3FEC796F3D9B8DA877BB005 /* FeedDTOs.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FeedDTOs.swift; sourceTree = "<group>"; };
 		C7B5191431BC2148A6165957 /* AuthService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
+		FC9FE23F699A8B7A0887DF74 /* FeedSelectorSheet.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FeedSelectorSheet.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -232,6 +234,7 @@
 				37B0A0AC2EAAA34200DBB593 /* ThreadView.swift */,
 				37B0A0AD2EAAA34200DBB593 /* TimelineView.swift */,
 				37E8CC872E58E475005C7C63 /* PostListView.swift */,
+				FC9FE23F699A8B7A0887DF74 /* FeedSelectorSheet.swift */,
 			);
 			path = Feeds;
 			sourceTree = "<group>";
@@ -636,6 +639,7 @@
 				5CCEDA37DF7C110D7E1FDF73 /* BSAPIClient.swift in Sources */,
 				1CB5B93182B60AFF8DCFEDE1 /* ResponseMappers.swift in Sources */,
 				D43B3AEA45F5C1E584C5FBBF /* FeedDTOs.swift in Sources */,
+				AD0077113DB4CE176A090F95 /* FeedSelectorSheet.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

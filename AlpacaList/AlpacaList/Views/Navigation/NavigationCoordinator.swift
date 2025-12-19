@@ -72,6 +72,9 @@ class NavigationCoordinator {
     // Settings sheet state
     var showingSettingsSheet: Bool = false
     
+    // Feed selector sheet state
+    var showingFeedSelectorSheet: Bool = false
+    
     // AppState for accessing ViewModelFactory
     private let appState: AppState
     
@@ -130,6 +133,10 @@ class NavigationCoordinator {
         showingSettingsSheet = true
     }
     
+    func presentFeedSelector() {
+        showingFeedSelectorSheet = true
+    }
+    
     // MARK: - View Builders
     
     /// Default root view (Home timeline) - uses cached ViewModel for current feed type
@@ -150,6 +157,18 @@ class NavigationCoordinator {
     @ViewBuilder var composeSheetView: some View {
         let viewModel = appState.viewModelFactory.makeComposeViewModel(replyTo: composeReplyTo)
         ComposeView(viewModel: viewModel)
+    }
+    
+    /// Feed selector sheet binding for the current feed type
+    var currentFeedTypeBinding: Binding<FeedType> {
+        Binding(
+            get: { self.currentFeedType },
+            set: { self.currentFeedType = $0 }
+        )
+    }
+    
+    @ViewBuilder var feedSelectorSheetView: some View {
+        FeedSelectorSheet(selectedFeed: currentFeedTypeBinding)
     }
 
     /// Build view for navigation destination using cached ViewModel from parallel stack

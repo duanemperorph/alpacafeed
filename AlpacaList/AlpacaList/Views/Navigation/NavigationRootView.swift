@@ -35,6 +35,9 @@ struct NavigationRootView: View {
         .sheet(isPresented: $navigationCoordinator.showingSettingsSheet) {
             UserSettings()
         }
+        .sheet(isPresented: $navigationCoordinator.showingFeedSelectorSheet) {
+            navigationCoordinator.feedSelectorSheetView
+        }
         .environment(navigationCoordinator)
     }
 }
