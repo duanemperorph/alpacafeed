@@ -100,7 +100,7 @@ struct TimelineView_Previews: PreviewProvider {
     static var previews: some View {
         let appState = AppState()
         let navigationCoordinator = NavigationCoordinator(appState: appState)
-        let viewModel = appState.viewModelFactory.makeTimelineViewModel(type: .home)
+        let viewModel = appState.viewModelFactory.makeTimelineViewModel(feedType: .home)
         
         NavigationView {
             TimelineView(viewModel: viewModel)

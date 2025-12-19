@@ -83,8 +83,8 @@ struct TopBarExpanded: View {
     
     var currentFeedTypeBinding: Binding<FeedType> {
         Binding(
-            get: { appState.currentFeedType },
-            set: { appState.currentFeedType = $0 }
+            get: { navigationCoordinator.currentFeedType },
+            set: { navigationCoordinator.currentFeedType = $0 }
         )
     }
     

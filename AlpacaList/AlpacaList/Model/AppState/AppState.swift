@@ -38,9 +38,6 @@ class AppState {
     
     var currentUser: Author?
     
-    /// Current feed type for the home timeline
-    var currentFeedType: FeedType = .following
-    
     /// Whether session restoration has completed (not whether user is authenticated)
     private(set) var isSessionRestored: Bool = false
     

@@ -8,7 +8,7 @@
 import Foundation
 
 /// Factory for creating ViewModels with proper dependencies
-/// - Creates FRESH repository and coordinator instances per ViewModel
+/// - Creates FRESH repository instances per ViewModel
 /// - Uses shared caches and services
 @MainActor
 class ViewModelFactory {
@@ -32,17 +32,38 @@ class ViewModelFactory {
     
     // MARK: - ViewModel Factory Methods
     
-    /// Create a TimelineViewModel with proper dependencies
-    func makeTimelineViewModel(type: TimelineViewModel.TimelineType) -> TimelineViewModel {
+    /// Create a TimelineViewModel for a UI feed type (Following, Discover, etc.)
+    func makeTimelineViewModel(for feedType: FeedType) -> TimelineViewModel {
+        let repositoryFeedType = mapToRepositoryFeedType(feedType)
+        return makeTimelineViewModel(feedType: repositoryFeedType)
+    }
+    
+    /// Create a TimelineViewModel with a specific repository feed type
+    func makeTimelineViewModel(feedType: FeedRepository.FeedType) -> TimelineViewModel {
         // Create fresh repository instances for this ViewModel
-        let feedCoordinator = makeFeedRepositoryCoordinator()
+        let feedRepository = makeFeedRepository(feedType: feedType)
         let postRepository = makePostRepository()
         
         return TimelineViewModel(
-            timelineType: type,
-            feedCoordinator: feedCoordinator,
+            feedRepository: feedRepository,
             postRepository: postRepository
         )
+    }
+    
+    // MARK: - Feed Type Mapping
+    
+    /// Map UI FeedType to FeedRepository.FeedType
+    private func mapToRepositoryFeedType(_ feedType: FeedType) -> FeedRepository.FeedType {
+        switch feedType {
+        case .following:
+            return .home
+        case .discover:
+            // Bluesky's Discover feed URI
+            return .customFeed(uri: "at://did:plc:z72i7hdynmk6r22z27h6tvur/app.bsky.feed.generator/whats-hot")
+        case .custom:
+            // TODO: Allow user to select custom feed URI
+            return .home
+        }
     }
     
     /// Create a ThreadViewModel with proper dependencies
@@ -74,9 +95,10 @@ class ViewModelFactory {
     
     // MARK: - Repository Factory Methods
     
-    /// Create a fresh FeedRepositoryCoordinator instance
-    func makeFeedRepositoryCoordinator() -> FeedRepositoryCoordinator {
-        return FeedRepositoryCoordinator(
+    /// Create a fresh FeedRepository instance for a specific feed type
+    func makeFeedRepository(feedType: FeedRepository.FeedType) -> FeedRepository {
+        return FeedRepository(
+            feedType: feedType,
             postCache: postCache,
             profileCache: profileCache,
             feedService: feedService
