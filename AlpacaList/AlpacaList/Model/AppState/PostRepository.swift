@@ -25,31 +25,72 @@ class PostRepository {
     
     // MARK: - Post Creation
     
-    /// Create a new post
-    func createPost(text: String, replyTo: Post? = nil, embed: Embed? = nil) async -> Post? {
+    /// Create a new top-level post (not a reply)
+    /// - Parameter text: The post text content
+    /// - Returns: The created Post on success, nil on failure
+    func createPost(text: String) async -> Post? {
+        return await createPostInternal(text: text, replyTo: nil)
+    }
+    
+    /// Create a reply to an existing post
+    /// - Parameters:
+    ///   - text: The reply text content
+    ///   - replyTo: The post being replied to
+    /// - Returns: The created Post on success, nil on failure
+    func createReply(text: String, replyTo: Post) async -> Post? {
+        return await createPostInternal(text: text, replyTo: replyTo)
+    }
+    
+    /// Internal helper for post creation (both new posts and replies)
+    private func createPostInternal(text: String, replyTo: Post?) async -> Post? {
         error = nil
         
         do {
-            // TODO: Replace with actual API call to com.atproto.repo.createRecord
-            // For now, create a mock post
+            // Build reply reference if this is a reply
+            let replyReference: ReplyReference? = replyTo.map { parent in
+                // For replies, we need both root and parent references
+                // If replying to a reply, root is the original post; otherwise root == parent
+                let rootRef: RecordRef
+                if let existingReply = parent.reply {
+                    // Parent is itself a reply - use its root
+                    rootRef = RecordRef(uri: existingReply.root.uri, cid: existingReply.root.cid)
+                } else {
+                    // Parent is a top-level post - it becomes the root
+                    rootRef = RecordRef(uri: parent.uri, cid: parent.cid)
+                }
+                let parentRef = RecordRef(uri: parent.uri, cid: parent.cid)
+                return ReplyReference(root: rootRef, parent: parentRef)
+            }
             
-            let author = mockAuthors[0]  // Use mock current user
+            // Call the API
+            let response = try await feedService.createPost(
+                text: text,
+                reply: replyReference
+            )
             
-            let reply: ReplyRef? = replyTo.map { parent in
-                ReplyRef(
-                    root: ReplyRef.StrongRef(uri: parent.uri, cid: parent.cid),
+            // Build the Post object from the response
+            let author = try getCurrentUserAuthor()
+            
+            let replyRef: ReplyRef? = replyTo.map { parent in
+                let rootRef: ReplyRef.StrongRef
+                if let existingReply = parent.reply {
+                    rootRef = existingReply.root
+                } else {
+                    rootRef = ReplyRef.StrongRef(uri: parent.uri, cid: parent.cid)
+                }
+                return ReplyRef(
+                    root: rootRef,
                     parent: ReplyRef.StrongRef(uri: parent.uri, cid: parent.cid)
                 )
             }
             
             let post = Post(
-                uri: "at://\(author.did)/app.bsky.feed.post/\(UUID().uuidString)",
-                cid: "bafyrei\(UUID().uuidString.prefix(16))",
+                uri: response.uri,
+                cid: response.cid,
                 author: author,
                 createdAt: Date(),
                 text: text,
-                embed: embed,
-                reply: reply
+                reply: replyRef
             )
             
             // Cache the new post
@@ -68,6 +109,18 @@ class PostRepository {
             self.error = error
             return nil
         }
+    }
+    
+    /// Get the current user as an Author
+    private func getCurrentUserAuthor() throws -> Author {
+        guard let did = feedService.currentUserDID,
+              let handle = feedService.currentUserHandle else {
+            throw PostError.unauthorized
+        }
+        
+        // Create minimal Author from session info
+        // Note: displayName and avatar will be nil until we fetch the full profile
+        return Author(did: did, handle: handle, displayName: nil, avatar: nil)
     }
     
     // MARK: - Like Operations
@@ -218,15 +271,24 @@ class PostRepository {
     // MARK: - Delete Operations
     
     /// Delete a post
+    /// - Parameter uri: The post URI to delete
     func deletePost(uri: String) async {
         error = nil
         
+        // Get post from cache for potential rollback
+        let cachedPost = await postCache.getPost(uri: uri)
+        
+        // Optimistic update - remove from cache immediately
+        await postCache.removePost(uri: uri)
+        
         do {
-            // TODO: Replace with actual API call to com.atproto.repo.deleteRecord
-            // For now, just remove from cache
-            
-            await postCache.removePost(uri: uri)
+            // Call the API to delete the post record
+            try await feedService.deletePost(postUri: uri)
         } catch {
+            // Rollback - restore the cached post if deletion failed
+            if let post = cachedPost {
+                await postCache.cachePost(post)
+            }
             self.error = error
         }
     }

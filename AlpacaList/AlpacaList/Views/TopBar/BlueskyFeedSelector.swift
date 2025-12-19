@@ -32,16 +32,18 @@ extension View {
     }
 }
 
+// MARK: - Feed Type
+
+enum FeedType: String, CaseIterable {
+    case following = "Following"
+    case discover = "Discover"
+    case custom = "Custom"
+}
+
 // MARK: - Feed Selector
 
 struct BlueskyFeedSelector: View {
-    @State private var selectedFeed: FeedType = .following
-    
-    enum FeedType: String, CaseIterable {
-        case following = "Following"
-        case discover = "Discover"
-        case custom = "Custom"
-    }
+    @Binding var selectedFeed: FeedType
     
     var body: some View {
         HStack {
@@ -74,25 +76,14 @@ struct BlueskyFeedSelector: View {
             : (currentIndex + 1) % allCases.count
         
         selectedFeed = allCases[nextIndex]
-        
-        // Post notification for feed type change
-        NotificationCenter.default.post(
-            name: .feedTypeChanged,
-            object: nil,
-            userInfo: ["feedType": selectedFeed]
-        )
     }
-}
-
-// MARK: - Notification Names
-
-extension Notification.Name {
-    static let feedTypeChanged = Notification.Name("feedTypeChanged")
 }
 
 // MARK: - Previews
 
 struct BlueskyFeedSelector_Previews: PreviewProvider {
+    @State static var selectedFeed: FeedType = .following
+    
     static var previews: some View {
         ZStack {
             LinearGradient(
@@ -103,10 +94,10 @@ struct BlueskyFeedSelector_Previews: PreviewProvider {
             .edgesIgnoringSafeArea(.all)
             
             VStack(spacing: 20) {
-                BlueskyFeedSelector()
+                BlueskyFeedSelector(selectedFeed: $selectedFeed)
                     .frame(width: 150)
                 
-                BlueskyFeedSelector()
+                BlueskyFeedSelector(selectedFeed: .constant(.discover))
                     .frame(width: 200)
             }
             .padding()

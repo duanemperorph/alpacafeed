@@ -38,9 +38,17 @@ class AppState {
     
     var currentUser: Author?
     
+    /// Current feed type for the home timeline
+    var currentFeedType: FeedType = .following
+    
     /// Whether user is authenticated (delegated to AuthenticationRepository)
     var isAuthenticated: Bool {
         authRepository.isAuthenticated
+    }
+    
+    /// Current user's handle (from authenticated session)
+    var currentHandle: String? {
+        authRepository.currentHandle
     }
     
     // MARK: - Initialization

@@ -22,6 +22,20 @@ class FeedService {
         self.apiService = apiService
     }
     
+    // MARK: - Current User Info
+    
+    /// The current user's DID
+    @MainActor
+    var currentUserDID: String? {
+        apiService.currentDID
+    }
+    
+    /// The current user's handle
+    @MainActor
+    var currentUserHandle: String? {
+        apiService.currentHandle
+    }
+    
     // MARK: - Timeline
     
     /// Get the user's home timeline

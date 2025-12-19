@@ -32,21 +32,11 @@ struct ImageTextFieldPairView: View {
 
 struct ButtonSubBarView: View {
     @Environment(NavigationCoordinator.self) private var navigationCoordinator
-    
-    @ViewBuilder
-    var centerContent: some View {
-        if case .thread = navigationCoordinator.navigationStack.last {
-            // Thread mode - show simple "Thread" label
-            Text("Thread")
-                .feedSelectorPillStyle()
-        } else {
-            // Timeline mode - show feed selector
-            BlueskyFeedSelector()
-        }
-    }
+    @Binding var currentFeedType: FeedType
     
     var body: some View {
         let isBackButtonDisabled = !navigationCoordinator.canPop
+        
         HStack(spacing: 24) {
             // Back button
             Button(action: {
@@ -58,7 +48,14 @@ struct ButtonSubBarView: View {
             .opacity(isBackButtonDisabled ? 0.5 : 1)
             
             // Context-aware center content
-            centerContent
+            if case .thread = navigationCoordinator.navigationStack.last {
+                // Thread mode - show simple "Thread" label
+                Text("Thread")
+                    .feedSelectorPillStyle()
+            } else {
+                // Timeline mode - show feed selector
+                BlueskyFeedSelector(selectedFeed: $currentFeedType)
+            }
             
             // Compose button
             Button(action: {
@@ -80,15 +77,31 @@ extension Notification.Name {
 }
 
 struct TopBarExpanded: View {
-    @Binding var userName: String
     @Environment(NavigationCoordinator.self) private var navigationCoordinator
+    @Environment(AppState.self) private var appState
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     
+    var currentFeedTypeBinding: Binding<FeedType> {
+        Binding(
+            get: { appState.currentFeedType },
+            set: { appState.currentFeedType = $0 }
+        )
+    }
+    
     @ViewBuilder var userSettingsButton: some View {
-        ImageTextFieldPairView(imageName: "person.circle", text: $userName) {
-            navigationCoordinator.presentSettings()
+        if let handle = appState.currentHandle {
+            // Logged in - show user handle
+            ImageTextFieldPairView(imageName: "person.circle", text: .constant(handle)) {
+                navigationCoordinator.presentSettings()
+            }
+            .frame(maxWidth: .infinity)
+        } else {
+            // Logged out - show login prompt
+            ImageTextFieldPairView(imageName: "person.badge.plus", text: .constant("Sign in to Bluesky")) {
+                navigationCoordinator.presentSettings()
+            }
+            .frame(maxWidth: .infinity)
         }
-        .frame(maxWidth: .infinity)
     }
     
     var body: some View {
@@ -96,7 +109,7 @@ struct TopBarExpanded: View {
             userSettingsButton
                 
             Spacer().frame(height: 15)
-            ButtonSubBarView()
+            ButtonSubBarView(currentFeedType: currentFeedTypeBinding)
                 .padding(.horizontal, 10)
         }
         .padding(.horizontal, 8)
@@ -117,11 +130,9 @@ struct TopBarViewExpanded_Previews: PreviewProvider {
             )
             .edgesIgnoringSafeArea(.all)
             VStack {
-                TopBarExpanded(
-                    userName: .constant("alice.bsky.social")
-                )
-                .environment(appState)
-                .environment(navigationCoordinator)
+                TopBarExpanded()
+                    .environment(appState)
+                    .environment(navigationCoordinator)
             }
             .background(.regularMaterial)
             .environment(\.colorScheme, .dark)

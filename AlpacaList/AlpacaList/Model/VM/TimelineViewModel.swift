@@ -139,27 +139,11 @@ class TimelineViewModel {
     }
     
     /// Quote post (repost with comment)
+    /// Note: Quote posts require embed support which is not yet implemented
     func quotePost(uri: String, text: String) {
-        guard let quotedPost = posts.first(where: { $0.uri == uri }) else {
-            return
-        }
-        
-        // Create a record embed for the quoted post
-        let recordEmbed = Embed.RecordEmbed(
-            uri: quotedPost.uri,
-            cid: quotedPost.cid
-        )
-        
-        Task {
-            if let newPost = await postRepository.createPost(
-                text: text,
-                replyTo: nil,
-                embed: .record(recordEmbed)
-            ) {
-                // Add the new quote post to the timeline via repository
-                await self.feedRepository.prependPost(newPost)
-            }
-        }
+        // TODO: Implement quote posts once embed creation is supported
+        // This requires creating a record embed and calling the API
+        print("Quote post not yet implemented - requires embed support")
     }
     
     /// Delete own post

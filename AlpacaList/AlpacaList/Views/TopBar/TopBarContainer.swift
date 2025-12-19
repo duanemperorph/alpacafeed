@@ -9,8 +9,8 @@ import SwiftUI
 
 struct TopBarContainer: View {
     @Environment(\.colorScheme) var envColorScheme
-    @State var userName = "alice.bsky.social"
     @Environment(TopBarController.self) private var topBarController
+    @Environment(AppState.self) private var appState
     
     var backgroundColorScheme: ColorScheme {
         return envColorScheme == .dark ? ColorScheme.light : ColorScheme.dark
@@ -24,13 +24,21 @@ struct TopBarContainer: View {
         }
     }
     
+    @ViewBuilder var minimizedContent: some View {
+        if let handle = appState.currentHandle {
+            TopBarMinimized(text: handle)
+        } else {
+            TopBarMinimized(imageName: "person.badge.plus", text: "Sign in to Bluesky")
+        }
+    }
+    
     var body: some View {
         VStack {
             if (topBarController.isExpanded) {
-                TopBarExpanded(userName: $userName)
+                TopBarExpanded()
             }
             else {
-                TopBarMinimized(userName: $userName)
+                minimizedContent
                     .contentShape(Rectangle())
                     .gesture(topBarTap)
             }

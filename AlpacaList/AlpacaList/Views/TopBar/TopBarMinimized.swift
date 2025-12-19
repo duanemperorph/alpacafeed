@@ -35,11 +35,12 @@ struct TopBarButtonMinimized: View {
 }
 
 struct TopBarMinimized: View {
-    @Binding var userName: String
+    var imageName: String = "person.circle"
+    var text: String
     
     var body: some View {
         HStack {
-            TopBarButtonMinimized(imageName: "person.circle", text: userName)
+            TopBarButtonMinimized(imageName: imageName, text: text)
         }
         .font(.system(size: 18))
         .frame(maxWidth: .infinity, maxHeight: 20)
@@ -57,8 +58,9 @@ struct TopBarMinimized_Previews: PreviewProvider {
                 endPoint: .bottomTrailing
             )
             .edgesIgnoringSafeArea(.all)
-            VStack {
-                TopBarMinimized(userName: .constant("alice.bsky.social"))
+            VStack(spacing: 20) {
+                TopBarMinimized(text: "alice.bsky.social")
+                TopBarMinimized(imageName: "person.badge.plus", text: "Sign in to Bluesky")
             }
             .background(.regularMaterial)
             .environment(\.colorScheme, .dark)
