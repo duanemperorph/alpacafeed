@@ -25,7 +25,9 @@ struct TopBarContainer: View {
     }
     
     @ViewBuilder var minimizedContent: some View {
-        if let handle = appState.currentHandle {
+        if !appState.isSessionRestored {
+            EmptyView()
+        } else if let handle = appState.currentHandle {
             TopBarMinimized(text: handle)
         } else {
             TopBarMinimized(imageName: "person.badge.plus", text: "Sign in to Bluesky")

@@ -11,6 +11,7 @@ import SwiftUI
 struct TimelineView: View {
     @Bindable var viewModel: TimelineViewModel
     @Environment(NavigationCoordinator.self) private var navigationCoordinator
+    @Environment(AppState.self) private var appState
     
     var body: some View {
         PostListView(
@@ -75,8 +76,9 @@ struct TimelineView: View {
                 ProgressView("Loading timeline...")
             }
         )
-        .task {
-            // Fetch timeline when view appears
+        .task(id: appState.isSessionRestored) {
+            // Only fetch timeline after session restoration completes and user is authenticated
+            guard appState.isSessionRestored, appState.isAuthenticated else { return }
             viewModel.fetchTimeline()
         }
         .toolbar {

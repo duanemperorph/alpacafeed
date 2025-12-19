@@ -89,7 +89,9 @@ struct TopBarExpanded: View {
     }
     
     @ViewBuilder var userSettingsButton: some View {
-        if let handle = appState.currentHandle {
+        if !appState.isSessionRestored {
+            EmptyView()
+        } else if let handle = appState.currentHandle {
             // Logged in - show user handle
             ImageTextFieldPairView(imageName: "person.circle", text: .constant(handle)) {
                 navigationCoordinator.presentSettings()

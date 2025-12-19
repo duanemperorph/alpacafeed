@@ -41,6 +41,9 @@ class AppState {
     /// Current feed type for the home timeline
     var currentFeedType: FeedType = .following
     
+    /// Whether session restoration has completed (not whether user is authenticated)
+    private(set) var isSessionRestored: Bool = false
+    
     /// Whether user is authenticated (delegated to AuthenticationRepository)
     var isAuthenticated: Bool {
         authRepository.isAuthenticated
@@ -100,6 +103,7 @@ class AppState {
     /// Restore session from secure storage on app launch
     func restoreSession() async {
         await authRepository.restoreSession()
+        isSessionRestored = true
         // TODO: Fetch current user profile from session
     }
     
