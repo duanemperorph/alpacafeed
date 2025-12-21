@@ -8,9 +8,7 @@
 import Foundation
 
 /// Service for making authenticated AT Protocol / Bluesky API calls
-/// - Obtains access token from session repository
-/// - Refreshes token if needed before calls
-/// - Retries on 401 with fresh token
+/// - Obtains valid access token from session repository (refreshes proactively if expired)
 /// - Provides server URL from current session
 class BSAPIClient {
     
@@ -19,11 +17,6 @@ class BSAPIClient {
     /// Unowned reference to avoid retain cycles (session repo outlives this client)
     private unowned let sessionRepository: AuthSessionRepository
     private let http: ATProtoClient 
-    
-    // MARK: - Configuration
-    
-    /// Maximum retry attempts for token refresh
-    private let maxRetryAttempts = 1
     
     // MARK: - Initialization
     
@@ -126,17 +119,17 @@ class BSAPIClient {
     
     // MARK: - Internal Execution
     
-    /// Execute a request with authentication and retry logic
+    /// Execute a request with authentication
+    /// Token refresh is handled proactively by getValidAccessToken()
     @MainActor
     private func executeWithAuth<Body: Encodable, T: Decodable>(
         endpoint: String,
         method: String,
         queryItems: [URLQueryItem]?,
         body: Body?,
-        responseType: T.Type,
-        retryCount: Int = 0
+        responseType: T.Type
     ) async throws -> T {
-        // Get valid access token
+        // Get valid access token (automatically refreshes if expired/expiring)
         let accessToken = try await sessionRepository.getValidAccessToken()
         
         // Build URL
@@ -156,31 +149,18 @@ class BSAPIClient {
             body: body
         )
         
-        do {
-            return try await http.execute(request, responseType: responseType)
-        } catch APIError.invalidCredentials where retryCount < maxRetryAttempts {
-            // Token expired, try to refresh and retry
-            try await sessionRepository.refreshToken()
-            return try await executeWithAuth(
-                endpoint: endpoint,
-                method: method,
-                queryItems: queryItems,
-                body: body,
-                responseType: responseType,
-                retryCount: retryCount + 1
-            )
-        }
+        return try await http.execute(request, responseType: responseType)
     }
     
     /// Execute a request with authentication that returns no content
+    /// Token refresh is handled proactively by getValidAccessToken()
     @MainActor
     private func executeWithAuthNoContent<Body: Encodable>(
         endpoint: String,
         method: String,
-        body: Body?,
-        retryCount: Int = 0
+        body: Body?
     ) async throws {
-        // Get valid access token
+        // Get valid access token (automatically refreshes if expired/expiring)
         let accessToken = try await sessionRepository.getValidAccessToken()
         
         // Build URL
@@ -199,18 +179,7 @@ class BSAPIClient {
             body: body
         )
         
-        do {
-            _ = try await http.execute(request, responseType: EmptyResponse.self)
-        } catch APIError.invalidCredentials where retryCount < maxRetryAttempts {
-            // Token expired, try to refresh and retry
-            try await sessionRepository.refreshToken()
-            try await executeWithAuthNoContent(
-                endpoint: endpoint,
-                method: method,
-                body: body,
-                retryCount: retryCount + 1
-            )
-        }
+        _ = try await http.execute(request, responseType: EmptyResponse.self)
     }
 }
 

@@ -86,6 +86,7 @@ class AuthSessionRepository {
     /// - Called once at app startup
     func restoreSession() async {
         currentSession = credentialStore.loadSession()
+        print("🔑 [AuthRepo] Loaded session: \(currentSession != nil ? "found (\(currentSession!.handle))" : "nil")")
     }
     
     // MARK: - Login
@@ -132,13 +133,18 @@ class AuthSessionRepository {
     
     // MARK: - Token Refresh
     
+    /// Buffer time before expiry to trigger refresh (60 seconds)
+    private let tokenExpiryBuffer: TimeInterval = 60
+    
     /// Refresh the access token for the current session
-    /// - Called when access token expires or API returns 401
+    /// - Called when access token expires or is near expiry
     /// - Updates stored session with new tokens
     func refreshToken() async throws {
         guard let session = currentSession else {
             throw AuthError.notAuthenticated
         }
+        
+        print("🔄 [AuthRepo] Refreshing access token...")
         
         do {
             let newSession = try await authService.refreshSession(
@@ -151,9 +157,12 @@ class AuthSessionRepository {
             
             // Update state
             currentSession = newSession
+            
+            print("🔄 [AuthRepo] Token refreshed successfully")
         } catch let error as APIError {
             // If refresh fails, clear the session
             if case .refreshTokenInvalid = error {
+                print("🔄 [AuthRepo] Refresh token invalid, logging out")
                 await logout()
             }
             throw mapAPIError(error)
@@ -162,24 +171,9 @@ class AuthSessionRepository {
         }
     }
     
-    /// Refresh token if it's expired or near expiry
-    /// - Call this before making authenticated API requests
-    /// - No-op if token is still valid
-    ///
-    /// Note: Currently always refreshes since we don't track token expiry.
-    /// TODO: Decode JWT to check expiry and only refresh when needed.
-    func refreshTokenIfNeeded() async throws {
-        guard currentSession != nil else {
-            throw AuthError.notAuthenticated
-        }
-        
-        // TODO: Check if token is near expiry by decoding JWT
-        // For now, we don't proactively refresh - let API calls fail and retry
-    }
-    
     // MARK: - Token Access for API Clients
     
-    /// Get a valid access token, refreshing if necessary
+    /// Get a valid access token, refreshing if expired or near expiry
     /// - Returns: Valid access JWT
     /// - Throws: If not authenticated or refresh fails
     func getValidAccessToken() async throws -> String {
@@ -187,10 +181,73 @@ class AuthSessionRepository {
             throw AuthError.notAuthenticated
         }
         
-        // TODO: Check expiry and refresh if needed
-        // try await refreshTokenIfNeeded()
+        // Check if token is expired or about to expire
+        if isTokenExpiredOrExpiring(session.accessJwt) {
+            print("🔄 [AuthRepo] Access token expired or expiring, refreshing...")
+            try await refreshToken()
+            
+            // Return the new token after refresh
+            guard let refreshedSession = currentSession else {
+                throw AuthError.notAuthenticated
+            }
+            return refreshedSession.accessJwt
+        }
         
         return session.accessJwt
+    }
+    
+    // MARK: - JWT Expiration Check
+    
+    /// Check if a JWT is expired or will expire within the buffer period
+    /// - Parameter jwt: The JWT string to check
+    /// - Returns: true if token is expired or expiring soon
+    private func isTokenExpiredOrExpiring(_ jwt: String) -> Bool {
+        guard let expirationDate = getJWTExpirationDate(jwt) else {
+            // If we can't decode the JWT, assume it's expired to be safe
+            print("🔄 [AuthRepo] Could not decode JWT expiration, assuming expired")
+            return true
+        }
+        
+        let now = Date()
+        let expiryWithBuffer = expirationDate.addingTimeInterval(-tokenExpiryBuffer)
+        
+        let isExpiring = now >= expiryWithBuffer
+        if isExpiring {
+            print("🔄 [AuthRepo] Token expires at \(expirationDate), now is \(now)")
+        }
+        
+        return isExpiring
+    }
+    
+    /// Decode a JWT and extract the expiration date
+    /// - Parameter jwt: The JWT string (header.payload.signature)
+    /// - Returns: The expiration date, or nil if decoding fails
+    private func getJWTExpirationDate(_ jwt: String) -> Date? {
+        let parts = jwt.split(separator: ".")
+        guard parts.count == 3 else { return nil }
+        
+        // Get the payload (second part)
+        var payload = String(parts[1])
+        
+        // Convert from base64url to base64
+        payload = payload
+            .replacingOccurrences(of: "-", with: "+")
+            .replacingOccurrences(of: "_", with: "/")
+        
+        // Add padding if needed
+        let paddingLength = (4 - payload.count % 4) % 4
+        payload += String(repeating: "=", count: paddingLength)
+        
+        // Decode base64
+        guard let payloadData = Data(base64Encoded: payload) else { return nil }
+        
+        // Parse JSON to extract exp claim
+        guard let json = try? JSONSerialization.jsonObject(with: payloadData) as? [String: Any],
+              let exp = json["exp"] as? TimeInterval else {
+            return nil
+        }
+        
+        return Date(timeIntervalSince1970: exp)
     }
     
     // MARK: - Error Mapping
