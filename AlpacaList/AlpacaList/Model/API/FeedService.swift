@@ -256,6 +256,70 @@ class FeedService {
         try await apiService.post(endpoint: "com.atproto.repo.deleteRecord", body: body)
     }
     
+    // MARK: - Saved Feeds
+    
+    /// Get user's preferences (includes saved feeds)
+    /// - Returns: Preferences response with all preference items
+    ///
+    /// API: GET /xrpc/app.bsky.actor.getPreferences
+    @MainActor
+    func getPreferences() async throws -> PreferencesResponse {
+        return try await apiService.get(
+            endpoint: "app.bsky.actor.getPreferences",
+            queryItems: [],
+            responseType: PreferencesResponse.self
+        )
+    }
+    
+    /// Get feed generators by URIs (hydrate feed URIs with metadata)
+    /// - Parameter uris: Array of feed generator URIs
+    /// - Returns: Feed generators with display names, descriptions, etc.
+    ///
+    /// API: GET /xrpc/app.bsky.feed.getFeedGenerators
+    @MainActor
+    func getFeedGenerators(uris: [String]) async throws -> FeedGeneratorsResponse {
+        let queryItems = uris.map { URLQueryItem(name: "feeds", value: $0) }
+        
+        return try await apiService.get(
+            endpoint: "app.bsky.feed.getFeedGenerators",
+            queryItems: queryItems,
+            responseType: FeedGeneratorsResponse.self
+        )
+    }
+    
+    /// Update user preferences (for saving/pinning feeds)
+    /// - Parameter preferences: The complete preferences array to save
+    ///
+    /// API: POST /xrpc/app.bsky.actor.putPreferences
+    @MainActor
+    func putPreferences(_ preferences: [PreferenceItemRequest]) async throws {
+        let body = PutPreferencesRequest(preferences: preferences)
+        try await apiService.post(endpoint: "app.bsky.actor.putPreferences", body: body)
+    }
+    
+    /// Get suggested feeds for discovery
+    /// - Parameters:
+    ///   - cursor: Pagination cursor
+    ///   - limit: Max feeds to return
+    /// - Returns: Suggested feeds with cursor for pagination
+    ///
+    /// API: GET /xrpc/app.bsky.feed.getSuggestedFeeds
+    @MainActor
+    func getSuggestedFeeds(cursor: String? = nil, limit: Int = 50) async throws -> SuggestedFeedsResponse {
+        var queryItems: [URLQueryItem] = [
+            URLQueryItem(name: "limit", value: String(limit))
+        ]
+        if let cursor = cursor {
+            queryItems.append(URLQueryItem(name: "cursor", value: cursor))
+        }
+        
+        return try await apiService.get(
+            endpoint: "app.bsky.feed.getSuggestedFeeds",
+            queryItems: queryItems,
+            responseType: SuggestedFeedsResponse.self
+        )
+    }
+    
     // MARK: - Helpers
     
     /// Get the current user's DID from the session
@@ -295,6 +359,75 @@ private struct DeleteRecordRequest: Encodable {
     let repo: String
     let collection: String
     let rkey: String
+}
+
+/// Request to update preferences
+private struct PutPreferencesRequest: Encodable {
+    let preferences: [PreferenceItemRequest]
+}
+
+/// A preference item for encoding (mirrors PreferenceItem but Encodable)
+enum PreferenceItemRequest: Encodable {
+    case savedFeedsPrefV2(SavedFeedsPrefV2Request)
+    case other([String: AnyCodable])  // Pass-through for unknown types
+    
+    func encode(to encoder: Encoder) throws {
+        switch self {
+        case .savedFeedsPrefV2(let pref):
+            try pref.encode(to: encoder)
+        case .other(let dict):
+            var container = encoder.singleValueContainer()
+            try container.encode(dict)
+        }
+    }
+}
+
+/// Saved feeds preference V2 for encoding
+struct SavedFeedsPrefV2Request: Encodable {
+    let type = "app.bsky.actor.defs#savedFeedsPrefV2"
+    let items: [SavedFeedItemRequest]
+    
+    enum CodingKeys: String, CodingKey {
+        case type = "$type"
+        case items
+    }
+}
+
+/// Saved feed item for encoding
+struct SavedFeedItemRequest: Encodable {
+    let type: String
+    let value: String
+    let pinned: Bool
+    let id: String
+}
+
+/// Type-erased Codable for pass-through encoding
+struct AnyCodable: Encodable {
+    private let value: Any
+    
+    init(_ value: Any) {
+        self.value = value
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        
+        if let string = value as? String {
+            try container.encode(string)
+        } else if let int = value as? Int {
+            try container.encode(int)
+        } else if let double = value as? Double {
+            try container.encode(double)
+        } else if let bool = value as? Bool {
+            try container.encode(bool)
+        } else if let array = value as? [Any] {
+            try container.encode(array.map { AnyCodable($0) })
+        } else if let dict = value as? [String: Any] {
+            try container.encode(dict.mapValues { AnyCodable($0) })
+        } else {
+            try container.encodeNil()
+        }
+    }
 }
 
 // MARK: - Record Types

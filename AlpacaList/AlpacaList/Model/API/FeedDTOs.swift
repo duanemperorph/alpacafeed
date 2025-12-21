@@ -302,3 +302,80 @@ struct RecordPostValueDTO: Decodable {
     let createdAt: String
 }
 
+// MARK: - Preferences DTOs
+
+/// Response from app.bsky.actor.getPreferences
+struct PreferencesResponse: Decodable {
+    let preferences: [PreferenceItem]
+}
+
+/// A single preference item - polymorphic based on $type
+enum PreferenceItem: Decodable {
+    case savedFeedsPrefV2(SavedFeedsPrefV2DTO)
+    case savedFeedsV2(SavedFeedsV2DTO)  // Legacy format
+    case unknown
+    
+    enum CodingKeys: String, CodingKey {
+        case type = "$type"
+    }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let type = try container.decodeIfPresent(String.self, forKey: .type)
+        
+        switch type {
+        case "app.bsky.actor.defs#savedFeedsPrefV2":
+            self = .savedFeedsPrefV2(try SavedFeedsPrefV2DTO(from: decoder))
+        case "app.bsky.actor.defs#savedFeedsPref":
+            self = .savedFeedsV2(try SavedFeedsV2DTO(from: decoder))
+        default:
+            self = .unknown
+        }
+    }
+}
+
+/// Saved feeds preference V2 format
+struct SavedFeedsPrefV2DTO: Decodable {
+    let items: [SavedFeedItemDTO]
+}
+
+/// Individual saved feed item
+struct SavedFeedItemDTO: Decodable {
+    let type: String  // "feed" or "timeline"
+    let value: String // Feed URI for "feed", or "following" for timeline
+    let pinned: Bool
+    let id: String
+}
+
+/// Legacy saved feeds preference format
+struct SavedFeedsV2DTO: Decodable {
+    let pinned: [String]?  // Array of feed URIs
+    let saved: [String]?   // Array of feed URIs
+}
+
+// MARK: - Feed Generator DTOs
+
+/// Response from app.bsky.feed.getFeedGenerators
+struct FeedGeneratorsResponse: Decodable {
+    let feeds: [FeedGeneratorDTO]
+}
+
+/// A feed generator (algorithm feed)
+struct FeedGeneratorDTO: Decodable {
+    let uri: String
+    let cid: String
+    let did: String
+    let creator: AuthorDTO
+    let displayName: String
+    let description: String?
+    let avatar: String?
+    let likeCount: Int?
+    let indexedAt: String
+}
+
+/// Response from app.bsky.feed.getSuggestedFeeds
+struct SuggestedFeedsResponse: Decodable {
+    let feeds: [FeedGeneratorDTO]
+    let cursor: String?
+}
+
