@@ -30,55 +30,19 @@ class TimelineViewModel {
     
     // MARK: - Private Properties
     
-    // Timeline type
-    enum TimelineType: Equatable {
-        case home                          // User's home feed
-        case authorFeed(handle: String)    // Specific author's posts
-        case customFeed(uri: String)       // Algorithm feed
-        case likes(handle: String)         // User's liked posts
-        case search(query: String)         // Search results
-    }
-    
-    private(set) var timelineType: TimelineType  // Changed to var to support switching
-    
     // Repository dependencies
-    private let feedCoordinator: FeedRepositoryCoordinator
+    private let feedRepository: FeedRepository
     private let postRepository: PostRepository
-    
-    // Computed property to get the feed repository for this timeline
-    private var feedRepository: FeedRepository {
-        return feedCoordinator.repository(for: mapToFeedType(timelineType))
-    }
     
     // MARK: - Initialization
     
     /// Initializer with repository dependencies
     init(
-        timelineType: TimelineType,
-        feedCoordinator: FeedRepositoryCoordinator,
+        feedRepository: FeedRepository,
         postRepository: PostRepository
     ) {
-        self.timelineType = timelineType
-        self.feedCoordinator = feedCoordinator
+        self.feedRepository = feedRepository
         self.postRepository = postRepository
-    }
-    
-    // MARK: - Timeline Switching
-    
-    /// Switch to a different timeline type
-    /// This allows the same ViewModel to display different feeds without recreating it
-    func switchTimeline(to newType: TimelineType) {
-        guard newType != timelineType else { return }
-        
-        // Update the timeline type
-        timelineType = newType
-        
-        // Note: The feedRepository computed property will now return a different repository
-        // from the coordinator based on the new timeline type, and posts will automatically
-        // reflect the new repository's state
-        
-        // Fetch the new timeline
-        fetchTimeline()
     }
     
     // MARK: - Fetch Methods
@@ -169,24 +133,6 @@ class TimelineViewModel {
             await feedRepository.updatePost(updatedPost)
             
             // TODO: Persist bookmarks locally or via API
-        }
-    }
-    
-    // MARK: - Helper Methods
-    
-    /// Map TimelineType to FeedRepository.FeedType
-    private func mapToFeedType(_ timelineType: TimelineType) -> FeedRepository.FeedType {
-        switch timelineType {
-        case .home:
-            return .home
-        case .authorFeed(let handle):
-            return .authorFeed(handle: handle)
-        case .customFeed(let uri):
-            return .customFeed(uri: uri)
-        case .likes(let handle):
-            return .likes(handle: handle)
-        case .search(let query):
-            return .search(query: query)
         }
     }
 }

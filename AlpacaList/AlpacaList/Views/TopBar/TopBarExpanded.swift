@@ -32,7 +32,7 @@ struct ImageTextFieldPairView: View {
 
 struct ButtonSubBarView: View {
     @Environment(NavigationCoordinator.self) private var navigationCoordinator
-    @Binding var currentFeedType: FeedType
+    let currentFeedType: FeedType
     
     var body: some View {
         let isBackButtonDisabled = !navigationCoordinator.canPop
@@ -53,8 +53,10 @@ struct ButtonSubBarView: View {
                 Text("Thread")
                     .feedSelectorPillStyle()
             } else {
-                // Timeline mode - show feed selector
-                BlueskyFeedSelector(selectedFeed: $currentFeedType)
+                // Timeline mode - show feed selector button
+                FeedSelectorButton(currentFeed: currentFeedType) {
+                    navigationCoordinator.presentFeedSelector()
+                }
             }
             
             // Compose button
@@ -81,13 +83,6 @@ struct TopBarExpanded: View {
     @Environment(AppState.self) private var appState
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     
-    var currentFeedTypeBinding: Binding<FeedType> {
-        Binding(
-            get: { appState.currentFeedType },
-            set: { appState.currentFeedType = $0 }
-        )
-    }
-    
     @ViewBuilder var userSettingsButton: some View {
         if !appState.isSessionRestored {
             EmptyView()
@@ -111,7 +106,7 @@ struct TopBarExpanded: View {
             userSettingsButton
                 
             Spacer().frame(height: 15)
-            ButtonSubBarView(currentFeedType: currentFeedTypeBinding)
+            ButtonSubBarView(currentFeedType: navigationCoordinator.currentFeedType)
                 .padding(.horizontal, 10)
         }
         .padding(.horizontal, 8)

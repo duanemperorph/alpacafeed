@@ -182,5 +182,3 @@ let (rootPost, parents, replies) = flattenThread(response.thread)
 6. **Phase 4** — Error handling polish
 
 ---
-
-Would you like me to start implementing Phase 1 (dependency wiring)?

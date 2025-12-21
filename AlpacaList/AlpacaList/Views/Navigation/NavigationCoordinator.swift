@@ -59,8 +59,11 @@ class NavigationCoordinator {
     // Each ViewModel corresponds to the destination at the same index
     private var viewModelStack: [Any] = []
     
-    // Root view ViewModel (not on stack, always exists)
-    private var homeTimelineViewModel: TimelineViewModel?
+    // Current feed type for the home timeline (switching between Following, Discover, etc.)
+    var currentFeedType: FeedType = .following
+    
+    // Cached ViewModels per feed type (lazy, one per feed)
+    private var feedViewModels: [FeedType: TimelineViewModel] = [:]
     
     // Compose sheet state (for modal presentation)
     var showingComposeSheet: Bool = false
@@ -68,6 +71,9 @@ class NavigationCoordinator {
     
     // Settings sheet state
     var showingSettingsSheet: Bool = false
+    
+    // Feed selector sheet state
+    var showingFeedSelectorSheet: Bool = false
     
     // AppState for accessing ViewModelFactory
     private let appState: AppState
@@ -127,26 +133,42 @@ class NavigationCoordinator {
         showingSettingsSheet = true
     }
     
-    // MARK: - View Builders
-    
-    /// Default root view (Home timeline) - uses cached ViewModel
-    @ViewBuilder var rootView: some View {
-        TimelineView(viewModel: getOrCreateHomeViewModel())
+    func presentFeedSelector() {
+        showingFeedSelectorSheet = true
     }
     
-    /// Get cached home ViewModel or create one
-    private func getOrCreateHomeViewModel() -> TimelineViewModel {
-        if let cached = homeTimelineViewModel {
+    // MARK: - View Builders
+    
+    /// Default root view (Home timeline) - uses cached ViewModel for current feed type
+    @ViewBuilder var rootView: some View {
+        TimelineView(viewModel: getOrCreateFeedViewModel(for: currentFeedType))
+    }
+    
+    /// Get cached ViewModel for a feed type or create one
+    private func getOrCreateFeedViewModel(for feedType: FeedType) -> TimelineViewModel {
+        if let cached = feedViewModels[feedType] {
             return cached
         }
-        let newViewModel = appState.viewModelFactory.makeTimelineViewModel(type: .home)
-        homeTimelineViewModel = newViewModel
+        let newViewModel = appState.viewModelFactory.makeTimelineViewModel(for: feedType)
+        feedViewModels[feedType] = newViewModel
         return newViewModel
     }
     
     @ViewBuilder var composeSheetView: some View {
         let viewModel = appState.viewModelFactory.makeComposeViewModel(replyTo: composeReplyTo)
         ComposeView(viewModel: viewModel)
+    }
+    
+    /// Feed selector sheet binding for the current feed type
+    var currentFeedTypeBinding: Binding<FeedType> {
+        Binding(
+            get: { self.currentFeedType },
+            set: { self.currentFeedType = $0 }
+        )
+    }
+    
+    @ViewBuilder var feedSelectorSheetView: some View {
+        FeedSelectorSheet(selectedFeed: currentFeedTypeBinding)
     }
 
     /// Build view for navigation destination using cached ViewModel from parallel stack
@@ -186,7 +208,7 @@ class NavigationCoordinator {
     @ViewBuilder private func viewFromNewViewModel(destination: NavigationDestination) -> some View {
         switch destination {
         case .timeline:
-            let viewModel = appState.viewModelFactory.makeTimelineViewModel(type: .home)
+            let viewModel = appState.viewModelFactory.makeTimelineViewModel(feedType: .home)
             TimelineView(viewModel: viewModel)
             
         case .thread(let post):
@@ -194,7 +216,7 @@ class NavigationCoordinator {
             ThreadView(viewModel: viewModel)
             
         case .profile(let handle):
-            let viewModel = appState.viewModelFactory.makeTimelineViewModel(type: .authorFeed(handle: handle))
+            let viewModel = appState.viewModelFactory.makeTimelineViewModel(feedType: .authorFeed(handle: handle))
             TimelineView(viewModel: viewModel)
         }
     }
@@ -206,13 +228,13 @@ class NavigationCoordinator {
     private func createViewModel(for destination: NavigationDestination) -> Any {
         switch destination {
         case .timeline:
-            return appState.viewModelFactory.makeTimelineViewModel(type: .home)
+            return appState.viewModelFactory.makeTimelineViewModel(feedType: .home)
             
         case .thread(let post):
             return appState.viewModelFactory.makeThreadViewModel(post: post)
             
         case .profile(let handle):
-            return appState.viewModelFactory.makeTimelineViewModel(type: .authorFeed(handle: handle))
+            return appState.viewModelFactory.makeTimelineViewModel(feedType: .authorFeed(handle: handle))
         }
     }
 }
