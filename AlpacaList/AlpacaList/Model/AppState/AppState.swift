@@ -30,6 +30,10 @@ class AppState {
     let postCache: PostCache
     let profileCache: ProfileCache
     
+    // MARK: - Feed Repositories
+    
+    let savedFeedsRepository: SavedFeedsRepository
+    
     // MARK: - ViewModel Factory
     
     let viewModelFactory: ViewModelFactory
@@ -64,6 +68,9 @@ class AppState {
         // Initialize caches
         self.postCache = PostCache()
         self.profileCache = ProfileCache()
+        
+        // Initialize feed repositories
+        self.savedFeedsRepository = SavedFeedsRepository(feedService: feedService)
         
         // Initialize ViewModel factory
         self.viewModelFactory = ViewModelFactory(
@@ -101,13 +108,20 @@ class AppState {
     func restoreSession() async {
         await authRepository.restoreSession()
         isSessionRestored = true
-        // TODO: Fetch current user profile from session
+        
+        // Fetch saved feeds if authenticated
+        if isAuthenticated {
+            await savedFeedsRepository.fetchSavedFeeds()
+        }
     }
     
     /// Login with identifier and password
     func login(identifier: String, password: String, server: String = "bsky.social") async throws {
         try await authRepository.login(identifier: identifier, password: password, server: server)
-        // TODO: Fetch current user profile from session
+        
+        // Fetch saved feeds after login
+        await savedFeedsRepository.fetchSavedFeeds()
+        
         currentUser = mockAuthors[0]  // Mock for now
     }
     

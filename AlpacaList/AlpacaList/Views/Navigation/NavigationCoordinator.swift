@@ -139,9 +139,18 @@ class NavigationCoordinator {
     
     // MARK: - View Builders
     
-    /// Default root view (Home timeline) - uses cached ViewModel for current feed type
+    /// Default root view - shows placeholder until session is restored, then timeline
     @ViewBuilder var rootView: some View {
-        TimelineView(viewModel: getOrCreateFeedViewModel(for: currentFeedType))
+        if !appState.isSessionRestored {
+            // Placeholder while restoring session
+            Color.clear
+        } else if !appState.isAuthenticated {
+            // Unauthenticated - show empty for now (login handled elsewhere)
+            Color.clear
+        } else {
+            // Ready - show timeline for current feed type
+            TimelineView(viewModel: getOrCreateFeedViewModel(for: currentFeedType))
+        }
     }
     
     /// Get cached ViewModel for a feed type or create one
@@ -168,7 +177,11 @@ class NavigationCoordinator {
     }
     
     @ViewBuilder var feedSelectorSheetView: some View {
-        FeedSelectorSheet(selectedFeed: currentFeedTypeBinding)
+        FeedSelectorSheet(
+            selectedFeed: currentFeedTypeBinding,
+            savedFeeds: appState.savedFeedsRepository.savedFeeds,
+            suggestedFeeds: []  // TODO: Fetch from API
+        )
     }
 
     /// Build view for navigation destination using cached ViewModel from parallel stack
