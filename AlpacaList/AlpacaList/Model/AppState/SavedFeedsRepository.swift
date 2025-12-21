@@ -23,6 +23,9 @@ class SavedFeedsRepository {
     /// The user's saved feeds (hydrated with metadata)
     private(set) var savedFeeds: [SavedFeed] = []
     
+    /// Suggested feeds for discovery (from API)
+    private(set) var suggestedFeeds: [SavedFeed] = []
+    
     /// Loading state
     private(set) var isLoading = false
     
@@ -83,8 +86,27 @@ class SavedFeedsRepository {
                 generators: generatorsResponse.feeds
             )
             
+            // 6. Fetch suggested feeds for Explore tab
+            await fetchSuggestedFeeds()
+            
         } catch {
             self.error = error
+        }
+    }
+    
+    /// Fetch suggested feeds from API
+    private func fetchSuggestedFeeds() async {
+        do {
+            let response = try await feedService.getSuggestedFeeds(limit: 25)
+            
+            // Filter out feeds the user already has saved
+            let savedUris = Set(savedFeeds.map { $0.uri })
+            self.suggestedFeeds = response.feeds
+                .filter { !savedUris.contains($0.uri) }
+                .map { $0.toSavedFeed() }
+        } catch {
+            // Suggested feeds are non-critical, just log and continue
+            print("Failed to fetch suggested feeds: \(error)")
         }
     }
     
@@ -192,14 +214,7 @@ class SavedFeedsRepository {
                   let generator = generatorsByUri[item.value] else {
                 return nil
             }
-            
-            return SavedFeed(
-                uri: generator.uri,
-                name: generator.displayName,
-                description: generator.description,
-                avatar: generator.avatar,
-                creator: generator.creator.handle
-            )
+            return generator.toSavedFeed()
         }
     }
     

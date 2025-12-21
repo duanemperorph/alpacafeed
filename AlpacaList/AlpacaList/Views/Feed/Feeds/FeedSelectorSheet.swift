@@ -11,29 +11,27 @@ import SwiftUI
 
 enum FeedSelectorTab: String, CaseIterable {
     case myFeeds = "My Feeds"
-    case discover = "Discover"
+    case explore = "Explore"
 }
 
 // MARK: - Feed Selector Sheet
 
 struct FeedSelectorSheet: View {
     @Environment(\.dismiss) private var dismiss
+    @Environment(AppState.self) private var appState
     
     @Binding var selectedFeed: FeedType
     @State private var selectedTab: FeedSelectorTab = .myFeeds
+    @State private var feedToRemove: SavedFeed?
+    @State private var showingRemoveConfirmation = false
     
-    // Mock data for now - will be replaced with API data
-    let savedFeeds: [SavedFeed]
-    let suggestedFeeds: [SavedFeed]
+    // Computed from AppState
+    private var savedFeeds: [SavedFeed] {
+        appState.savedFeedsRepository.savedFeeds
+    }
     
-    init(
-        selectedFeed: Binding<FeedType>,
-        savedFeeds: [SavedFeed] = SavedFeed.mockSavedFeeds,
-        suggestedFeeds: [SavedFeed] = SavedFeed.mockSuggestedFeeds
-    ) {
-        self._selectedFeed = selectedFeed
-        self.savedFeeds = savedFeeds
-        self.suggestedFeeds = suggestedFeeds
+    private var suggestedFeeds: [SavedFeed] {
+        appState.savedFeedsRepository.suggestedFeeds
     }
     
     var body: some View {
@@ -53,8 +51,8 @@ struct FeedSelectorSheet: View {
                     switch selectedTab {
                     case .myFeeds:
                         myFeedsContent
-                    case .discover:
-                        discoverContent
+                    case .explore:
+                        exploreContent
                     }
                 }
                 .listStyle(.insetGrouped)
@@ -91,7 +89,7 @@ struct FeedSelectorSheet: View {
                 }
             )
             
-            // Saved feeds
+            // Saved feeds (swipe to remove)
             ForEach(savedFeeds) { feed in
                 FeedRow(
                     name: feed.name,
@@ -103,15 +101,41 @@ struct FeedSelectorSheet: View {
                         dismiss()
                     }
                 )
+                .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                    Button(role: .destructive) {
+                        feedToRemove = feed
+                        showingRemoveConfirmation = true
+                    } label: {
+                        Label("Remove", systemImage: "minus.circle")
+                    }
+                }
             }
         }
         .listRowBackground(Color.clear.background(.thinMaterial))
+        .alert("Remove Feed", isPresented: $showingRemoveConfirmation, presenting: feedToRemove) { feed in
+            Button("Cancel", role: .cancel) {
+                feedToRemove = nil
+            }
+            Button("Remove", role: .destructive) {
+                Task {
+                    try? await appState.savedFeedsRepository.unpinFeed(uri: feed.uri)
+                    
+                    // If the removed feed was selected, switch to Following
+                    if selectedFeed == .custom(feed) {
+                        selectedFeed = .following
+                    }
+                }
+                feedToRemove = nil
+            }
+        } message: { feed in
+            Text("Remove \"\(feed.name)\" from your saved feeds?")
+        }
     }
     
-    // MARK: - Discover Tab
+    // MARK: - Explore Tab
     
     @ViewBuilder
-    private var discoverContent: some View {
+    private var exploreContent: some View {
         Section {
             ForEach(suggestedFeeds) { feed in
                 FeedRow(
@@ -126,7 +150,9 @@ struct FeedSelectorSheet: View {
                         dismiss()
                     },
                     onPin: {
-                        // TODO: Pin feed to saved feeds via API
+                        Task {
+                            try? await appState.savedFeedsRepository.pinFeed(feed)
+                        }
                     }
                 )
             }
@@ -207,6 +233,8 @@ struct FeedRow: View {
 
 struct FeedSelectorSheet_Previews: PreviewProvider {
     static var previews: some View {
+        let appState = AppState()
+        
         ZStack {
             LinearGradient(
                 gradient: Gradient(colors: [.blue, .purple]),
@@ -217,22 +245,8 @@ struct FeedSelectorSheet_Previews: PreviewProvider {
             
             FeedSelectorSheet(selectedFeed: .constant(.following))
         }
+        .environment(appState)
         .tint(Color(red: 0.75, green: 0.25, blue: 0.75))
-        
-        ZStack {
-            LinearGradient(
-                gradient: Gradient(colors: [.blue, .purple]),
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
-            .edgesIgnoringSafeArea(.all)
-            
-            FeedSelectorSheet(
-                selectedFeed: .constant(.custom(SavedFeed.mockSavedFeeds[0]))
-            )
-        }
-        .tint(Color(red: 0.75, green: 0.25, blue: 0.75))
-        .previewDisplayName("With Custom Feed Selected")
     }
 }
 

@@ -177,11 +177,7 @@ class NavigationCoordinator {
     }
     
     @ViewBuilder var feedSelectorSheetView: some View {
-        FeedSelectorSheet(
-            selectedFeed: currentFeedTypeBinding,
-            savedFeeds: appState.savedFeedsRepository.savedFeeds,
-            suggestedFeeds: []  // TODO: Fetch from API
-        )
+        FeedSelectorSheet(selectedFeed: currentFeedTypeBinding)
     }
 
     /// Build view for navigation destination using cached ViewModel from parallel stack

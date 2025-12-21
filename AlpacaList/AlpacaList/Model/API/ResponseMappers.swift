@@ -268,3 +268,18 @@ extension EmbedMediaDTO {
     }
 }
 
+// MARK: - FeedGeneratorDTO → SavedFeed
+
+extension FeedGeneratorDTO {
+    /// Convert API FeedGeneratorDTO to app SavedFeed model
+    func toSavedFeed() -> SavedFeed {
+        SavedFeed(
+            uri: uri,
+            name: displayName,
+            description: description,
+            avatar: avatar,
+            creator: creator.handle
+        )
+    }
+}
+
