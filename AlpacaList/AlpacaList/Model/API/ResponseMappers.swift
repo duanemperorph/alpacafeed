@@ -247,10 +247,44 @@ extension EmbedRecordDTO {
     func toRecordEmbed() -> Embed.RecordEmbed? {
         switch record {
         case .post(let postDTO):
-            return Embed.RecordEmbed(uri: postDTO.uri, cid: postDTO.cid)
-        case .notFound, .blocked, .unknown:
+            return Embed.RecordEmbed(
+                uri: postDTO.uri,
+                cid: postDTO.cid,
+                author: postDTO.author.toAuthor(),
+                text: postDTO.value.text,
+                indexedAt: parseDate(postDTO.indexedAt),
+                state: .available
+            )
+        case .notFound:
+            // Return a placeholder for not found records
+            return Embed.RecordEmbed(
+                uri: "",
+                cid: "",
+                state: .notFound
+            )
+        case .blocked:
+            // Return a placeholder for blocked records
+            return Embed.RecordEmbed(
+                uri: "",
+                cid: "",
+                state: .blocked
+            )
+        case .unknown:
             return nil
         }
+    }
+    
+    private func parseDate(_ dateString: String) -> Date {
+        let formatter = ISO8601DateFormatter()
+        formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+        
+        if let date = formatter.date(from: dateString) {
+            return date
+        }
+        
+        // Try without fractional seconds
+        formatter.formatOptions = [.withInternetDateTime]
+        return formatter.date(from: dateString) ?? Date()
     }
 }
 

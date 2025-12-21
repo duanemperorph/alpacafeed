@@ -98,7 +98,15 @@ struct PostEmbed_Previews: PreviewProvider {
                 PostEmbed(embed: .record(
                     Embed.RecordEmbed(
                         uri: "at://did:plc:example/app.bsky.feed.post/abc123",
-                        cid: "bafyreiabc123"
+                        cid: "bafyreiabc123",
+                        author: Author(
+                            did: "did:plc:example",
+                            handle: "alice.bsky.social",
+                            displayName: "Alice"
+                        ),
+                        text: "This is a quoted post showing some sample text from another user's post.",
+                        indexedAt: Date().addingTimeInterval(-7200),
+                        state: .available
                     )
                 ))
             }

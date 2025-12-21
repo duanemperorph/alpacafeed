@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Kingfisher
 
 /// Displays quoted post embed
 struct QuotePostEmbed: View {
@@ -14,46 +15,168 @@ struct QuotePostEmbed: View {
     
     var body: some View {
         Button(action: {
-            onTap?(record.uri)
+            if record.state == .available {
+                onTap?(record.uri)
+            }
         }) {
-            VStack(alignment: .leading, spacing: 8) {
-                // TODO: Fetch and display actual quoted post content
-                // For now, show placeholder
+            content
+        }
+        .buttonStyle(.plain)
+        .disabled(record.state != .available)
+    }
+    
+    @ViewBuilder
+    private var content: some View {
+        switch record.state {
+        case .available:
+            availableContent
+        case .notFound:
+            unavailableContent(message: "Post not found", icon: "questionmark.circle")
+        case .blocked:
+            unavailableContent(message: "Post from blocked user", icon: "nosign")
+        }
+    }
+    
+    private var availableContent: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            // Author header
+            if let author = record.author {
                 HStack(spacing: 8) {
-                    Circle()
-                        .fill(Color.gray.opacity(0.3))
-                        .frame(width: 32, height: 32)
+                    // Avatar
+                    KFImage(URL(string: author.avatar ?? ""))
+                        .placeholder {
+                            Circle()
+                                .fill(Color.gray.opacity(0.3))
+                                .overlay(
+                                    Image(systemName: "person.fill")
+                                        .font(.caption2)
+                                        .foregroundColor(.gray)
+                                )
+                        }
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 20, height: 20)
+                        .clipShape(Circle())
                     
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text("Quoted Post")
-                            .font(.subheadline)
-                            .fontWeight(.semibold)
-                        Text("@user.bsky.social")
+                    // Name and handle
+                    HStack(spacing: 4) {
+                        if let displayName = author.displayName, !displayName.isEmpty {
+                            Text(displayName)
+                                .font(.subheadline)
+                                .fontWeight(.semibold)
+                                .lineLimit(1)
+                        }
+                        
+                        Text("@\(author.handle)")
                             .font(.caption)
                             .foregroundColor(.secondary)
+                            .lineLimit(1)
+                        
+                        if let indexedAt = record.indexedAt {
+                            Text("·")
+                                .foregroundColor(.secondary)
+                                .font(.caption)
+                            
+                            Text(formattedDate(indexedAt))
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
                     }
+                    
+                    Spacer()
                 }
-                
-                Text("This is a quoted post. Content would be fetched from the AT Protocol using the URI.")
+            }
+            
+            // Post text
+            if let text = record.text, !text.isEmpty {
+                Text(text)
                     .font(.subheadline)
                     .foregroundColor(.primary)
                     .lineLimit(4)
-                
-                Text("URI: \(record.uri)")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                    .lineLimit(1)
+                    .multilineTextAlignment(.leading)
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(12)
-            .background(Color.gray.opacity(0.1))
-            .clipShape(RoundedRectangle(cornerRadius: 12))
-            .overlay(
-                RoundedRectangle(cornerRadius: 12)
-                    .stroke(Color.gray.opacity(0.3), lineWidth: 1)
-            )
         }
-        .buttonStyle(.plain)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(12)
+        .background(Color(.systemGray6))
+        .clipShape(RoundedRectangle(cornerRadius: 12))
+        .overlay(
+            RoundedRectangle(cornerRadius: 12)
+                .stroke(Color.gray.opacity(0.2), lineWidth: 1)
+        )
+    }
+    
+    private func unavailableContent(message: String, icon: String) -> some View {
+        HStack(spacing: 8) {
+            Image(systemName: icon)
+                .foregroundColor(.secondary)
+            Text(message)
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(12)
+        .background(Color(.systemGray6))
+        .clipShape(RoundedRectangle(cornerRadius: 12))
+        .overlay(
+            RoundedRectangle(cornerRadius: 12)
+                .stroke(Color.gray.opacity(0.2), lineWidth: 1)
+        )
+    }
+    
+    private func formattedDate(_ date: Date) -> String {
+        let now = Date()
+        let interval = now.timeIntervalSince(date)
+        
+        if interval < 60 { return "now" }
+        if interval < 3600 { return "\(Int(interval / 60))m" }
+        if interval < 86400 { return "\(Int(interval / 3600))h" }
+        if interval < 604800 { return "\(Int(interval / 86400))d" }
+        
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MMM d"
+        return formatter.string(from: date)
     }
 }
 
+#Preview {
+    VStack(spacing: 16) {
+        // Available quote post
+        QuotePostEmbed(
+            record: Embed.RecordEmbed(
+                uri: "at://did:plc:test/app.bsky.feed.post/123",
+                cid: "abc123",
+                author: Author(
+                    did: "did:plc:test",
+                    handle: "alice.bsky.social",
+                    displayName: "Alice"
+                ),
+                text: "This is a quoted post with some sample text that shows how the quote embed looks when properly rendered.",
+                indexedAt: Date().addingTimeInterval(-3600),
+                state: .available
+            ),
+            onTap: nil
+        )
+        
+        // Not found
+        QuotePostEmbed(
+            record: Embed.RecordEmbed(
+                uri: "",
+                cid: "",
+                state: .notFound
+            ),
+            onTap: nil
+        )
+        
+        // Blocked
+        QuotePostEmbed(
+            record: Embed.RecordEmbed(
+                uri: "",
+                cid: "",
+                state: .blocked
+            ),
+            onTap: nil
+        )
+    }
+    .padding()
+}

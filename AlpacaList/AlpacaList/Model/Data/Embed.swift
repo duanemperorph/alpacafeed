@@ -44,10 +44,33 @@ enum Embed: Codable, Equatable {
         let thumb: String?      // Preview thumbnail
     }
     
-    /// Quoted post reference
+    /// Quoted post content
     struct RecordEmbed: Codable, Equatable {
         let uri: String         // at:// URI of quoted post
         let cid: String         // Content identifier
+        
+        // Quoted post content (populated when available)
+        let author: Author?
+        let text: String?
+        let indexedAt: Date?
+        
+        /// State of the quoted record
+        let state: RecordState
+        
+        enum RecordState: String, Codable, Equatable {
+            case available
+            case notFound
+            case blocked
+        }
+        
+        init(uri: String, cid: String, author: Author? = nil, text: String? = nil, indexedAt: Date? = nil, state: RecordState = .available) {
+            self.uri = uri
+            self.cid = cid
+            self.author = author
+            self.text = text
+            self.indexedAt = indexedAt
+            self.state = state
+        }
     }
     
     /// Media embed (for recordWithMedia case)
