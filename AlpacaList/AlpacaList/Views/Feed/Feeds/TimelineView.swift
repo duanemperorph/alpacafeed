@@ -13,6 +13,8 @@ struct TimelineView: View {
     @Environment(NavigationCoordinator.self) private var navigationCoordinator
     
     var body: some View {
+        let _ = print("[TimelineView] body evaluated, posts count: \(viewModel.posts.count)")
+        
         PostListView(
             items: viewModel.posts,
             isLoading: viewModel.isLoading,

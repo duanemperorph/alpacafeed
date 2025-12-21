@@ -24,11 +24,15 @@ class FeedRepository {
     
     /// Refresh posts from cache - call this to get latest post states
     func refreshPostsFromCache() async {
-        posts = await postCache.getPosts(uris: postUris)
+        print("new uris: ", postUris)
+        let newPosts = await postCache.getPosts(uris: postUris)
+        print("new posts with uris: ", newPosts.map { $0.uri })
+        posts = newPosts
     }
     
     // Loading states
-    private(set) var isLoading = false
+    private var isFetching = false  // Internal concurrency guard - prevents concurrent fetches
+    private(set) var isLoading = false  // External UI flag - shows loading spinner when list is empty
     private(set) var isLoadingMore = false
     
     // Error state for feed operations
@@ -73,21 +77,38 @@ class FeedRepository {
     // MARK: - Fetch Methods
     
     /// Fetch initial feed (resets pagination)
-    func fetchFeed(limit: Int = 50) async {
-        guard !isLoading else { return }
+    /// - Parameter isRefresh: If true, skips setting isLoading to avoid cancelling the pull-to-refresh task
+    func fetchFeed(limit: Int = 50, isRefresh: Bool = false) async {
+        guard !isFetching else { return }
         
-        isLoading = true
+        print("[FeedRepository] Fetching feed: \(feedType)")
+        
+        isFetching = true
         error = nil
-        defer { isLoading = false }
+        
+        // Only set isLoading for initial loads, not refreshes
+        // Refresh has its own UI (pull-to-refresh spinner) and setting isLoading
+        // can trigger view updates that cancel the ongoing network request
+        if !isRefresh {
+            isLoading = true
+        }
+        
+        defer { 
+            isFetching = false
+            isLoading = false
+        }
         
         do {
             let response: TimelineResponse
             
             switch feedType {
             case .home:
+                print("[FeedRepository] → Calling getTimeline()")
                 response = try await feedService.getTimeline(cursor: nil, limit: limit)
             case .customFeed(let uri):
+                print("[FeedRepository] → Calling getFeed(uri: \(uri))")
                 response = try await feedService.getFeed(feedUri: uri, cursor: nil, limit: limit)
+                print("* response: ")
             case .authorFeed, .likes, .search:
                 // TODO: Implement these feed types
                 return
@@ -96,10 +117,15 @@ class FeedRepository {
             // Convert DTOs to domain models
             let fetchedPosts = response.toPosts()
             
+
+            print("* going to cache posts")
+
             // Cache the posts and authors
             await postCache.cachePosts(fetchedPosts)
             let authors = fetchedPosts.map { $0.author }
             await profileCache.cacheProfiles(authors)
+
+            print("* posts cached")
             
             // Update internal state - store URIs and refresh from cache
             self.postUris = fetchedPosts.map { $0.uri }
@@ -107,13 +133,14 @@ class FeedRepository {
             self.hasMore = response.cursor != nil
             await self.refreshPostsFromCache()
         } catch {
+            print("[FeedRepository] Error in fetchFeed: \(error)")
             self.error = error
         }
     }
     
     /// Load more posts (pagination)
     func loadMore(limit: Int = 50) async {
-        guard let currentCursor = cursor, hasMore, !isLoadingMore, !isLoading else {
+        guard let currentCursor = cursor, hasMore, !isLoadingMore, !isFetching else {
             return
         }
         
@@ -157,7 +184,7 @@ class FeedRepository {
         self.cursor = nil
         self.hasMore = true
         
-        await fetchFeed(limit: limit)
+        await fetchFeed(limit: limit, isRefresh: true)
     }
     
     // MARK: - State
