@@ -99,11 +99,8 @@ class SavedFeedsRepository {
         do {
             let response = try await feedService.getSuggestedFeeds(limit: 25)
             
-            // Filter out feeds the user already has saved
-            let savedUris = Set(savedFeeds.map { $0.uri })
-            self.suggestedFeeds = response.feeds
-                .filter { !savedUris.contains($0.uri) }
-                .map { $0.toSavedFeed() }
+            // Keep all suggested feeds (UI will show saved status)
+            self.suggestedFeeds = response.feeds.map { $0.toSavedFeed() }
         } catch {
             // Suggested feeds are non-critical, just log and continue
             print("Failed to fetch suggested feeds: \(error)")
@@ -205,8 +202,8 @@ class SavedFeedsRepository {
         feedItems: [SavedFeedItemDTO],
         generators: [FeedGeneratorDTO]
     ) -> [SavedFeed] {
-        // Create lookup by URI
-        let generatorsByUri = Dictionary(uniqueKeysWithValues: generators.map { ($0.uri, $0) })
+        // Create lookup by URI (use uniquingKeysWith to handle potential duplicates gracefully)
+        let generatorsByUri = Dictionary(generators.map { ($0.uri, $0) }, uniquingKeysWith: { first, _ in first })
         
         // Map in order, only including feeds we have generator info for
         return feedItems.compactMap { item -> SavedFeed? in

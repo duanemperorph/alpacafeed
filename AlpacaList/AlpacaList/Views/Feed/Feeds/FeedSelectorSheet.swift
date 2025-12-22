@@ -22,8 +22,11 @@ struct FeedSelectorSheet: View {
     
     @Binding var selectedFeed: FeedType
     @State private var selectedTab: FeedSelectorTab = .myFeeds
-    @State private var feedToRemove: SavedFeed?
-    @State private var showingRemoveConfirmation = false
+    
+    /// Track feeds currently being added (by URI)
+    @State private var feedsBeingAdded: Set<String> = []
+    /// Track feeds currently being removed (by URI)
+    @State private var feedsBeingRemoved: Set<String> = []
     
     // Computed from AppState
     private var savedFeeds: [SavedFeed] {
@@ -32,6 +35,11 @@ struct FeedSelectorSheet: View {
     
     private var suggestedFeeds: [SavedFeed] {
         appState.savedFeedsRepository.suggestedFeeds
+    }
+    
+    /// Check if a feed URI is already saved
+    private func isFeedSaved(_ uri: String) -> Bool {
+        savedFeeds.contains { $0.uri == uri }
     }
     
     var body: some View {
@@ -101,10 +109,16 @@ struct FeedSelectorSheet: View {
                         dismiss()
                     }
                 )
-                .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                .swipeActions(edge: .trailing, allowsFullSwipe: true) {
                     Button(role: .destructive) {
-                        feedToRemove = feed
-                        showingRemoveConfirmation = true
+                        Task {
+                            try? await appState.savedFeedsRepository.unpinFeed(uri: feed.uri)
+                            
+                            // If the removed feed was selected, switch to Following
+                            if selectedFeed == .custom(feed) {
+                                selectedFeed = .following
+                            }
+                        }
                     } label: {
                         Label("Remove", systemImage: "minus.circle")
                     }
@@ -112,24 +126,6 @@ struct FeedSelectorSheet: View {
             }
         }
         .listRowBackground(Color.clear.background(.thinMaterial))
-        .alert("Remove Feed", isPresented: $showingRemoveConfirmation, presenting: feedToRemove) { feed in
-            Button("Cancel", role: .cancel) {
-                feedToRemove = nil
-            }
-            Button("Remove", role: .destructive) {
-                Task {
-                    try? await appState.savedFeedsRepository.unpinFeed(uri: feed.uri)
-                    
-                    // If the removed feed was selected, switch to Following
-                    if selectedFeed == .custom(feed) {
-                        selectedFeed = .following
-                    }
-                }
-                feedToRemove = nil
-            }
-        } message: { feed in
-            Text("Remove \"\(feed.name)\" from your saved feeds?")
-        }
     }
     
     // MARK: - Explore Tab
@@ -138,20 +134,34 @@ struct FeedSelectorSheet: View {
     private var exploreContent: some View {
         Section {
             ForEach(suggestedFeeds) { feed in
+                let isSaved = isFeedSaved(feed.uri)
+                let isAdding = feedsBeingAdded.contains(feed.uri)
+                let isRemoving = feedsBeingRemoved.contains(feed.uri)
+                
                 FeedRow(
                     name: feed.name,
                     description: feed.description,
                     creator: feed.creator,
                     isSelected: false,
-                    showPinButton: true,
+                    actionState: isAdding ? .adding : (isRemoving ? .removing : (isSaved ? .added : .add)),
                     onTap: {
-                        // For now, just select it
                         selectedFeed = .custom(feed)
                         dismiss()
                     },
-                    onPin: {
+                    onAdd: {
+                        guard !feedsBeingAdded.contains(feed.uri) else { return }
+                        feedsBeingAdded.insert(feed.uri)
                         Task {
                             try? await appState.savedFeedsRepository.pinFeed(feed)
+                            feedsBeingAdded.remove(feed.uri)
+                        }
+                    },
+                    onRemove: {
+                        guard !feedsBeingRemoved.contains(feed.uri) else { return }
+                        feedsBeingRemoved.insert(feed.uri)
+                        Task {
+                            try? await appState.savedFeedsRepository.unpinFeed(uri: feed.uri)
+                            feedsBeingRemoved.remove(feed.uri)
                         }
                     }
                 )
@@ -161,6 +171,16 @@ struct FeedSelectorSheet: View {
     }
 }
 
+// MARK: - Feed Row Action State
+
+enum FeedRowActionState {
+    case none       // No action button (used in My Feeds tab)
+    case add        // Show "+" button to add
+    case adding     // Show spinner while adding
+    case added      // Show checkmark with remove option
+    case removing   // Show spinner while removing
+}
+
 // MARK: - Feed Row
 
 struct FeedRow: View {
@@ -168,9 +188,10 @@ struct FeedRow: View {
     let description: String?
     var creator: String? = nil
     let isSelected: Bool
-    var showPinButton: Bool = false
+    var actionState: FeedRowActionState = .none
     let onTap: () -> Void
-    var onPin: (() -> Void)? = nil
+    var onAdd: (() -> Void)? = nil
+    var onRemove: (() -> Void)? = nil
     
     var body: some View {
         Button(action: onTap) {
@@ -209,23 +230,46 @@ struct FeedRow: View {
                 
                 Spacer()
                 
-                // Selection indicator or pin button
-                if isSelected {
-                    Image(systemName: "checkmark.circle.fill")
-                        .foregroundColor(.accentColor)
-                        .font(.system(size: 22))
-                } else if showPinButton, let onPin = onPin {
-                    Button(action: onPin) {
-                        Image(systemName: "plus.circle")
-                            .foregroundColor(.accentColor)
-                            .font(.system(size: 22))
-                    }
-                    .buttonStyle(.plain)
-                }
+                // Selection indicator or action button
+                actionView
             }
             .padding(.vertical, 4)
         }
         .buttonStyle(.plain)
+    }
+    
+    @ViewBuilder
+    private var actionView: some View {
+        if isSelected {
+            Image(systemName: "checkmark.circle.fill")
+                .foregroundColor(.accentColor)
+                .font(.system(size: 22))
+        } else {
+            switch actionState {
+            case .none:
+                EmptyView()
+                
+            case .add:
+                Button(action: { onAdd?() }) {
+                    Image(systemName: "plus.circle")
+                        .foregroundColor(.accentColor)
+                        .font(.system(size: 22))
+                }
+                .buttonStyle(.plain)
+                
+            case .adding, .removing:
+                ProgressView()
+                    .frame(width: 22, height: 22)
+                
+            case .added:
+                Button(action: { onRemove?() }) {
+                    Image(systemName: "minus.circle")
+                        .foregroundColor(.red.opacity(0.8))
+                        .font(.system(size: 22))
+                }
+                .buttonStyle(.plain)
+            }
+        }
     }
 }
 
