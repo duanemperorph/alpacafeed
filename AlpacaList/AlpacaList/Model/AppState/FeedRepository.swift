@@ -53,21 +53,21 @@ class FeedRepository {
     
     enum FeedType: Hashable {
         case home
-        case authorFeed(handle: String)
+        case authorFeed(actor: String)  // DID or handle
         case customFeed(uri: String)
-        case likes(handle: String)
+        case likes(actor: String)
         case search(query: String)
         
         var feedId: String {
             switch self {
             case .home:
                 return "home"
-            case .authorFeed(let handle):
-                return "author:\(handle)"
+            case .authorFeed(let actor):
+                return "author:\(actor)"
             case .customFeed(let uri):
                 return "custom:\(uri)"
-            case .likes(let handle):
-                return "likes:\(handle)"
+            case .likes(let actor):
+                return "likes:\(actor)"
             case .search(let query):
                 return "search:\(query)"
             }
@@ -86,14 +86,12 @@ class FeedRepository {
         isFetching = true
         error = nil
         
-        // Clear stale data immediately to avoid showing old account's posts
-        posts = []
-        postUris = []
-        
-        // Only set isLoading for initial loads, not refreshes
-        // Refresh has its own UI (pull-to-refresh spinner) and setting isLoading
-        // can trigger view updates that cancel the ongoing network request
+        // Only set isLoading and clear posts for initial loads, not refreshes
+        // Refresh has its own UI (pull-to-refresh spinner) and clearing posts
+        // triggers view updates that can cancel the ongoing network request
         if !isRefresh {
+            posts = []
+            postUris = []
             isLoading = true
         }
         
@@ -112,8 +110,10 @@ class FeedRepository {
             case .customFeed(let uri):
                 print("[FeedRepository] → Calling getFeed(uri: \(uri))")
                 response = try await feedService.getFeed(feedUri: uri, cursor: nil, limit: limit)
-                print("* response: ")
-            case .authorFeed, .likes, .search:
+            case .authorFeed(let actor):
+                print("[FeedRepository] → Calling getAuthorFeed(actor: \(actor))")
+                response = try await feedService.getAuthorFeed(actor: actor, cursor: nil, limit: limit)
+            case .likes, .search:
                 // TODO: Implement these feed types
                 return
             }
@@ -159,7 +159,9 @@ class FeedRepository {
                 response = try await feedService.getTimeline(cursor: currentCursor, limit: limit)
             case .customFeed(let uri):
                 response = try await feedService.getFeed(feedUri: uri, cursor: currentCursor, limit: limit)
-            case .authorFeed, .likes, .search:
+            case .authorFeed(let actor):
+                response = try await feedService.getAuthorFeed(actor: actor, cursor: currentCursor, limit: limit)
+            case .likes, .search:
                 // TODO: Implement these feed types
                 return
             }

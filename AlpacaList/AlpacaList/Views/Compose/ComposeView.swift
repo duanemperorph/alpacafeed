@@ -121,16 +121,21 @@ struct ComposeView: View {
                     .foregroundColor(viewModel.canPost ? .white : .white.opacity(0.5))
                 }
             }
-            .alert("Discard Post?", isPresented: $viewModel.showingDraftAlert) {
-                Button("Save Draft", role: .cancel) {
-                    viewModel.saveDraft()
-                    dismiss()
-                }
+            .alert("Discard Post?", isPresented: $viewModel.showingDiscardAlert) {
+                Button("Keep Editing", role: .cancel) { }
                 Button("Discard", role: .destructive) {
                     dismiss()
                 }
             } message: {
-                Text("Do you want to save this as a draft?")
+                Text("You have unsaved changes that will be lost.")
+            }
+            .alert("Failed to Post", isPresented: .init(
+                get: { viewModel.postError != nil },
+                set: { if !$0 { viewModel.postError = nil } }
+            )) {
+                Button("OK", role: .cancel) { }
+            } message: {
+                Text(viewModel.postError?.localizedDescription ?? "An unknown error occurred.")
             }
             .managedPhotoPicker(
                 isPresented: $viewModel.showingImagePicker,
@@ -204,8 +209,7 @@ struct ComposeView: View {
                 try await viewModel.createPost()
                 dismiss()
             } catch {
-                // TODO: Show error alert to user
-                print("Error posting: \(error)")
+                // Error alert is shown via viewModel.postError binding
             }
         }
     }
@@ -250,4 +254,6 @@ struct ComposeView_Previews: PreviewProvider {
         }
     }
 }
+
+
 

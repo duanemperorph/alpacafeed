@@ -55,9 +55,11 @@ struct SavedFeed: Hashable, Identifiable {
 
 // MARK: - Feed Type
 
-/// Feed type: either the home timeline (Following) or a custom feed
+/// Feed type: home timeline, user's own posts, author feed, or a custom feed
 enum FeedType: Hashable {
     case following
+    case myPosts
+    case authorFeed(actor: String, name: String)
     case custom(SavedFeed)
     
     /// Display name for the feed
@@ -65,6 +67,10 @@ enum FeedType: Hashable {
         switch self {
         case .following:
             return "Following"
+        case .myPosts:
+            return "My Posts"
+        case .authorFeed(_, let name):
+            return name
         case .custom(let feed):
             return feed.name
         }

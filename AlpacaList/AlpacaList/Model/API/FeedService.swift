@@ -87,6 +87,33 @@ class FeedService {
         )
     }
     
+    /// Get an author's feed (posts by a specific user)
+    /// - Parameters:
+    ///   - actor: The user's DID or handle
+    ///   - cursor: Pagination cursor (optional)
+    ///   - limit: Number of posts to fetch (default: 50)
+    ///   - filter: Filter type (default: posts_and_author_threads)
+    /// - Returns: Feed response with items and cursor
+    ///
+    /// API: GET /xrpc/app.bsky.feed.getAuthorFeed
+    @MainActor
+    func getAuthorFeed(actor: String, cursor: String? = nil, limit: Int = 50, filter: String = "posts_and_author_threads") async throws -> TimelineResponse {
+        var queryItems: [URLQueryItem] = [
+            URLQueryItem(name: "actor", value: actor),
+            URLQueryItem(name: "limit", value: String(limit)),
+            URLQueryItem(name: "filter", value: filter)
+        ]
+        if let cursor = cursor {
+            queryItems.append(URLQueryItem(name: "cursor", value: cursor))
+        }
+        
+        return try await apiService.get(
+            endpoint: "app.bsky.feed.getAuthorFeed",
+            queryItems: queryItems,
+            responseType: TimelineResponse.self
+        )
+    }
+    
     // MARK: - Post Thread
     
     /// Get a post thread (post + parent chain + replies)
@@ -361,6 +388,35 @@ class FeedService {
             endpoint: "app.bsky.feed.getSuggestedFeeds",
             queryItems: queryItems,
             responseType: SuggestedFeedsResponse.self
+        )
+    }
+    
+    // MARK: - Graph
+    
+    /// Get accounts that a user follows
+    /// - Parameters:
+    ///   - actor: The user's DID or handle (defaults to current user)
+    ///   - cursor: Pagination cursor
+    ///   - limit: Max follows to return (default: 50)
+    /// - Returns: List of followed profiles with cursor for pagination
+    ///
+    /// API: GET /xrpc/app.bsky.graph.getFollows
+    @MainActor
+    func getFollows(actor: String? = nil, cursor: String? = nil, limit: Int = 50) async throws -> FollowsResponse {
+        let actorValue = try actor ?? getDID()
+        
+        var queryItems: [URLQueryItem] = [
+            URLQueryItem(name: "actor", value: actorValue),
+            URLQueryItem(name: "limit", value: String(limit))
+        ]
+        if let cursor = cursor {
+            queryItems.append(URLQueryItem(name: "cursor", value: cursor))
+        }
+        
+        return try await apiService.get(
+            endpoint: "app.bsky.graph.getFollows",
+            queryItems: queryItems,
+            responseType: FollowsResponse.self
         )
     }
     

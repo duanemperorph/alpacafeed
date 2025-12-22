@@ -14,21 +14,23 @@ import Observation
 class PostRepository {
     private let postCache: PostCache
     private let feedService: FeedService
+    private let followsRepository: FollowsRepository
     
     // Error state for post operations
     private(set) var error: Error?
     
-    init(postCache: PostCache, feedService: FeedService) {
+    init(postCache: PostCache, feedService: FeedService, followsRepository: FollowsRepository) {
         self.postCache = postCache
         self.feedService = feedService
+        self.followsRepository = followsRepository
     }
     
     // MARK: - Post Creation
     
     /// Create a new top-level post (not a reply)
     /// - Parameter text: The post text content
-    /// - Returns: The created Post on success, nil on failure
-    func createPost(text: String) async -> Post? {
+    /// - Returns: Result with the created Post on success, or error on failure
+    func createPost(text: String) async -> Result<Post, Error> {
         return await createPostInternal(text: text, replyTo: nil)
     }
     
@@ -36,13 +38,13 @@ class PostRepository {
     /// - Parameters:
     ///   - text: The reply text content
     ///   - replyTo: The post being replied to
-    /// - Returns: The created Post on success, nil on failure
-    func createReply(text: String, replyTo: Post) async -> Post? {
+    /// - Returns: Result with the created Post on success, or error on failure
+    func createReply(text: String, replyTo: Post) async -> Result<Post, Error> {
         return await createPostInternal(text: text, replyTo: replyTo)
     }
     
     /// Internal helper for post creation (both new posts and replies)
-    private func createPostInternal(text: String, replyTo: Post?) async -> Post? {
+    private func createPostInternal(text: String, replyTo: Post?) async -> Result<Post, Error> {
         error = nil
         
         do {
@@ -104,10 +106,10 @@ class PostRepository {
                 )
             }
             
-            return post
+            return .success(post)
         } catch {
             self.error = error
-            return nil
+            return .failure(error)
         }
     }
     
@@ -293,67 +295,15 @@ class PostRepository {
         }
     }
     
-    // MARK: - Follow Operations
-    
-    /// Follow a user
-    /// - Parameter author: The author to follow
-    /// - Returns: The follow URI on success, nil on failure
-    func followUser(_ author: Author) async -> String? {
-        error = nil
-        
-        guard !author.isFollowing else {
-            // Already following
-            return author.followingUri
-        }
-        
-        // Optimistic update - set a temporary follow URI
-        let tempFollowUri = "at://temp/app.bsky.graph.follow/pending"
-        await postCache.updateAuthorFollowState(authorDID: author.did, followingUri: tempFollowUri)
-        
-        do {
-            let response = try await feedService.followUser(did: author.did)
-            
-            // Update cache with the real follow URI
-            await postCache.updateAuthorFollowState(authorDID: author.did, followingUri: response.uri)
-            
-            return response.uri
-        } catch {
-            // Rollback optimistic update on failure
-            await postCache.updateAuthorFollowState(authorDID: author.did, followingUri: nil)
-            self.error = error
-            return nil
-        }
-    }
-    
-    /// Unfollow a user
-    /// - Parameter author: The author to unfollow
-    func unfollowUser(_ author: Author) async {
-        error = nil
-        
-        guard let followUri = author.followingUri else {
-            // Not following
-            return
-        }
-        
-        // Optimistic update
-        await postCache.updateAuthorFollowState(authorDID: author.did, followingUri: nil)
-        
-        do {
-            try await feedService.unfollowUser(followUri: followUri)
-        } catch {
-            // Rollback optimistic update on failure
-            await postCache.updateAuthorFollowState(authorDID: author.did, followingUri: followUri)
-            self.error = error
-        }
-    }
+    // MARK: - Follow/Unfollow (delegates to FollowsRepository)
     
     /// Toggle follow state for an author
     /// - Parameter author: The author to follow/unfollow
     func toggleFollow(_ author: Author) async {
         if author.isFollowing {
-            await unfollowUser(author)
+            _ = await followsRepository.unfollow(author)
         } else {
-            _ = await followUser(author)
+            _ = await followsRepository.follow(author)
         }
     }
     

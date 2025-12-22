@@ -2,7 +2,7 @@
 //  FeedSelectorSheet.swift
 //  AlpacaList
 //
-//  Sheet for selecting feeds with tabs for My Feeds and Discover
+//  Sheet for selecting feeds with tabs for My Feeds, Following, and Discover
 //
 
 import SwiftUI
@@ -10,7 +10,8 @@ import SwiftUI
 // MARK: - Feed Selector Tab
 
 enum FeedSelectorTab: String, CaseIterable {
-    case myFeeds = "My Feeds"
+    case myFeeds = "Feeds"
+    case following = "Following"
     case explore = "Explore"
 }
 
@@ -37,6 +38,10 @@ struct FeedSelectorSheet: View {
         appState.savedFeedsRepository.suggestedFeeds
     }
     
+    private var followedAccounts: [FollowedAccount] {
+        appState.followsRepository.follows
+    }
+    
     /// Check if a feed URI is already saved
     private func isFeedSaved(_ uri: String) -> Bool {
         savedFeeds.contains { $0.uri == uri }
@@ -59,6 +64,8 @@ struct FeedSelectorSheet: View {
                     switch selectedTab {
                     case .myFeeds:
                         myFeedsContent
+                    case .following:
+                        followingContent
                     case .explore:
                         exploreContent
                     }
@@ -97,6 +104,17 @@ struct FeedSelectorSheet: View {
                 }
             )
             
+            // My Posts - current user's posts
+            FeedRow(
+                name: "My Posts",
+                description: "Your own posts",
+                isSelected: selectedFeed == .myPosts,
+                onTap: {
+                    selectedFeed = .myPosts
+                    dismiss()
+                }
+            )
+            
             // Saved feeds (swipe to remove)
             ForEach(savedFeeds) { feed in
                 FeedRow(
@@ -122,6 +140,65 @@ struct FeedSelectorSheet: View {
                     } label: {
                         Label("Remove", systemImage: "minus.circle")
                     }
+                }
+            }
+        }
+        .listRowBackground(Color.clear.background(.thinMaterial))
+    }
+    
+    // MARK: - Following Tab
+    
+    @ViewBuilder
+    private var followingContent: some View {
+        Section {
+            if appState.followsRepository.isLoading && followedAccounts.isEmpty {
+                HStack {
+                    Spacer()
+                    ProgressView("Loading...")
+                    Spacer()
+                }
+                .padding()
+            } else if followedAccounts.isEmpty {
+                Text("Not following anyone yet")
+                    .foregroundColor(.secondary)
+                    .padding()
+            } else {
+                ForEach(followedAccounts) { account in
+                    FollowedAccountRow(
+                        account: account,
+                        onTap: {
+                            // Create a SavedFeed-like object to represent viewing this user's posts
+                            selectedFeed = .authorFeed(actor: account.did, name: account.displayName ?? account.handle)
+                            dismiss()
+                        }
+                    )
+                    .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                        Button(role: .destructive) {
+                            Task {
+                                await appState.followsRepository.unfollow(account)
+                            }
+                        } label: {
+                            Label("Unfollow", systemImage: "person.badge.minus")
+                        }
+                    }
+                }
+                
+                // Load more trigger
+                if appState.followsRepository.hasMore {
+                    HStack {
+                        Spacer()
+                        if appState.followsRepository.isLoadingMore {
+                            ProgressView()
+                        } else {
+                            Button("Load More") {
+                                Task {
+                                    await appState.followsRepository.loadMore()
+                                }
+                            }
+                        }
+                        Spacer()
+                    }
+                    .padding(.vertical, 8)
                 }
             }
         }
@@ -168,6 +245,61 @@ struct FeedSelectorSheet: View {
             }
         }
         .listRowBackground(Color.clear.background(.thinMaterial))
+    }
+}
+
+// MARK: - Followed Account Row
+
+struct FollowedAccountRow: View {
+    let account: FollowedAccount
+    let onTap: () -> Void
+    
+    var body: some View {
+        Button(action: onTap) {
+            HStack(spacing: 12) {
+                // Avatar
+                AsyncImage(url: account.avatar.flatMap { URL(string: $0) }) { phase in
+                    switch phase {
+                    case .success(let image):
+                        image
+                            .resizable()
+                            .scaledToFill()
+                    case .failure, .empty:
+                        Image(systemName: "person.circle.fill")
+                            .resizable()
+                            .foregroundColor(.secondary)
+                    @unknown default:
+                        Image(systemName: "person.circle.fill")
+                            .resizable()
+                            .foregroundColor(.secondary)
+                    }
+                }
+                .frame(width: 40, height: 40)
+                .clipShape(Circle())
+                
+                // Account info
+                VStack(alignment: .leading, spacing: 2) {
+                    if let displayName = account.displayName, !displayName.isEmpty {
+                        Text(displayName)
+                            .font(.system(size: 16))
+                            .fontWeight(.medium)
+                            .foregroundColor(.primary)
+                    }
+                    
+                    Text("@\(account.handle)")
+                        .font(.system(size: 13))
+                        .foregroundColor(.secondary)
+                }
+                
+                Spacer()
+                
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 14))
+                    .foregroundColor(.secondary)
+            }
+            .padding(.vertical, 4)
+        }
+        .buttonStyle(.plain)
     }
 }
 

@@ -217,7 +217,7 @@ class NavigationCoordinator {
             ThreadView(viewModel: viewModel)
             
         case .profile(let handle):
-            let viewModel = viewModelFactory.makeTimelineViewModel(feedType: .authorFeed(handle: handle))
+            let viewModel = viewModelFactory.makeTimelineViewModel(feedType: .authorFeed(actor: handle))
             TimelineView(viewModel: viewModel)
         }
     }
@@ -235,7 +235,7 @@ class NavigationCoordinator {
             return viewModelFactory.makeThreadViewModel(post: post)
             
         case .profile(let handle):
-            return viewModelFactory.makeTimelineViewModel(feedType: .authorFeed(handle: handle))
+            return viewModelFactory.makeTimelineViewModel(feedType: .authorFeed(actor: handle))
         }
     }
 }

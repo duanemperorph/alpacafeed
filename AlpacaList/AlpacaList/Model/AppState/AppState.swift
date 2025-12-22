@@ -33,6 +33,7 @@ class AppState {
     // MARK: - Feed Repositories
     
     let savedFeedsRepository: SavedFeedsRepository
+    let followsRepository: FollowsRepository
     
     // MARK: - ViewModel Factory
     
@@ -90,12 +91,14 @@ class AppState {
         
         // Initialize feed repositories
         self.savedFeedsRepository = SavedFeedsRepository(feedService: feedService)
+        self.followsRepository = FollowsRepository(feedService: feedService, postCache: postCache)
         
         // Initialize ViewModel factory
         self.viewModelFactory = ViewModelFactory(
             postCache: postCache,
             profileCache: profileCache,
-            feedService: feedService
+            feedService: feedService,
+            followsRepository: followsRepository
         )
         
         // Initialize navigation coordinator (depends on viewModelFactory)
@@ -131,9 +134,10 @@ class AppState {
         await authRepository.restoreSession()
         isSessionRestored = true
         
-        // Fetch saved feeds if authenticated
+        // Fetch saved feeds and follows if authenticated
         if isAuthenticated {
             await savedFeedsRepository.fetchSavedFeeds()
+            await followsRepository.fetchFollows()
         }
     }
     
@@ -141,8 +145,9 @@ class AppState {
     func login(identifier: String, password: String, server: String = "bsky.social") async throws {
         try await authRepository.login(identifier: identifier, password: password, server: server)
         
-        // Fetch saved feeds after login
+        // Fetch saved feeds and follows after login
         await savedFeedsRepository.fetchSavedFeeds()
+        await followsRepository.fetchFollows()
         
         currentUser = mockAuthors[0]  // Mock for now
     }
@@ -156,10 +161,12 @@ class AppState {
         if !isAuthenticated {
             currentUser = nil
             await clearAllCaches()
+            followsRepository.clear()
             navigationCoordinator.resetForAccountSwitch()
         } else if wasActive {
             // Logged out the active account, now switched to another
             await savedFeedsRepository.fetchSavedFeeds()
+            await followsRepository.fetchFollows()
             navigationCoordinator.resetForAccountSwitch()
         }
     }
@@ -169,6 +176,7 @@ class AppState {
         await authRepository.logoutAll()
         currentUser = nil
         await clearAllCaches()
+        followsRepository.clear()
         navigationCoordinator.resetForAccountSwitch()
     }
     
@@ -185,7 +193,9 @@ class AppState {
         
         // Clear caches and reload data for new account
         await clearAllCaches()
+        followsRepository.clear()
         await savedFeedsRepository.fetchSavedFeeds()
+        await followsRepository.fetchFollows()
         
         // Reset navigation to default state
         navigationCoordinator.resetForAccountSwitch()

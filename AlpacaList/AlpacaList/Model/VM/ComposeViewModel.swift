@@ -13,6 +13,7 @@ import Observation
 
 /// View model for composing new posts and replies
 @Observable
+@MainActor
 class ComposeViewModel {
     // MARK: - Properties
     
@@ -23,7 +24,7 @@ class ComposeViewModel {
     var isLoadingLink: Bool = false
     
     // UI presentation state
-    var showingDraftAlert: Bool = false
+    var showingDiscardAlert: Bool = false
     var showingImagePicker: Bool = false
     var showingVideoPicker: Bool = false
     var showingLinkInput: Bool = false
@@ -96,8 +97,8 @@ class ComposeViewModel {
         }
     }
     
-    var hasDraft: Bool {
-        !postText.isEmpty || currentEmbed != nil
+    var hasContent: Bool {
+        !postText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || currentEmbed != nil
     }
     
     // MARK: - Initialization
@@ -128,7 +129,6 @@ class ComposeViewModel {
         
         let newImages = pendingImages
         
-        await MainActor.run {
             // Add to existing images or create new embed
             if case .images(let existingImages) = currentEmbed {
                 var updatedImages = existingImages
@@ -137,7 +137,6 @@ class ComposeViewModel {
             } else {
                 // Create new image embed
                 currentEmbed = .images(newImages)
-            }
         }
     }
     
@@ -179,11 +178,7 @@ class ComposeViewModel {
                 let time = CMTime(seconds: 0, preferredTimescale: 600)
                 let cgImage = try imageGenerator.copyCGImage(at: time, actualTime: nil)
                 thumbnail = UIImage(cgImage: cgImage)
-                
-                // Update the embed on main thread
-                await MainActor.run {
                     currentEmbed = .video(thumbnail: thumbnail, duration: durationInSeconds)
-                }
             } catch {
                 print("Failed to generate thumbnail: \(error)")
             }
@@ -208,15 +203,10 @@ class ComposeViewModel {
             return
         }
         
-        await MainActor.run {
             isLoadingLink = true
-        }
-        
         defer {
-            Task { @MainActor in
                 isLoadingLink = false
                 showingLinkInput = false
-            }
         }
         
         do {
@@ -224,7 +214,7 @@ class ComposeViewModel {
             let (data, _) = try await URLSession.shared.data(from: url)
             guard let html = String(data: data, encoding: .utf8) else {
                 print("Failed to decode HTML")
-                await setFallbackLink(url: url)
+                setFallbackLink(url: url)
                 return
             }
             
@@ -241,18 +231,16 @@ class ComposeViewModel {
             }
             
             // Update embed
-            await MainActor.run {
                 currentEmbed = .external(
                     url: url,
                     title: metadata.title,
                     description: metadata.description,
                     thumbnail: thumbnailImage
                 )
-            }
             
         } catch {
             print("Error fetching link metadata: \(error)")
-            await setFallbackLink(url: url)
+            setFallbackLink(url: url)
         }
     }
     
@@ -323,15 +311,13 @@ class ComposeViewModel {
         }
     }
     
-    private func setFallbackLink(url: URL) async {
-        await MainActor.run {
+    private func setFallbackLink(url: URL) {
             currentEmbed = .external(
                 url: url,
                 title: url.host ?? url.absoluteString,
                 description: nil,
                 thumbnail: nil
             )
-        }
     }
     
     /// Remove a specific image at index
@@ -356,40 +342,27 @@ class ComposeViewModel {
         guard canPost else { return }
         
         isPosting = true
-        defer { isPosting = false }
+        postError = nil
         
-        // TODO: Implement actual post creation with Bluesky API
-        print("Posting: \(postText)")
+        let result: Result<Post, Error>
+        
         if let replyTo = replyTo {
-            print("Reply to: \(replyTo.uri)")
+            result = await postRepository.createReply(text: postText, replyTo: replyTo)
+        } else {
+            result = await postRepository.createPost(text: postText)
         }
         
-        if let embed = currentEmbed {
-            await logEmbedInfo(embed)
-        }
-        
-        // Simulate API call
-        try await Task.sleep(nanoseconds: 500_000_000) // 0.5 seconds
-        
-        // Success - clear the form
-        await MainActor.run {
+        switch result {
+        case .success(let post):
+            onPostCreated(post)
             resetForm()
+            isPosting = false
+            
+        case .failure(let error):
+            postError = error
+            isPosting = false
+            throw error
         }
-    }
-    
-    /// Save the current post as a draft
-    func saveDraft() {
-        // TODO: Implement draft saving to UserDefaults or local storage
-        print("Saving draft: \(postText)")
-        if let embed = currentEmbed {
-            print("Draft includes embed: \(embed)")
-        }
-    }
-    
-    /// Load a saved draft
-    func loadDraft() {
-        // TODO: Implement draft loading from UserDefaults or local storage
-        print("Loading draft...")
     }
     
     // MARK: - UI Presentation Helpers
@@ -412,13 +385,13 @@ class ComposeViewModel {
         showingLinkInput = true
     }
     
-    /// Handle cancel action (check for draft)
+    /// Handle cancel - returns true if OK to dismiss immediately
     func handleCancel() -> Bool {
-        if hasDraft {
-            showingDraftAlert = true
-            return false // Don't dismiss yet
+        if hasContent {
+            showingDiscardAlert = true
+            return false
         }
-        return true // OK to dismiss
+        return true
     }
     
     // MARK: - Private Helpers

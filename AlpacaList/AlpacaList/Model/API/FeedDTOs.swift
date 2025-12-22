@@ -388,3 +388,22 @@ struct SuggestedFeedsResponse: Decodable {
     let cursor: String?
 }
 
+// MARK: - Graph DTOs
+
+/// Response from app.bsky.graph.getFollows
+struct FollowsResponse: Decodable {
+    let follows: [ProfileViewDTO]
+    let cursor: String?
+}
+
+/// Profile view for follows/followers lists
+struct ProfileViewDTO: Decodable {
+    let did: String
+    let handle: String
+    let displayName: String?
+    let description: String?
+    let avatar: String?
+    let indexedAt: String?
+    let viewer: AuthorViewerStateDTO?
+}
+

@@ -17,17 +17,20 @@ class ViewModelFactory {
     private let postCache: PostCache
     private let profileCache: ProfileCache
     private let feedService: FeedService
+    private let followsRepository: FollowsRepository
     
     // MARK: - Initialization
     
     init(
         postCache: PostCache,
         profileCache: ProfileCache,
-        feedService: FeedService
+        feedService: FeedService,
+        followsRepository: FollowsRepository
     ) {
         self.postCache = postCache
         self.profileCache = profileCache
         self.feedService = feedService
+        self.followsRepository = followsRepository
     }
     
     // MARK: - ViewModel Factory Methods
@@ -57,6 +60,12 @@ class ViewModelFactory {
         switch feedType {
         case .following:
             return .home
+        case .myPosts:
+            // Use the current user's DID for author feed
+            let actor = feedService.currentUserDID ?? ""
+            return .authorFeed(actor: actor)
+        case .authorFeed(let actor, _):
+            return .authorFeed(actor: actor)
         case .custom(let savedFeed):
             return .customFeed(uri: savedFeed.uri)
         }
@@ -113,7 +122,7 @@ class ViewModelFactory {
     
     /// Create a fresh PostRepository instance
     func makePostRepository() -> PostRepository {
-        return PostRepository(postCache: postCache, feedService: feedService)
+        return PostRepository(postCache: postCache, feedService: feedService, followsRepository: followsRepository)
     }
 }
 
