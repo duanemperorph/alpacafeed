@@ -8,20 +8,15 @@
 import SwiftUI
 
 struct NavigationRootView: View {
+    @Environment(AppState.self) private var appState
     @Environment(TopBarController.self) private var topBarController
     
-    // NavigationCoordinator passed via dependency injection
-    let navigationCoordinator: NavigationCoordinator
-    
-    init(navigationCoordinator: NavigationCoordinator) {
-        self.navigationCoordinator = navigationCoordinator
-    }
-    
     var body: some View {
-        @Bindable var navigationCoordinator = navigationCoordinator
+        @Bindable var navigationCoordinator = appState.navigationCoordinator
+        
         NavigationStack(path: $navigationCoordinator.navigationStack) {
-            // Root view provided by NavigationCoordinator
-            navigationCoordinator.rootView
+            // Root view - shows placeholder until session is restored, then timeline
+            rootContent
                 .navigationDestination(for: NavigationDestination.self) { destination in
                     navigationCoordinator.viewForDestination(destination: destination)
                 }
@@ -38,17 +33,30 @@ struct NavigationRootView: View {
         .sheet(isPresented: $navigationCoordinator.showingFeedSelectorSheet) {
             navigationCoordinator.feedSelectorSheetView
         }
-        .environment(navigationCoordinator)
+        .environment(appState.navigationCoordinator)
+    }
+    
+    @ViewBuilder
+    private var rootContent: some View {
+        if !appState.isSessionRestored {
+            // Placeholder while restoring session
+            Color.clear
+        } else if !appState.isAuthenticated {
+            // Unauthenticated - show empty for now (login handled via settings)
+            Color.clear
+        } else {
+            // Authenticated - show timeline
+            appState.navigationCoordinator.timelineView
+        }
     }
 }
 
 struct NavigationRootView_Previews: PreviewProvider {
     static var previews: some View {
         let appState = AppState()
-        let navigationCoordinator = NavigationCoordinator(appState: appState)
         let topBarController = TopBarController()
         
-        return NavigationRootView(navigationCoordinator: navigationCoordinator)
+        return NavigationRootView()
             .environment(appState)
             .environment(topBarController)
     }

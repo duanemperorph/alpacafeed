@@ -232,21 +232,20 @@ struct ComposeView_Previews: PreviewProvider {
     
     static var previews: some View {
         let appState = AppState()
-        let navigationCoordinator = NavigationCoordinator(appState: appState)
         
         // New post preview
         Group {
             let newPostViewModel = appState.viewModelFactory.makeComposeViewModel(replyTo: nil)
             ComposeView(viewModel: newPostViewModel)
                 .environment(appState)
-                .environment(navigationCoordinator)
+                .environment(appState.navigationCoordinator)
                 .previewDisplayName("New Post")
             
             // Reply preview
             let replyViewModel = appState.viewModelFactory.makeComposeViewModel(replyTo: mockPost)
             ComposeView(viewModel: replyViewModel)
                 .environment(appState)
-                .environment(navigationCoordinator)
+                .environment(appState.navigationCoordinator)
                 .previewDisplayName("Reply")
         }
     }

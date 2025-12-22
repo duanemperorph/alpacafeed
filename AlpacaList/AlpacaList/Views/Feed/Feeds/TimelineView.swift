@@ -9,8 +9,20 @@ import SwiftUI
 
 /// Timeline feed view for home, profile, or custom feeds
 struct TimelineView: View {
+    /// Task ID that triggers re-fetch when ViewModel or account changes
+    private struct FetchTaskID: Equatable {
+        let viewModelID: ObjectIdentifier
+        let accountDID: String?
+        
+        init(viewModel: TimelineViewModel, accountDID: String?) {
+            self.viewModelID = ObjectIdentifier(viewModel)
+            self.accountDID = accountDID
+        }
+    }
+    
     @Bindable var viewModel: TimelineViewModel
     @Environment(NavigationCoordinator.self) private var navigationCoordinator
+    @Environment(AppState.self) private var appState
     
     var body: some View {
         let _ = print("[TimelineView] body evaluated, posts count: \(viewModel.posts.count)")
@@ -77,8 +89,8 @@ struct TimelineView: View {
                 ProgressView("Loading timeline...")
             }
         )
-        .task(id: ObjectIdentifier(viewModel)) {
-            // Fetch timeline when ViewModel changes (new feed selected)
+        .task(id: FetchTaskID(viewModel: viewModel, accountDID: appState.activeAccountDID)) {
+            // Fetch timeline when ViewModel changes (new feed) or account changes
             // Coordinator guarantees we're only shown when session is restored and authenticated
             viewModel.fetchTimeline()
         }
@@ -100,14 +112,13 @@ struct TimelineView: View {
 struct TimelineView_Previews: PreviewProvider {
     static var previews: some View {
         let appState = AppState()
-        let navigationCoordinator = NavigationCoordinator(appState: appState)
         let viewModel = appState.viewModelFactory.makeTimelineViewModel(feedType: .home)
         
         NavigationView {
             TimelineView(viewModel: viewModel)
                 .navigationTitle("Home")
                 .environment(appState)
-                .environment(navigationCoordinator)
+                .environment(appState.navigationCoordinator)
         }
     }
 }

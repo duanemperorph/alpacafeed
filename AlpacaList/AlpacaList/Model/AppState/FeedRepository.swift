@@ -86,6 +86,10 @@ class FeedRepository {
         isFetching = true
         error = nil
         
+        // Clear stale data immediately to avoid showing old account's posts
+        posts = []
+        postUris = []
+        
         // Only set isLoading for initial loads, not refreshes
         // Refresh has its own UI (pull-to-refresh spinner) and setting isLoading
         // can trigger view updates that cancel the ongoing network request

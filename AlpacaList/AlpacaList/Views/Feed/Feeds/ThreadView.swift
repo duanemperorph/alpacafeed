@@ -145,7 +145,6 @@ struct ThreadView: View {
 struct ThreadView_Previews: PreviewProvider {
     static var previews: some View {
         let appState = AppState()
-        let navigationCoordinator = NavigationCoordinator(appState: appState)
         
         // Create a mock post for preview
         let mockPost = Post.createTextPost(
@@ -161,7 +160,7 @@ struct ThreadView_Previews: PreviewProvider {
                 .navigationTitle("Thread")
                 .navigationBarTitleDisplayMode(.inline)
                 .environment(appState)
-                .environment(navigationCoordinator)
+                .environment(appState.navigationCoordinator)
         }
     }
 }

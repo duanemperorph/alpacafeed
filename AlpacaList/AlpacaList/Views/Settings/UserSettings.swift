@@ -32,7 +32,6 @@ struct UserSettings: View {
     @State private var accountToLogout: AuthSession? = nil
     @State private var settingsCoordinator = SettingsCoordinator()
     @Environment(AppState.self) private var appState
-    @Environment(NavigationCoordinator.self) private var navigationCoordinator
     @Environment(TopBarController.self) private var topBarController
     @Environment(\.dismiss) private var dismiss
     
@@ -122,7 +121,6 @@ struct UserSettings: View {
 struct UserSettings_Previews: PreviewProvider {
     static var previews: some View {
         let appState = AppState()
-        let navigationCoordinator = NavigationCoordinator(appState: appState)
         let topBarController = TopBarController()
         
         ZStack {
@@ -135,7 +133,7 @@ struct UserSettings_Previews: PreviewProvider {
             UserSettings()
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .environment(appState)
-                .environment(navigationCoordinator)
+                .environment(appState.navigationCoordinator)
                 .environment(topBarController)
         }
         .tint(Color(red: 0.75, green: 0.25, blue: 0.75))

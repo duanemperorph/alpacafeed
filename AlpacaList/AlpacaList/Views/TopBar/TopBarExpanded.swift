@@ -116,7 +116,6 @@ struct TopBarExpanded: View {
 
 struct TopBarViewExpanded_Previews: PreviewProvider {
     static let appState = AppState()
-    static let navigationCoordinator = NavigationCoordinator(appState: appState)
     
     @ViewBuilder static var createPreview: some View {
         ZStack {
@@ -129,7 +128,7 @@ struct TopBarViewExpanded_Previews: PreviewProvider {
             VStack {
                 TopBarExpanded()
                     .environment(appState)
-                    .environment(navigationCoordinator)
+                    .environment(appState.navigationCoordinator)
             }
             .background(.regularMaterial)
             .environment(\.colorScheme, .dark)

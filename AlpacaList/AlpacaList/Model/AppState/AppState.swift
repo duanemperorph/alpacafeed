@@ -38,6 +38,10 @@ class AppState {
     
     let viewModelFactory: ViewModelFactory
     
+    // MARK: - Navigation
+    
+    let navigationCoordinator: NavigationCoordinator
+    
     // MARK: - Global State
     
     var currentUser: Author?
@@ -94,6 +98,9 @@ class AppState {
             feedService: feedService
         )
         
+        // Initialize navigation coordinator (depends on viewModelFactory)
+        self.navigationCoordinator = NavigationCoordinator(viewModelFactory: viewModelFactory)
+        
         // Set mock current user for now
         self.currentUser = mockAuthors[0]
     }
@@ -142,15 +149,18 @@ class AppState {
     
     /// Logout a specific account by DID
     func logout(did: String) async {
+        let wasActive = isActiveAccount(did: did)
         await authRepository.logout(did: did)
         
         // If no accounts remaining, clear everything
         if !isAuthenticated {
             currentUser = nil
             await clearAllCaches()
-        } else if did == activeAccountDID {
-            // If we logged out the active account, reload feeds for new active
+            navigationCoordinator.resetForAccountSwitch()
+        } else if wasActive {
+            // Logged out the active account, now switched to another
             await savedFeedsRepository.fetchSavedFeeds()
+            navigationCoordinator.resetForAccountSwitch()
         }
     }
     
@@ -159,6 +169,7 @@ class AppState {
         await authRepository.logoutAll()
         currentUser = nil
         await clearAllCaches()
+        navigationCoordinator.resetForAccountSwitch()
     }
     
     // MARK: - Account Switching
@@ -175,6 +186,9 @@ class AppState {
         // Clear caches and reload data for new account
         await clearAllCaches()
         await savedFeedsRepository.fetchSavedFeeds()
+        
+        // Reset navigation to default state
+        navigationCoordinator.resetForAccountSwitch()
         
         currentUser = mockAuthors[0]  // Mock for now
         
