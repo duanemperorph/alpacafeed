@@ -55,6 +55,21 @@ class AppState {
         authRepository.currentHandle
     }
     
+    /// All authenticated sessions
+    var allAccounts: [AuthSession] {
+        authRepository.allSessions
+    }
+    
+    /// Number of authenticated accounts
+    var accountCount: Int {
+        authRepository.accountCount
+    }
+    
+    /// The DID of the currently active account
+    var activeAccountDID: String? {
+        authRepository.activeAccountDID
+    }
+    
     // MARK: - Initialization
     
     init() {
@@ -125,11 +140,49 @@ class AppState {
         currentUser = mockAuthors[0]  // Mock for now
     }
     
-    /// Logout and clear caches
-    func logout() async {
-        await authRepository.logout()
+    /// Logout a specific account by DID
+    func logout(did: String) async {
+        await authRepository.logout(did: did)
+        
+        // If no accounts remaining, clear everything
+        if !isAuthenticated {
+            currentUser = nil
+            await clearAllCaches()
+        } else if did == activeAccountDID {
+            // If we logged out the active account, reload feeds for new active
+            await savedFeedsRepository.fetchSavedFeeds()
+        }
+    }
+    
+    /// Logout all accounts
+    func logoutAll() async {
+        await authRepository.logoutAll()
         currentUser = nil
         await clearAllCaches()
     }
+    
+    // MARK: - Account Switching
+    
+    /// Switch to a different account
+    /// - Parameter did: The DID of the account to switch to
+    /// - Returns: true if switch was successful
+    @discardableResult
+    func switchAccount(to did: String) async -> Bool {
+        guard authRepository.switchAccount(to: did) else {
+            return false
+        }
+        
+        // Clear caches and reload data for new account
+        await clearAllCaches()
+        await savedFeedsRepository.fetchSavedFeeds()
+        
+        currentUser = mockAuthors[0]  // Mock for now
+        
+        return true
+    }
+    
+    /// Check if a given DID is the active account
+    func isActiveAccount(did: String) -> Bool {
+        activeAccountDID == did
+    }
 }
-

@@ -18,7 +18,7 @@ struct UserSettingsLoginButton: View {
                     .fontWeight(.bold)
                     .frame(width: 20)
                 Spacer().frame(width: 20)
-                Text("Sign In")
+                Text("Add Account")
                     .settingsItemFont()
                 Spacer()
             }
@@ -29,6 +29,7 @@ struct UserSettingsLoginButton: View {
 
 struct UserSettings: View {
     @State private var showLogoutAlert = false
+    @State private var accountToLogout: AuthSession? = nil
     @State private var settingsCoordinator = SettingsCoordinator()
     @Environment(AppState.self) private var appState
     @Environment(NavigationCoordinator.self) private var navigationCoordinator
@@ -40,23 +41,28 @@ struct UserSettings: View {
         NavigationStack(path: $settingsCoordinator.navigationPath) {
             SettingsList {
                 // Account Section
-                SettingsSection(title: "Account") {
-                    if appState.isAuthenticated, let handle = appState.authRepository.currentHandle {
-                        // Show logged-in user
+                SettingsSection(title: "Accounts") {
+                    // Show all logged-in accounts
+                    ForEach(appState.allAccounts) { account in
                         AccountListItem(
-                            username: handle,
-                            isActive: true,
-                            onSwitch: { },
+                            username: account.handle,
+                            isActive: appState.isActiveAccount(did: account.did),
+                            onSwitch: {
+                                Task {
+                                    await appState.switchAccount(to: account.did)
+                                }
+                            },
                             onLogout: {
+                                accountToLogout = account
                                 showLogoutAlert = true
                             }
                         )
-                    } else {
-                        // Show sign in option
-                        UserSettingsLoginButton(action: {
-                            settingsCoordinator.push(.addAccount)
-                        })
                     }
+                    
+                    // Add Account button (always shown)
+                    UserSettingsLoginButton(action: {
+                        settingsCoordinator.push(.addAccount)
+                    })
                 }
             }
             .safeAreaInset(edge: .top) {
@@ -75,14 +81,23 @@ struct UserSettings: View {
                 }
             }
             .alert("Log Out", isPresented: $showLogoutAlert) {
-                Button("Cancel", role: .cancel) { }
+                Button("Cancel", role: .cancel) {
+                    accountToLogout = nil
+                }
                 Button("Log Out", role: .destructive) {
-                    Task {
-                        await appState.logout()
+                    if let account = accountToLogout {
+                        Task {
+                            await appState.logout(did: account.did)
+                        }
                     }
+                    accountToLogout = nil
                 }
             } message: {
-                Text("Are you sure you want to log out?")
+                if let account = accountToLogout {
+                    Text("Are you sure you want to log out of @\(account.handle)?")
+                } else {
+                    Text("Are you sure you want to log out?")
+                }
             }
             .navigationDestination(for: SettingsDestination.self) { destination in
                 switch destination {
