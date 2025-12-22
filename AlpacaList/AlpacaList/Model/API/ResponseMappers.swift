@@ -16,7 +16,9 @@ extension AuthorDTO {
             did: did,
             handle: handle,
             displayName: displayName,
-            avatar: avatar
+            avatar: avatar,
+            followingUri: viewer?.following,
+            isFollowedBy: viewer?.followedBy != nil
         )
     }
 }

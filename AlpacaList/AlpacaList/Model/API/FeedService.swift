@@ -256,6 +256,50 @@ class FeedService {
         try await apiService.post(endpoint: "com.atproto.repo.deleteRecord", body: body)
     }
     
+    // MARK: - Follow/Unfollow
+    
+    /// Follow a user
+    /// - Parameter did: The DID of the user to follow
+    /// - Returns: The follow record reference (uri + cid)
+    ///
+    /// API: POST /xrpc/com.atproto.repo.createRecord (collection: app.bsky.graph.follow)
+    @MainActor
+    func followUser(did: String) async throws -> CreateRecordResponse {
+        let record = FollowRecord(
+            subject: did,
+            createdAt: ISO8601DateFormatter().string(from: Date())
+        )
+        
+        let body = CreateRecordRequest(
+            repo: try getDID(),
+            collection: "app.bsky.graph.follow",
+            record: record
+        )
+        
+        return try await apiService.post(
+            endpoint: "com.atproto.repo.createRecord",
+            body: body,
+            responseType: CreateRecordResponse.self
+        )
+    }
+    
+    /// Unfollow a user (delete follow record)
+    /// - Parameter followUri: The follow record URI to delete (at://did/app.bsky.graph.follow/rkey)
+    ///
+    /// API: POST /xrpc/com.atproto.repo.deleteRecord
+    @MainActor
+    func unfollowUser(followUri: String) async throws {
+        let (repo, rkey) = try parseRecordUri(followUri)
+        
+        let body = DeleteRecordRequest(
+            repo: repo,
+            collection: "app.bsky.graph.follow",
+            rkey: rkey
+        )
+        
+        try await apiService.post(endpoint: "com.atproto.repo.deleteRecord", body: body)
+    }
+    
     // MARK: - Saved Feeds
     
     /// Get user's preferences (includes saved feeds)
@@ -463,6 +507,18 @@ private struct LikeRecord: Encodable {
 private struct RepostRecord: Encodable {
     let type = "app.bsky.feed.repost"
     let subject: RecordRef
+    let createdAt: String
+    
+    enum CodingKeys: String, CodingKey {
+        case type = "$type"
+        case subject, createdAt
+    }
+}
+
+/// Follow record structure
+private struct FollowRecord: Encodable {
+    let type = "app.bsky.graph.follow"
+    let subject: String  // DID of the user to follow
     let createdAt: String
     
     enum CodingKeys: String, CodingKey {

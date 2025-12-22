@@ -75,17 +75,6 @@ struct AuthorHeader: View {
                         .foregroundColor(.secondary)
                         .lineLimit(1)
                 }
-                
-                Spacer()
-                
-                // More button
-                Button(action: {
-                    // TODO: Show post menu
-                }) {
-                    Image(systemName: "ellipsis")
-                        .foregroundColor(.secondary)
-                }
-                .buttonStyle(.borderless)
             }
         }
     }

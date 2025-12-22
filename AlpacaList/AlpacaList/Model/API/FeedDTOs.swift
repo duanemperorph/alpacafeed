@@ -42,6 +42,15 @@ struct AuthorDTO: Decodable {
     let handle: String
     let displayName: String?
     let avatar: String?
+    let viewer: AuthorViewerStateDTO?
+}
+
+/// Viewer's relationship to the author
+struct AuthorViewerStateDTO: Decodable {
+    let following: String?   // URI of viewer's follow record (nil if not following)
+    let followedBy: String?  // URI if they follow you (nil if not)
+    let muted: Bool?
+    let blockedBy: Bool?
 }
 
 /// Post record content

@@ -16,7 +16,7 @@ struct Post: Identifiable, Codable, Equatable {
     let cid: String          // Content identifier (cryptographic hash)
     
     // Author info
-    let author: Author
+    var author: Author
     let createdAt: Date
     
     // Content (no title - just text, max ~300 chars)

@@ -62,6 +62,9 @@ struct TimelineView: View {
                         if let quotedPost = viewModel.posts.first(where: { $0.uri == uri }) {
                             navigationCoordinator.push(.thread(post: quotedPost))
                         }
+                    },
+                    onFollowToggle: { author in
+                        viewModel.toggleFollow(author)
                     }
                 )
                 .padding(.horizontal)

@@ -68,5 +68,18 @@ actor ProfileCache {
             profiles.removeValue(forKey: author.did)
         }
     }
+    
+    // MARK: - Follow State
+    
+    /// Update follow state for an author
+    /// - Parameters:
+    ///   - did: The author's DID
+    ///   - followingUri: The follow record URI (nil if not following)
+    func updateFollowState(did: String, followingUri: String?) {
+        guard var author = profiles[did] else { return }
+        author.followingUri = followingUri
+        profiles[did] = author
+        profiles[author.handle] = author
+    }
 }
 

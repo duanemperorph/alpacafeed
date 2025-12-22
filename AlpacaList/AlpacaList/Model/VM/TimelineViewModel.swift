@@ -135,5 +135,15 @@ class TimelineViewModel {
             // TODO: Persist bookmarks locally or via API
         }
     }
+    
+    /// Toggle follow state for an author
+    func toggleFollow(_ author: Author) {
+        Task {
+            await postRepository.toggleFollow(author)
+            
+            // Refresh posts from cache to show updated follow state
+            await feedRepository.refreshPostsFromCache()
+        }
+    }
 }
 

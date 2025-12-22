@@ -18,6 +18,7 @@ struct PostCard: View {
     let onRepost: ((String) -> Void)?
     let onReply: ((String) -> Void)?
     let onQuotePostTap: ((String) -> Void)?
+    let onFollowToggle: ((Author) -> Void)?
     
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     
@@ -29,7 +30,8 @@ struct PostCard: View {
         onLike: ((String) -> Void)? = nil,
         onRepost: ((String) -> Void)? = nil,
         onReply: ((String) -> Void)? = nil,
-        onQuotePostTap: ((String) -> Void)? = nil
+        onQuotePostTap: ((String) -> Void)? = nil,
+        onFollowToggle: ((Author) -> Void)? = nil
     ) {
         self.post = post
         self.isMainPost = isMainPost
@@ -39,6 +41,7 @@ struct PostCard: View {
         self.onRepost = onRepost
         self.onReply = onReply
         self.onQuotePostTap = onQuotePostTap
+        self.onFollowToggle = onFollowToggle
     }
     
     var body: some View {
@@ -46,12 +49,21 @@ struct PostCard: View {
             onPostTap?(post)
         }) {
             VStack(alignment: .leading, spacing: 12) {
-                // Author header
-                AuthorHeader(
-                    author: post.author,
-                    createdAt: post.createdAt,
-                    repostedBy: post.repostedBy
-                )
+                // Author header with overflow menu
+                HStack(alignment: .top) {
+                    AuthorHeader(
+                        author: post.author,
+                        createdAt: post.createdAt,
+                        repostedBy: post.repostedBy
+                    )
+                    
+                    Spacer()
+                    
+                    PostOverflowMenu(
+                        post: post,
+                        onFollowToggle: onFollowToggle
+                    )
+                }
                 
                 // Reply context indicator
                 if showReplyContext && post.isReply {

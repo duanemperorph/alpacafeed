@@ -148,6 +148,16 @@ class ThreadViewModel {
         }
     }
     
+    /// Toggle follow state for an author
+    func toggleFollow(_ author: Author) {
+        Task {
+            await postRepository.toggleFollow(author)
+            
+            // Refresh posts from cache to show updated follow state
+            await threadRepository.refreshPostsFromCache()
+        }
+    }
+    
     // MARK: - Computed Properties
     
     /// All posts in thread (for rendering)

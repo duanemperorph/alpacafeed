@@ -84,9 +84,9 @@ class AppState {
         self.apiClient = BSAPIClient(sessionRepository: authRepository)
         self.feedService = FeedService(apiService: apiClient)
         
-        // Initialize caches
-        self.postCache = PostCache()
+        // Initialize caches (ProfileCache first since PostCache depends on it)
         self.profileCache = ProfileCache()
+        self.postCache = PostCache(profileCache: profileCache)
         
         // Initialize feed repositories
         self.savedFeedsRepository = SavedFeedsRepository(feedService: feedService)

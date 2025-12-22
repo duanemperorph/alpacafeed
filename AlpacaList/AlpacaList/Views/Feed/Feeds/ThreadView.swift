@@ -65,6 +65,9 @@ struct ThreadView: View {
                         onQuotePostTap: { uri in
                             // TODO: Navigate to quoted post
                             print("Quoted post: \(uri)")
+                        },
+                        onFollowToggle: { author in
+                            viewModel.toggleFollow(author)
                         }
                     )
                     .padding(.horizontal)
@@ -111,6 +114,9 @@ struct ThreadView: View {
                         if let quotedPost = viewModel.replies.first(where: { $0.uri == uri }) {
                             navigationCoordinator.push(.thread(post: quotedPost))
                         }
+                    },
+                    onFollowToggle: { author in
+                        viewModel.toggleFollow(author)
                     }
                 )
                 .padding(.horizontal)
