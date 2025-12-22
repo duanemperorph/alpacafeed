@@ -42,6 +42,7 @@ struct TimelineView: View {
             content: { post in
                 PostCard(
                     post: post,
+                    currentUserDID: appState.activeAccountDID,
                     onPostTap: { tappedPost in
                         navigationCoordinator.push(.thread(post: tappedPost))
                     },
@@ -65,6 +66,12 @@ struct TimelineView: View {
                     },
                     onFollowToggle: { author in
                         viewModel.toggleFollow(author)
+                    },
+                    onViewFeed: { author in
+                        navigationCoordinator.selectFeed(.authorFeed(actor: author.did, name: author.displayName ?? author.handle))
+                    },
+                    onDelete: { uri in
+                        viewModel.deletePost(uri: uri)
                     }
                 )
                 .padding(.horizontal)

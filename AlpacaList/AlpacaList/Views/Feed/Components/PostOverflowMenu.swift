@@ -9,12 +9,24 @@ import SwiftUI
 
 struct PostOverflowMenu: View {
     let post: Post
+    let isOwnPost: Bool
     let onFollowToggle: ((Author) -> Void)?
+    let onViewFeed: ((Author) -> Void)?
+    let onDelete: ((String) -> Void)?
     
     var body: some View {
         Menu {
-            // Follow/Unfollow
-            if let onFollowToggle = onFollowToggle {
+            // View Feed - always available
+            if let onViewFeed = onViewFeed {
+                Button {
+                    onViewFeed(post.author)
+                } label: {
+                    Label("View @\(post.author.handle)'s Feed", systemImage: "person.crop.rectangle.stack")
+                }
+            }
+            
+            // Follow/Unfollow - only for other users' posts
+            if !isOwnPost, let onFollowToggle = onFollowToggle {
                 Button {
                     onFollowToggle(post.author)
                 } label: {
@@ -26,11 +38,24 @@ struct PostOverflowMenu: View {
                 }
             }
             
+            Divider()
+            
             // Copy link
             Button {
                 copyPostLink()
             } label: {
                 Label("Copy Link", systemImage: "link")
+            }
+            
+            // Delete - only for own posts
+            if isOwnPost, let onDelete = onDelete {
+                Divider()
+                
+                Button(role: .destructive) {
+                    onDelete(post.uri)
+                } label: {
+                    Label("Delete Post", systemImage: "trash")
+                }
             }
         } label: {
             Image(systemName: "ellipsis")

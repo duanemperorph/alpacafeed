@@ -138,6 +138,13 @@ class NavigationCoordinator {
         showingFeedSelectorSheet = true
     }
     
+    /// Select a specific feed - switches to the feed and pops to root
+    func selectFeed(_ feedType: FeedType) {
+        currentFeedType = feedType
+        showingFeedSelectorSheet = false
+        popToRoot()
+    }
+    
     // MARK: - View Builders
     
     /// Timeline view for the current feed type

@@ -11,6 +11,7 @@ import SwiftUI
 struct ThreadView: View {
     @Bindable var viewModel: ThreadViewModel
     @Environment(NavigationCoordinator.self) private var navigationCoordinator
+    @Environment(AppState.self) private var appState
     
     var body: some View {
         PostListView(
@@ -52,6 +53,7 @@ struct ThreadView: View {
                         post: rootPost,
                         isMainPost: true,
                         showReplyContext: false,
+                        currentUserDID: appState.activeAccountDID,
                         onPostTap: nil, // Already viewing this post
                         onLike: { uri in
                             viewModel.likePost(uri: uri)
@@ -68,6 +70,12 @@ struct ThreadView: View {
                         },
                         onFollowToggle: { author in
                             viewModel.toggleFollow(author)
+                        },
+                        onViewFeed: { author in
+                            navigationCoordinator.selectFeed(.authorFeed(actor: author.did, name: author.displayName ?? author.handle))
+                        },
+                        onDelete: { uri in
+                            viewModel.deletePost(uri: uri)
                         }
                     )
                     .padding(.horizontal)
@@ -94,6 +102,7 @@ struct ThreadView: View {
             content: { reply in
                 PostCard(
                     post: reply,
+                    currentUserDID: appState.activeAccountDID,
                     onPostTap: { tappedPost in
                         navigationCoordinator.push(.thread(post: tappedPost))
                     },
@@ -117,6 +126,12 @@ struct ThreadView: View {
                     },
                     onFollowToggle: { author in
                         viewModel.toggleFollow(author)
+                    },
+                    onViewFeed: { author in
+                        navigationCoordinator.selectFeed(.authorFeed(actor: author.did, name: author.displayName ?? author.handle))
+                    },
+                    onDelete: { uri in
+                        viewModel.deletePost(uri: uri)
                     }
                 )
                 .padding(.horizontal)

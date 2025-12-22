@@ -12,6 +12,7 @@ struct PostCard: View {
     let post: Post
     let isMainPost: Bool
     let showReplyContext: Bool
+    let currentUserDID: String?
     
     let onPostTap: ((Post) -> Void)?
     let onLike: ((String) -> Void)?
@@ -19,29 +20,43 @@ struct PostCard: View {
     let onReply: ((String) -> Void)?
     let onQuotePostTap: ((String) -> Void)?
     let onFollowToggle: ((Author) -> Void)?
+    let onViewFeed: ((Author) -> Void)?
+    let onDelete: ((String) -> Void)?
     
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
+    
+    /// Whether this post belongs to the current user
+    private var isOwnPost: Bool {
+        guard let currentDID = currentUserDID else { return false }
+        return post.author.did == currentDID
+    }
     
     init(
         post: Post,
         isMainPost: Bool = false,
         showReplyContext: Bool = false,
+        currentUserDID: String? = nil,
         onPostTap: ((Post) -> Void)? = nil,
         onLike: ((String) -> Void)? = nil,
         onRepost: ((String) -> Void)? = nil,
         onReply: ((String) -> Void)? = nil,
         onQuotePostTap: ((String) -> Void)? = nil,
-        onFollowToggle: ((Author) -> Void)? = nil
+        onFollowToggle: ((Author) -> Void)? = nil,
+        onViewFeed: ((Author) -> Void)? = nil,
+        onDelete: ((String) -> Void)? = nil
     ) {
         self.post = post
         self.isMainPost = isMainPost
         self.showReplyContext = showReplyContext
+        self.currentUserDID = currentUserDID
         self.onPostTap = onPostTap
         self.onLike = onLike
         self.onRepost = onRepost
         self.onReply = onReply
         self.onQuotePostTap = onQuotePostTap
         self.onFollowToggle = onFollowToggle
+        self.onViewFeed = onViewFeed
+        self.onDelete = onDelete
     }
     
     var body: some View {
@@ -61,7 +76,10 @@ struct PostCard: View {
                     
                     PostOverflowMenu(
                         post: post,
-                        onFollowToggle: onFollowToggle
+                        isOwnPost: isOwnPost,
+                        onFollowToggle: onFollowToggle,
+                        onViewFeed: onViewFeed,
+                        onDelete: onDelete
                     )
                 }
                 
